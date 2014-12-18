@@ -103,10 +103,10 @@
                                 <arg>-Xneuromlcodeinjector</arg>            
                                 <arg>-XtoString</arg>
                             </args>
-                            <!-- <bindingDirectory>src/main/resources/Schemas/</bindingDirectory>
+                            <bindingDirectory>src/main/resources/Schemas</bindingDirectory>
                             <bindingIncludes>
-                                <include>NeuroML_v${build.version2}.xjb</include>
-                            </bindingIncludes> -->
+                                <include>LEMS_v${build.version2}.xjb</include>
+                            </bindingIncludes>
                             <forceRegenerate>true</forceRegenerate>
                             <schemaDirectory>src/main/resources/Schemas</schemaDirectory>
                             <generateDirectory>${project.build.directory}/generated-sources/LEMS</generateDirectory>
