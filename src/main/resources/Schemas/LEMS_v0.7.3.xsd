@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    v0.7.3 supporting new LEMS elements required for GapJunctions & new connection specifications: 
+    v0.7.test supporting new LEMS elements required for GapJunctions & new connection specifications: 
     Tunnel, InstanceRequirement, IndexParameter, ComponentRequirement
     
     v0.7.2 added the ability to validate LEMS files containing Simulation elements, as the form of this element
@@ -14,11 +14,14 @@
     and pylems (https://github.com/lisphacker/pylems)
 -->
 
-<xs:schema targetNamespace="http://www.neuroml.org/lems/0.7.3"
-    xmlns="http://www.neuroml.org/lems/0.7.3"
+<xs:schema targetNamespace="http://www.neuroml.org/lems/0.7.test"
+    xmlns="http://www.neuroml.org/lems/0.7.test"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:jaxb = "http://java.sun.com/xml/ns/jaxb"
+    xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
     elementFormDefault="qualified"
-    attributeFormDefault="unqualified">
+    attributeFormDefault="unqualified"
+    jaxb:extensionBindingPrefixes="simplify">
 
     <xs:element name="Lems">
         <xs:annotation>
@@ -27,24 +30,19 @@
         
         <xs:complexType>
 
-            <xs:sequence>
-                <xs:element name="Target" type="Target" minOccurs="0" maxOccurs="1"/>
-                <xs:element name="Include" type="Include" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="Dimension" type="Dimension" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="Unit" type="Unit" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="ComponentType" type="ComponentType" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element name="Component" type="Component" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
+            <xs:choice maxOccurs="unbounded">
+                <xs:element name="Target" type="Target"/>
+                <xs:element name="Include" type="Include"/>
+                <xs:element name="Dimension" type="Dimension"/>
+                <xs:element name="Unit" type="Unit"/>
+                <xs:element name="Constant" type="Constant"/>
+                <xs:element name="ComponentType" type="ComponentType"/>
+                <xs:element name="Component" type="Component"/>
+            </xs:choice>
 
             <xs:attribute name="description" type="xs:string" use="optional"/>
 
         </xs:complexType>
-        
-        <!--<xs:unique name="dimension_uniqueness">
-    		<xs:selector xpath="Dimension"></xs:selector>
-    		<xs:field xpath="@name"></xs:field>
-        </xs:unique>-->
         
     </xs:element>
 
@@ -267,8 +265,8 @@
     <xs:complexType name="OnEvent">
 
         <xs:sequence>
-            <xs:element name="StateAssignment" type="StateAssignment" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="EventOut" type="EventOut" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="StateAssignment" type="StateAssignment" />
+            <xs:element name="EventOut" type="EventOut" />
         </xs:sequence>
 
         <xs:attribute name="port" type="xs:string" use="required"/>
@@ -278,8 +276,8 @@
     <xs:complexType name="OnCondition">
 
         <xs:sequence>
-            <xs:element name="StateAssignment" type="StateAssignment" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="EventOut" type="EventOut" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="StateAssignment" type="StateAssignment" />
+            <xs:element name="EventOut" type="EventOut" />
             <xs:element name="Transition" type="Transition" minOccurs="0" maxOccurs="1"/>   <!-- only on OnCondition inside Regime... -->
         </xs:sequence>
 
@@ -307,9 +305,9 @@
     <xs:complexType name="Regime">
 
         <xs:sequence>
-            <xs:element name="TimeDerivative" type="TimeDerivative" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="TimeDerivative" type="TimeDerivative" />
             <xs:element name="OnEntry" type="OnStart" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="OnCondition" type="OnCondition" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="OnCondition" type="OnCondition" />
         </xs:sequence>
 
         <xs:attribute name="name" type="xs:string" use="required"/>
@@ -343,36 +341,41 @@
 
     <!-- ComponentType is used for component definitions containing parts which are currently specific to LEMS, e.g. Build/MultiInstantiate -->
     <xs:complexType name="ComponentType">
-        <xs:sequence>
-            <xs:element name="Property" type="Property" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Parameter" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="DerivedParameter" type="DerivedParameter" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="IndexParameter" type="IndexParameter" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:choice maxOccurs="unbounded">
+            <xs:annotation>
+	            <xs:appinfo>
+	                <simplify:as-element-property/>
+	            </xs:appinfo>
+        	</xs:annotation>
+            <xs:element name="Property" type="Property" />
+            <xs:element name="Parameter" type="Parameter" />
+            <xs:element name="DerivedParameter" type="DerivedParameter" />
+            <xs:element name="IndexParameter" type="IndexParameter" />
             
-            <xs:element name="Constant" type="Constant" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Child" type="Child" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Children" type="Children" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Fixed" type="Fixed" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Link" type="Link" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="ComponentReference" type="ComponentReference" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Attachments" type="Attachments" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Constant" type="Constant" />
+            <xs:element name="Child" type="Child" />
+            <xs:element name="Children" type="Children" />
+            <xs:element name="Fixed" type="Fixed" />
+            <xs:element name="Link" type="Link" />
+            <xs:element name="ComponentReference" type="ComponentReference" />
+            <xs:element name="Attachments" type="Attachments" />
 
-            <xs:element name="EventPort" type="EventPort" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="EventPort" type="EventPort" />
 
-            <xs:element name="Exposure" type="Exposure" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Requirement" type="Requirement" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Exposure" type="Exposure" />
+            <xs:element name="Requirement" type="Requirement" />
             
-            <xs:element name="ComponentRequirement" type="ComponentRequirement" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="ComponentRequirement" type="ComponentRequirement" />
             
-            <xs:element name="InstanceRequirement" type="InstanceRequirement" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="InstanceRequirement" type="InstanceRequirement" />
 
-            <xs:element name="Path" type="Path" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Text" type="Text" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Path" type="Path" />
+            <xs:element name="Text" type="Text" />
 
-            <xs:element name="Dynamics" type="Dynamics" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="Dynamics" type="Dynamics" />
             <xs:element name="Structure" type="Structure" minOccurs="0" maxOccurs="1"/>
             <xs:element name="Simulation" type="Simulation" minOccurs="0" maxOccurs="1"/>
-        </xs:sequence>
+        </xs:choice>
 
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="extends" type="xs:string" use="optional"/>
@@ -432,19 +435,19 @@
 
     <xs:complexType name="Dynamics">
 
-        <xs:sequence>
-            <xs:element name="StateVariable" type="StateVariable" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="DerivedVariable" type="DerivedVariable" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="ConditionalDerivedVariable" type="ConditionalDerivedVariable" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="TimeDerivative" type="TimeDerivative" minOccurs="0" maxOccurs="unbounded"/>
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="StateVariable" type="StateVariable" />
+            <xs:element name="DerivedVariable" type="DerivedVariable" />
+            <xs:element name="ConditionalDerivedVariable" type="ConditionalDerivedVariable" />
+            <xs:element name="TimeDerivative" type="TimeDerivative" />
             <xs:element name="OnStart" type="OnStart" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="OnEvent" type="OnEvent" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="OnCondition" type="OnCondition" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Regime" type="Regime" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="OnEvent" type="OnEvent" />
+            <xs:element name="OnCondition" type="OnCondition" />
+            <xs:element name="Regime" type="Regime" />
 
             <xs:element name="KineticScheme" type="KineticScheme" minOccurs="0" maxOccurs="1"/>
 
-        </xs:sequence>
+        </xs:choice>
 
     </xs:complexType>
 
@@ -569,12 +572,12 @@
 
     <xs:complexType name="Simulation">
 
-        <xs:sequence>
-            <xs:element name="DataDisplay" type="DataDisplay" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Record" type="Record" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="Run" type="Run" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="DataWriter" type="DataWriter" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
+        <xs:choice maxOccurs="unbounded">
+            <xs:element name="DataDisplay" type="DataDisplay" />
+            <xs:element name="Record" type="Record" />
+            <xs:element name="Run" type="Run" />
+            <xs:element name="DataWriter" type="DataWriter" />
+        </xs:choice>
 
     </xs:complexType>
 

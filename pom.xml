@@ -99,9 +99,11 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                        	<extension>true</extension>
                             <args>
                                 <arg>-Xneuromlcodeinjector</arg>            
                                 <arg>-XtoString</arg>
+                                <arg>-Xsimplify</arg>
                             </args>
                             <bindingDirectory>src/main/resources/Schemas</bindingDirectory>
                             <bindingIncludes>
