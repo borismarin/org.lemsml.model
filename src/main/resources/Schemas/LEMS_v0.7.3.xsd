@@ -341,6 +341,7 @@
     <xs:sequence>
       <xs:any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
     </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required"/>
     <xs:anyAttribute processContents="skip"/>
   </xs:complexType>
 
