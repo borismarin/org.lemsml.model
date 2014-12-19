@@ -1,6 +1,5 @@
-<Lems xmlns="http://www.neuroml.org/lems/0.7.3"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.neuroml.org/lems/0.7.3 https://raw.github.com/LEMS/LEMS/master/Schemas/LEMS/LEMS_v0.7.3.xsd">
+<Lems xmlns="http://www.neuroml.org/lems/0.8.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 <!--
 
@@ -46,12 +45,12 @@
     <Parameter name="x1" dimension="none" description="related to the
         system's resting potential"/>
 
+    <Constant name="SEC" dimension="time" value="1s"/>
     <!-- Initial Conditions -->
     <Parameter name="x0" dimension="none"/>
     <Parameter name="y0" dimension="none"/>
     <Parameter name="z0" dimension="none"/>
 
-    <Constant name="SEC" dimension="time" value="1s"/>
 
     <Exposure name="x" dimension="none"/>
     <Exposure name="y" dimension="none"/>
