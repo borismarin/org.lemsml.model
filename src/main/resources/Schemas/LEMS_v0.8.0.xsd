@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
+	v0.8.0 Supporting unordered LEMS documents via _choice_ instead of sequences. 
+
 	v0.7.3 supporting new LEMS elements required for GapJunctions & new connection specifications: 
 	Tunnel, InstanceRequirement, IndexParameter, ComponentRequirement
 

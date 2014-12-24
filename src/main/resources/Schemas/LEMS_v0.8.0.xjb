@@ -5,7 +5,7 @@
 	xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify" 
 	extensionBindingPrefixes="simplify" >
 
-	<jxb:bindings schemaLocation="LEMS_v0.7.3.xsd" node="/xs:schema">
+	<jxb:bindings schemaLocation="LEMS_v0.8.0.xsd" node="/xs:schema">
 
 		<jxb:schemaBindings>
 			<jxb:package name="org.lemsml.model" />
