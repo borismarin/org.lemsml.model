@@ -7,16 +7,16 @@ import org.lemsml.model.ObjectFactory;
 import org.lemsml.model.Parameter;
 
 @XmlTransient
-public class MyParameter extends Parameter {
-	
+public class ExtParameter extends Parameter {
+
 
 }
 
 @XmlRegistry
 class ObjectFactoryEx extends ObjectFactory {
-  @Override
-public
-  MyParameter createParameter() {
-    return new MyParameter();
-  }
+	@Override
+	public
+	ExtParameter createParameter() {
+		return new ExtParameter();
+	}
 }
