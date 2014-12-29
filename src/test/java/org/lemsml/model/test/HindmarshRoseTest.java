@@ -21,6 +21,7 @@ public class HindmarshRoseTest{
 
 	private LemsTestUtils hr_compdef;
 	private LemsTestUtils hr_sim;
+	private File canonical_xslt;
 
 	private File getLocalFile(String fname) {
 		return new File(getClass().getResource(fname).getFile());
@@ -29,6 +30,7 @@ public class HindmarshRoseTest{
 	@Before
 	public void setUp() {
 		File schema = getLocalFile("/Schemas/LEMS_v0.8.0.xsd");
+		canonical_xslt = getLocalFile("/Schemas/canonical.xslt");
 		hr_compdef = new LemsTestUtils(
 				getLocalFile("/examples/HindmarshRose3d.xml"), schema);
 		hr_sim = new LemsTestUtils(
@@ -44,7 +46,14 @@ public class HindmarshRoseTest{
 	public void validateSimulation() {
 		assertTrue(hr_sim.validate());
 	}
-
+	
+	@Test
+	public void applyXSLT(){
+		//TODO: Add assert
+		hr_compdef.applyXSLT(canonical_xslt);
+	}
+	
+	
 	@Test
 	public void testUnmarshallingComponent() {
 
