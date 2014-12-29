@@ -5,7 +5,7 @@ import javax.xml.bind.annotation.XmlRegistry;
 import org.lemsml.model.ObjectFactory;
 
 @XmlRegistry
-class ExtObjectFactory extends ObjectFactory {
+public class ExtObjectFactory extends ObjectFactory {
 	@Override
 	public ExtParameter createParameter() {
 		return new ExtParameter();

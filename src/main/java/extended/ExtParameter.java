@@ -12,11 +12,11 @@ public class ExtParameter extends Parameter {
 
 }
 
-@XmlRegistry
-class ObjectFactoryEx extends ObjectFactory {
-	@Override
-	public
-	ExtParameter createParameter() {
-		return new ExtParameter();
-	}
-}
+//@XmlRegistry
+//class ObjectFactoryEx extends ObjectFactory {
+//	@Override
+//	public
+//	ExtParameter createParameter() {
+//		return new ExtParameter();
+//	}
+//}
