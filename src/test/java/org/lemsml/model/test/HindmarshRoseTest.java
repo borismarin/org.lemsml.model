@@ -20,7 +20,6 @@ import extended.ExtParameter;
  */
 public class HindmarshRoseTest{
 
-	private LemsXmlUtils utils;
 	private File schema;
 	private File hr_comptype;
 	private File hr_sim;
