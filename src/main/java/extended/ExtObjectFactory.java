@@ -7,12 +7,12 @@ import org.lemsml.model.ObjectFactory;
 @XmlRegistry
 public class ExtObjectFactory extends ObjectFactory {
 	@Override
-	public ExtParameter createParameter() {
-		return new ExtParameter();
+	public Parameter createParameter() {
+		return new Parameter();
 	}
 
 	@Override
-	public ExtComponent createComponent() {
-		return new ExtComponent();
+	public Component createComponent() {
+		return new Component();
 	}
 }

@@ -2,11 +2,10 @@ package extended;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.lemsml.model.Component;
 import org.lemsml.model.ComponentType;
 
 @XmlTransient
-public class ExtComponent extends Component {
+public class Component extends org.lemsml.model.Component {
 	ComponentType _ComponentType;
 
 	public ComponentType get_ComponentType() {

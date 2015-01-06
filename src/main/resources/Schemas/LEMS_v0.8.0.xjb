@@ -16,19 +16,19 @@
 		</jxb:bindings>
 		
 		<jxb:bindings node=".//xs:element[@type='Parameter']">
-			<jxb:class ref="extended.ExtParameter" />
+			<jxb:class ref="extended.Parameter" />
 		</jxb:bindings>
 
 		<jxb:bindings node=".//xs:complexType[@name='Parameter']">
-			<jxb:class implClass="extended.ExtParameter" />
+			<jxb:class implClass="extended.Parameter" />
 		</jxb:bindings>
 
 		<jxb:bindings node=".//xs:complexType[@name='Component']">
-			<jxb:class implClass="extended.ExtComponent" />
+			<jxb:class implClass="extended.Component" />
 		</jxb:bindings>
 
 		<jxb:bindings node=".//xs:element[@type='Component']">
-			<jxb:class ref="extended.ExtComponent" />
+			<jxb:class ref="extended.Component" />
 		</jxb:bindings>
 
 	</jxb:bindings>
