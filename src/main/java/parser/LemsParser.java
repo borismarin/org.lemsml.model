@@ -31,7 +31,7 @@ public class LemsParser {
 		tv.setTraverseFirst(true);
 		lems.accept(tv);
 
-		Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByName();
+		Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByNameHM();
 		for (Entry<String, ComponentType> entry : nameTypeMap.entrySet()) {
 			System.out.println(entry.getKey() + " : "
 					+ entry.getValue().getClass().toString());
