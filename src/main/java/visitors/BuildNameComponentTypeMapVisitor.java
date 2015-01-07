@@ -1,4 +1,4 @@
-package org.lemsml.model.test;
+package visitors;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.visitors.BaseVisitor;
