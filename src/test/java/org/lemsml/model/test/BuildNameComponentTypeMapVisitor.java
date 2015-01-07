@@ -5,22 +5,20 @@ import org.lemsml.visitors.BaseVisitor;
 
 import extended.Lems;
 
+public class BuildNameComponentTypeMapVisitor<Void> extends
+		BaseVisitor<Void, Throwable> {
 
-public class BuildNameComponentTypeMapVisitor<Void> extends BaseVisitor<Void, Throwable> {
 	private Lems lems;
 
-	
 	public BuildNameComponentTypeMapVisitor(Lems lems) {
 		this.lems = lems;
 	}
 
-
 	@Override
-    public Void visit(ComponentType ct) throws Throwable {
+	public Void visit(ComponentType ct) throws Throwable {
 		this.lems.registerComponentType(ct.getName(), ct);
 		return null;
-    }
-
+	}
 
 	public Lems getLems() {
 		return lems;

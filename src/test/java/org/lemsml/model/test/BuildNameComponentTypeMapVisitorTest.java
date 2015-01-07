@@ -13,11 +13,9 @@ import org.lemsml.visitors.TraversingVisitor;
 import extended.Lems;
 
 public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
-	
 
 	private File schema;
 	private File hr_def;
-
 
 	@Before
 	public void setUp() {
@@ -28,17 +26,19 @@ public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
 	@Test
 	public void test() throws Throwable {
 		Lems lems = LemsXmlUtils.unmarshall(hr_def, schema);
-		
-		BuildNameComponentTypeMapVisitor<Lems> nameComptypeVisitor = new BuildNameComponentTypeMapVisitor<Lems>(lems);
-		TraversingVisitor<Lems,Throwable> tv = new TraversingVisitor<Lems, Throwable>(
-                new DepthFirstTraverserImpl<Throwable>(), nameComptypeVisitor);
-        tv.setTraverseFirst(true);
-        lems.accept(tv);
 
-        Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByName();
+		BuildNameComponentTypeMapVisitor<Lems> nameComptypeVisitor = new BuildNameComponentTypeMapVisitor<Lems>(
+				lems);
+		TraversingVisitor<Lems, Throwable> tv = new TraversingVisitor<Lems, Throwable>(
+				new DepthFirstTraverserImpl<Throwable>(), nameComptypeVisitor);
+		tv.setTraverseFirst(true);
+		lems.accept(tv);
+
+		Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByName();
 		for (Entry<String, ComponentType> entry : nameTypeMap.entrySet()) {
-			System.out.println(entry.getKey() + " : " + entry.getValue().getClass().toString());
-			
+			System.out.println(entry.getKey() + " : "
+					+ entry.getValue().getClass().toString());
+
 		}
 	}
 
