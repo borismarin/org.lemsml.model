@@ -10,24 +10,21 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.Lems;
 
+import extended.Lems;
 import extended.Parameter;
 
 /**
  * @author boris
  *
  */
-public class HindmarshRoseTest{
+public class HindmarshRoseTest extends BaseTest{
 
 	private File schema;
 	private File hr_comptype;
 	private File hr_sim;
 	private File hr_noncanon_sim;
 
-	private File getLocalFile(String fname) {
-		return new File(getClass().getResource(fname).getFile());
-	}
 
 	@Before
 	public void setUp() {

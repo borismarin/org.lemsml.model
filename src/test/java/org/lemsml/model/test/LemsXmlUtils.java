@@ -6,9 +6,8 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.lemsml.model.Lems;
-
 import extended.ExtObjectFactory;
+import extended.Lems;
 
 public class LemsXmlUtils {
 
