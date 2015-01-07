@@ -1,15 +1,12 @@
 package org.lemsml.model.test;
 
 import java.io.File;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.lemsml.model.ComponentType;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
-import org.lemsml.visitors.TraversingVisitor;
 
+import parser.LemsParser;
+import parser.LemsXmlUtils;
 import extended.Lems;
 
 public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
@@ -26,20 +23,11 @@ public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
 	@Test
 	public void test() throws Throwable {
 		Lems lems = LemsXmlUtils.unmarshall(hr_def, schema);
+		LemsParser parser = new LemsParser(schema, hr_def);
 
-		BuildNameComponentTypeMapVisitor<Lems> nameComptypeVisitor = new BuildNameComponentTypeMapVisitor<Lems>(
-				lems);
-		TraversingVisitor<Lems, Throwable> tv = new TraversingVisitor<Lems, Throwable>(
-				new DepthFirstTraverserImpl<Throwable>(), nameComptypeVisitor);
-		tv.setTraverseFirst(true);
-		lems.accept(tv);
-
-		Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByName();
-		for (Entry<String, ComponentType> entry : nameTypeMap.entrySet()) {
-			System.out.println(entry.getKey() + " : "
-					+ entry.getValue().getClass().toString());
-
-		}
+		parser.populateNameComponentTypeHM(lems);
 	}
+
+	
 
 }

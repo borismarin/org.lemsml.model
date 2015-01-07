@@ -1,4 +1,4 @@
-package org.lemsml.model.test;
+package parser;
 
 import java.io.File;
 
@@ -11,7 +11,7 @@ import extended.Lems;
 
 public class LemsXmlUtils {
 
-	static Lems unmarshall(File document, File schema) {
+	public static Lems unmarshall(File document, File schema) {
 		Lems lems = null;
 		try {
 			JAXBContext jc = JAXBContext.newInstance(Lems.class);

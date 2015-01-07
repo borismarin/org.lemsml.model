@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 
+import parser.LemsXmlUtils;
+import parser.XmlFileUtils;
 import extended.Lems;
 import extended.Parameter;
 
