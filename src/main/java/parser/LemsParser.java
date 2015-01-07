@@ -13,19 +13,23 @@ import extended.Lems;
 
 public class LemsParser {
 	
-	Lems unmarshalled_lems;
+	Lems lems;
+
+	public Lems getLems() {
+		return lems;
+	}
 
 	public LemsParser(File lemsdocument, File schema) {
-		this.unmarshalled_lems = LemsXmlUtils.unmarshall(lemsdocument, schema);
+		this.lems = LemsXmlUtils.unmarshall(lemsdocument, schema);
 	}
 
 	public void populateNameComponentTypeHM() throws Throwable {
 		BuildNameComponentTypeMapVisitor<Lems> nameComptypeVisitor = new BuildNameComponentTypeMapVisitor<Lems>(
-				unmarshalled_lems);
+				lems);
 		TraversingVisitor<Lems, Throwable> tv = new TraversingVisitor<Lems, Throwable>(
 				new DepthFirstTraverserImpl<Throwable>(), nameComptypeVisitor);
 		tv.setTraverseFirst(true);
-		unmarshalled_lems.accept(tv);
+		lems.accept(tv);
 
 		Map<String, ComponentType> nameTypeMap = nameComptypeVisitor.getLems().getComponentTypesByName();
 		for (Entry<String, ComponentType> entry : nameTypeMap.entrySet()) {
