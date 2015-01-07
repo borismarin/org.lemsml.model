@@ -4,6 +4,7 @@ src/test/resources/tmp
 src/main/java/META-INF/MANIFEST.MF
 .DS_Store
 *.class
+output.xml
 
 # Package Files #
 *.jar
