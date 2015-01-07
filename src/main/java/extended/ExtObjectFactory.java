@@ -15,4 +15,9 @@ public class ExtObjectFactory extends ObjectFactory {
 	public Component createComponent() {
 		return new Component();
 	}
+
+	@Override
+	public Lems createLems() {
+		return new Lems();
+	}
 }
