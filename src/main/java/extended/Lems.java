@@ -16,18 +16,15 @@ public class Lems extends org.lemsml.model.Lems {
 		return componentTypesByNameHM.get(name);
 	}
 
-	public void registerComponentType(String name, ComponentType ct) {
-		this.componentTypesByNameHM.put(name, ct);
 
+	public void registerComponentTypeName(String name, ComponentType ct) {
+		this.componentTypesByNameHM.put(name, ct);
 	}
+
 
 	public Map<String, ComponentType> getComponentTypesByNameHM() {
 		return componentTypesByNameHM;
 	}
 
-	public void setComponentTypesByName(
-			Map<String, ComponentType> componentTypesByName) {
-		this.componentTypesByNameHM = componentTypesByName;
-	}
 
 }
