@@ -53,12 +53,12 @@
 
     <Component type="Display" id="d1" title="theta timeseries"
 			   timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
-      <Line id ="th" quantity="theta" scale="1" color="#ff0000" timeScale="1s"/>
+      <Component type="Line" id ="th" quantity="theta" scale="1" color="#ff0000" timeScale="1s"/>
     </Component>
     
     <Component type="Display" id="d2" title="p timeseries"
 			   timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
-      <Line id ="p" quantity="p" scale="1" color="#0000ff" timeScale="1s"/>
+      <Component type="Line" id ="p" quantity="p" scale="1" color="#0000ff" timeScale="1s"/>
     </Component>
 
 	<!--

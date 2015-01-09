@@ -18,29 +18,29 @@
 
 
 <Component type="network" id="net1">
-    <population id="hr_chaotic_pop" component="hr_chaotic" size="1"/>
+    <Component type="population" id="hr_chaotic_pop" component="hr_chaotic" size="1"/>
 </Component>
 
 
 <Component type="Simulation" id="sim1" length="2000s" step="0.001s" target="net1" method="rk4">
 
-    <Display id="d1" title="x (membrane potential) timeseries"
+    <Component type="Display" id="d1" title="x (membrane potential) timeseries"
         timeScale="1s" xmin="-100" xmax="2100" ymin="-2" ymax="2">
-        <Line id ="x" quantity="hr_chaotic_pop[0]/x" scale="1"
+        <Component type="Line" id ="x" quantity="hr_chaotic_pop[0]/x" scale="1"
             color="#000000" timeScale="1s"/>
-    </Display>
+    </Component>
 
-    <Display id="d2" title="y timeseries"
+    <Component type="Display" id="d2" title="y timeseries"
         timeScale="1s" xmin="-100" xmax="2100" ymin="-6" ymax="1">
-        <Line id ="y" quantity="hr_chaotic_pop[0]/y" scale="1"
+        <Component type="Line" id ="y" quantity="hr_chaotic_pop[0]/y" scale="1"
             color="#0000ff" timeScale="1s"/>
-    </Display>
+    </Component>
 
-    <Display id="d3" title="z timeseries"
+    <Component type="Display" id="d3" title="z timeseries"
         timeScale="1s" xmin="-100" xmax="2100" ymin="3" ymax="4">
-        <Line id ="z" quantity="hr_chaotic_pop[0]/z" scale="1"
+        <Component type="Line" id ="z" quantity="hr_chaotic_pop[0]/z" scale="1"
             color="#00ff00" timeScale="1s"/>
-    </Display>
+	</Component>
     
 </Component>
 
