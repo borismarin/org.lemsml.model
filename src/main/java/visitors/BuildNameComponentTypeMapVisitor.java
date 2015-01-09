@@ -1,27 +1,28 @@
 package visitors;
 
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
-public class BuildNameComponentTypeMapVisitor<L> extends BaseVisitor<L, Throwable>  {
+public class BuildNameComponentTypeMapVisitor extends BaseVisitor<Object, Throwable>  {
 
-	private L lems;
+	private Lems lems;
 
-	public BuildNameComponentTypeMapVisitor(L lems) {
+	public BuildNameComponentTypeMapVisitor(Lems lems) {
 		this.lems = lems;
 	}
 
 	@Override
-	public L visit(ComponentType ct) throws Throwable {
+	public Lems visit(ComponentType ct) throws Throwable {
 		((extended.Lems) this.lems).registerComponentTypeName(ct.getName(), ct);
 		return lems;
 	}
 
-	public L getLems() {
+	public Lems getLems() {
 		return lems;
 	}
 
-	public void setLems(L lems) {
+	public void setLems(Lems lems) {
 		this.lems = lems;
 	}
 

@@ -1,9 +1,11 @@
 package parser;
 
 import java.io.File;
+import java.util.List;
 
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
+import org.lemsml.visitors.Visitable;
 import org.lemsml.visitors.Visitor;
 
 import visitors.AddTypeToComponentVisitor;
@@ -22,20 +24,29 @@ public class LemsParser {
 		this.lems = LemsXmlUtils.unmarshall(lemsdocument, schema);
 	}
 
-	public void traverseWithVisitor(Visitor<Lems, Throwable> visitor)
+	public void visitList(List<? extends Visitable> visitables, Visitor<Object,Throwable> visitor)
+			throws Throwable {
+		for(Visitable toVisit : visitables) {
+			toVisit.accept(visitor);
+		}
+	}
+	
+
+	public void traverseWithVisitor(Visitable tree, Visitor<Object, Throwable> visitor)
 			throws Throwable {
 
-		TraversingVisitor<Lems, Throwable> tv = new TraversingVisitor<Lems, Throwable>(
+		TraversingVisitor<Object, Throwable> tv = new TraversingVisitor<Object, Throwable>(
 				new DepthFirstTraverserImpl<Throwable>(), visitor);
 		tv.setTraverseFirst(true);
-		lems.accept(tv);
+		tree.accept(tv);
 	}
 
 	public void populateNameComponentTypeHM() throws Throwable {
-		traverseWithVisitor(new BuildNameComponentTypeMapVisitor<Lems>(lems));
+//		traverseWithVisitor((Visitable) lems.getComponentType(), new BuildNameComponentTypeMapVisitor(lems));
+		visitList(lems.getComponentType(), new BuildNameComponentTypeMapVisitor(lems));
 	}
 
 	public void decorateComponentsWithType() throws Throwable {
-		traverseWithVisitor(new AddTypeToComponentVisitor<Lems>(lems));
+		visitList(lems.getComponent(), new AddTypeToComponentVisitor(lems));
 	}
 }
