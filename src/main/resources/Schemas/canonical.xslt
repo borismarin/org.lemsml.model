@@ -1,6 +1,6 @@
 <xsl:stylesheet version="1.0" 
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns="http://www.neuroml.org/lems/0.8.0"
+	xmlns="http://www.neuroml.org/lems/0.9.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <xsl:output method="xml" omit-xml-declaration="yes" indent="yes" version="1.0"/>

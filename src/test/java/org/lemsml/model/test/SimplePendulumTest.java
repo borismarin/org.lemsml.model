@@ -22,7 +22,7 @@ public class SimplePendulumTest extends BaseTest {
 
 	@Before
 	public void setUp() {
-		schema = getLocalFile("/Schemas/LEMS_v0.8.0.xsd");
+		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		lemsdoc = getLocalFile("/examples/opensourcechaos/standalone_pend.xml");
 	}
 

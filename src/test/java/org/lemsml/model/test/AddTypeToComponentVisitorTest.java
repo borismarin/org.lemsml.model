@@ -18,7 +18,7 @@ public class AddTypeToComponentVisitorTest extends BaseTest {
 
 	@Before
 	public void setUp() {
-		schema = getLocalFile("/Schemas/LEMS_v0.8.0.xsd");
+		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		lemsdoc = getLocalFile("/examples/opensourcechaos/standalone_pend.xml");
 	}
 
@@ -39,7 +39,6 @@ public class AddTypeToComponentVisitorTest extends BaseTest {
 		// Adds the corresponding ComponentType to each Component
 		parser.decorateComponentsWithType();
 		System.out.println("##### Decorated Components with type");
-		//TODO: there is a bug in here: see the github issue
 		for (Component comp : parser.getLems().getComponent()) {
 			System.out.println(comp + " : " + comp.get_ComponentType());
 		}

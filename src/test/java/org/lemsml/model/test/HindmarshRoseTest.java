@@ -30,7 +30,7 @@ public class HindmarshRoseTest extends BaseTest{
 
 	@Before
 	public void setUp() {
-		schema = getLocalFile("/Schemas/LEMS_v0.8.0.xsd");
+		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		hr_comptype = getLocalFile("/examples/HindmarshRose3d.xml");
 		hr_sim = getLocalFile("/examples/Run_Chaotic_HindmarshRose.xml");
 		hr_noncanon_sim = getLocalFile("/examples/NonCanon_Run_Chaotic_HindmarshRose.xml");

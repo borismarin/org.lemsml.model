@@ -14,7 +14,7 @@ public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
 
 	@Before
 	public void setUp() {
-		schema = getLocalFile("/Schemas/LEMS_v0.8.0.xsd");
+		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		hr_def = getLocalFile("/examples/HindmarshRose3d.xml");
 	}
 
