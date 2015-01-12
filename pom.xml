@@ -16,15 +16,9 @@
         	<version>0.9.2</version>
 		</dependency>
         <dependency>
-            <groupId>com.sun.tools.xjc.maven2</groupId>
-            <artifactId>maven-jaxb-plugin</artifactId>
-            <version>1.1.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jaxb-impl</artifactId>
-                    <groupId>com.sun.xml.bind</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.12.3</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -96,7 +90,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.2</version>
+                <version>0.12.3</version>
                 <executions>
                     <execution>
                         <id>LEMSML</id>
@@ -104,6 +98,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                        	<specVersion>2.2</specVersion>
                         	<extension>true</extension>
                             <args>
                             <!-- <arg>-Xneuromlcodeinjector</arg> -->
