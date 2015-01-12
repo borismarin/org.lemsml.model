@@ -14,10 +14,10 @@ public class LemsXmlUtils {
 	public static Lems unmarshall(File document, File schema) {
 		Lems lems = null;
 		try {
-			JAXBContext jc = JAXBContext.newInstance(Lems.class);
+			JAXBContext jc = JAXBContext.newInstance(ExtObjectFactory.class);
 			Unmarshaller unmarshaller = jc.createUnmarshaller();
 			unmarshaller.setSchema(XmlFileUtils.parseSchema(schema));
-			unmarshaller.setProperty("com.sun.xml.internal.bind.ObjectFactory",
+			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory",
 					new ExtObjectFactory());
 			lems = (Lems) unmarshaller.unmarshal(document);
 		} catch (JAXBException e) {
