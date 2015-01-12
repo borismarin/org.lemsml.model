@@ -26,11 +26,6 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.neuroml.model.injectingplugin</groupId>
-            <artifactId>org.neuroml.model.injectingplugin</artifactId>
-            <version>1.4.0</version>
-        </dependency> -->
     </dependencies>
     <build>
         <plugins>
@@ -101,8 +96,8 @@
                         	<specVersion>2.2</specVersion>
                         	<extension>true</extension>
                             <args>
-                            <!-- <arg>-Xneuromlcodeinjector</arg> -->
                                 <arg>-XtoString</arg>
+                                <arg>-Xcopyable</arg>
                                 <arg>-Xsimplify</arg>
 								<arg>-Xvisitor</arg>
 								<arg>-Xvisitor-package:org.lemsml.visitors</arg>

@@ -1,0 +1,5 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+    <Include file="include2.xml"/>
+    <ComponentType name="Blah1"/>
+    <Constant name="constant1" value="1m"/>
+</Lems>
