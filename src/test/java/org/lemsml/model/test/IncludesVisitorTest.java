@@ -32,7 +32,7 @@ public class IncludesVisitorTest extends BaseTest {
 
 		LemsParser parser = new LemsParser(include0, schema);
 		parser.processIncludes();
-		assertEquals(parser.getLems().getConstant().size(),2);
+		assertEquals(parser.getLems().getConstant().size(),3);
 
 	}
 
