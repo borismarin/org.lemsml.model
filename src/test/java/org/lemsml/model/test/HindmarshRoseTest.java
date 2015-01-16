@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
+import parser.LemsParser;
 import parser.LemsXmlUtils;
 import parser.XmlFileUtils;
 import extended.Lems;
@@ -57,21 +58,37 @@ public class HindmarshRoseTest extends BaseTest{
 		assertTrue(XmlFileUtils.validate(transformed, schema));
 	}
 	
+	private void validateHRComponentType(ComponentType hr_candidate){
+		
+		String desc = hr_candidate.getDescription();
+		assertEquals(
+				desc,
+				"     The Hindmarsh Rose model is a simplified point cell model which     captures complex firing patterns of single neurons, such as     periodic and chaotic bursting. It in a fast spiking subsystem,     which is a generalization of the Fitzhugh-Nagumo system, coupled     to a slower subsystem which allows the model to fire bursts. The     dynamical variables x,y,z correspond to the membrane potential, a     recovery variable, and a slower adaptation current, respectively.     ");
+
+		List<Parameter> ParameterList = hr_candidate.getParameter();
+		assertEquals(ParameterList.get(0).getDescription(),
+				"cubic term in x         nullcline");
+	}
+	
 	
 	@Test
 	public void testUnmarshallingComponent() {
 
 		Lems lems = LemsXmlUtils.unmarshall(hr_comptype, schema);
 		ComponentType hrct = lems.getComponentType().get(0);
+		validateHRComponentType(hrct);
 
-		String desc = hrct.getDescription();
-		assertEquals(
-				desc,
-				"     The Hindmarsh Rose model is a simplified point cell model which     captures complex firing patterns of single neurons, such as     periodic and chaotic bursting. It in a fast spiking subsystem,     which is a generalization of the Fitzhugh-Nagumo system, coupled     to a slower subsystem which allows the model to fire bursts. The     dynamical variables x,y,z correspond to the membrane potential, a     recovery variable, and a slower adaptation current, respectively.     ");
+	}
+	
+	@Test
+	public void testIncludes() throws Throwable {
 
-		List<Parameter> ParameterList = hrct.getParameter();
-		assertEquals(ParameterList.get(0).getDescription(),
-				"cubic term in x         nullcline");
+		LemsParser parser = new LemsParser(hr_sim, schema);
+		parser.processIncludes();
+
+		ComponentType hrct = parser.getLems().getComponentType().get(0);
+		validateHRComponentType(hrct);
+
 	}
 	
 }

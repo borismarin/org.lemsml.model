@@ -2,7 +2,7 @@ package visitors;
 
 import java.io.File;
 
-import org.lemsml.model.Component;
+import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Include;
 import org.lemsml.model.Lems;
@@ -48,9 +48,9 @@ public class ProcessIncludesVisitor extends BaseVisitor<Object, Throwable> {
 		return unextendedLems;
 	}
 
-	public Lems visit(Component component) throws Throwable {
-		System.out.println("#found component " + component.toString());
-		resolvedLems.getComponent().add((extended.Component)component);
+	public Lems visit(ComponentType componentType) throws Throwable {
+		System.out.println("#found component " + componentType.toString());
+		resolvedLems.getComponentType().add(componentType);
 
 		return unextendedLems;
 	}

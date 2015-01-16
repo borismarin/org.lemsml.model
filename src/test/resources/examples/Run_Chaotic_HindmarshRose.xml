@@ -4,9 +4,11 @@
 <Target component="sim1"/>
 
 <!-- Include core NeuroML2 ComponentType definitions -->
+<!--
 <Include file="Cells.xml"/>
 <Include file="Networks.xml"/>
 <Include file="Simulation.xml"/>
+ -->
 
 <Include file="HindmarshRose3d.xml"/>
 
