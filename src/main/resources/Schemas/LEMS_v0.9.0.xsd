@@ -327,7 +327,7 @@
 	</xs:complexType>
 
 	<!-- for Parameter, StateVariable etc. -->
-	<xs:complexType name="NamedDimensionalType">
+	<xs:complexType name="NamedDimensionalType" abstract="true">
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="dimension" type="xs:string" use="optional"
 			default="none" />
