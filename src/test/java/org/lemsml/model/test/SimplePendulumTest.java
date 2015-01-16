@@ -9,11 +9,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.Parameter;
 
 import parser.LemsXmlUtils;
 import parser.XmlFileUtils;
 import extended.Lems;
-import extended.Parameter;
 
 public class SimplePendulumTest extends BaseTest {
 

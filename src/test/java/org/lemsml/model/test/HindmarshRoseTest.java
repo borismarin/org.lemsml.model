@@ -10,11 +10,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.Parameter;
 
 import parser.LemsXmlUtils;
 import parser.XmlFileUtils;
 import extended.Lems;
-import extended.Parameter;
 
 /**
  * @author boris
@@ -73,4 +73,5 @@ public class HindmarshRoseTest extends BaseTest{
 		assertEquals(ParameterList.get(0).getDescription(),
 				"cubic term in x         nullcline");
 	}
+	
 }
