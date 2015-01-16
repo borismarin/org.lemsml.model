@@ -104,10 +104,6 @@
 	</xs:complexType>
 
 	<xs:simpleType name="PhysicalQuantity">
-		<xs:annotation>
-			<xs:documentation>A value for a physical quantity in LEMS, e.g. 20,
-				-60.0mV, .05 per_ms or 5nA</xs:documentation>
-		</xs:annotation>
 		<xs:restriction base="xs:string">
 			<xs:pattern
 				value="-?([0-9]*(\.[0-9]+)?)([eE]-?[0-9]+)?[\s]*([_a-zA-Z0-9])*" />
