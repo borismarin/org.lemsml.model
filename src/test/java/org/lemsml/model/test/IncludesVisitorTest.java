@@ -19,7 +19,7 @@ public class IncludesVisitorTest extends BaseTest {
 	@Before
 	public void setUp() {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
-		include0 = getLocalFile("/examples/include0.xml");
+		include0 = getLocalFile("/examples/include-test/include0.xml");
 	}
 
 	@Test
