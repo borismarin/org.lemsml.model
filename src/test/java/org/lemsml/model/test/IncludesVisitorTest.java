@@ -32,9 +32,8 @@ public class IncludesVisitorTest extends BaseTest {
 
 		LemsParser parser = new LemsParser(include0, schema);
 		parser.processIncludes();
-		assertEquals(parser.getLems().getConstant().size(),3);
-        System.out.println(parser.getLems().getConstant().get(0).getValue());
+		assertEquals(parser.getLems().getConstant().size(), 3);
+		System.out.println(parser.getLems().getConstant().get(0).getValue());
 	}
-
 
 }
