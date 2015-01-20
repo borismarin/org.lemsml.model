@@ -1,12 +1,12 @@
 package visitors;
 
-import org.lemsml.model.Component;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
+import extended.Component;
 
-public class AddTypeToComponentVisitor extends BaseVisitor<Object, Throwable>{
+public class AddTypeToComponentVisitor extends BaseVisitor<Object, Throwable> {
 
 	private Lems lems;
 
@@ -18,7 +18,7 @@ public class AddTypeToComponentVisitor extends BaseVisitor<Object, Throwable>{
 	public Object visit(Component comp) throws Throwable {
 		ComponentType ctToSet = ((extended.Lems) this.lems)
 				.getComponentTypeByName(comp.getType());
-		((extended.Component) comp).set_ComponentType(ctToSet);
+		comp.set_ComponentType(ctToSet);
 		return null;
 	}
 

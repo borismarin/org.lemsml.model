@@ -21,20 +21,19 @@ import extended.Lems;
  * @author boris
  *
  */
-public class HindmarshRoseTest extends BaseTest{
+public class HindmarshRoseTest extends BaseTest {
 
 	private File schema;
 	private File hr_comptype;
 	private File hr_sim;
 	private File hr_noncanon_sim;
 
-
 	@Before
 	public void setUp() {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
-		hr_comptype = getLocalFile("/examples/HindmarshRose3d.xml");
-		hr_sim = getLocalFile("/examples/Run_Chaotic_HindmarshRose.xml");
-		hr_noncanon_sim = getLocalFile("/examples/NonCanon_Run_Chaotic_HindmarshRose.xml");
+		hr_comptype = getLocalFile("/examples/nml/HindmarshRose3d.xml");
+		hr_sim = getLocalFile("/examples/nml/Run_Chaotic_HindmarshRose.xml");
+		hr_noncanon_sim = getLocalFile("/examples/nml/NonCanon_Run_Chaotic_HindmarshRose.xml");
 	}
 
 	@Test
@@ -46,20 +45,22 @@ public class HindmarshRoseTest extends BaseTest{
 	public void validateSimulation() {
 		assertTrue(XmlFileUtils.validate(hr_sim, schema));
 	}
-	
+
 	@Test
-	public void testCanonicalize(){
+	public void testCanonicalize() {
 		File xslt = getLocalFile("/Schemas/canonical.xslt");
-		System.out.println("Asserting that a noncanonical file fails to validate...");
+		System.out
+				.println("Asserting that a noncanonical file fails to validate...");
 		assertFalse(XmlFileUtils.validate(hr_noncanon_sim, schema));
 
-		System.out.println("Asserting that the canonicalized version validates...");
+		System.out
+				.println("Asserting that the canonicalized version validates...");
 		File transformed = XmlFileUtils.transform(hr_noncanon_sim, xslt);
 		assertTrue(XmlFileUtils.validate(transformed, schema));
 	}
-	
-	private void validateHRComponentType(ComponentType hr_candidate){
-		
+
+	private void validateHRComponentType(ComponentType hr_candidate) {
+
 		String desc = hr_candidate.getDescription();
 		assertEquals(
 				desc,
@@ -69,8 +70,7 @@ public class HindmarshRoseTest extends BaseTest{
 		assertEquals(ParameterList.get(0).getDescription(),
 				"cubic term in x         nullcline");
 	}
-	
-	
+
 	@Test
 	public void testUnmarshallingComponent() {
 
@@ -79,16 +79,20 @@ public class HindmarshRoseTest extends BaseTest{
 		validateHRComponentType(hrct);
 
 	}
-	
+
 	@Test
-	public void testIncludes() throws Throwable {
+	public void testParsing() throws Throwable {
 
 		LemsParser parser = new LemsParser(hr_sim, schema);
-		parser.processIncludes();
 
-		ComponentType hrct = parser.getLems().getComponentType().get(0);
+		parser.processIncludes();
+		parser.populateNameComponentTypeHM();
+		parser.decorateComponentsWithType();
+
+		ComponentType hrct = parser.getLems().getComponentTypeByName(
+				"hindmarshRoseCell");
 		validateHRComponentType(hrct);
 
 	}
-	
+
 }
