@@ -230,21 +230,21 @@
 	</xs:complexType>
 
 	<xs:complexType name="OnEvent">
-		<xs:sequence>
+		<xs:choice maxOccurs="unbounded" minOccurs="0">
 			<xs:element name="StateAssignment" type="StateAssignment" />
 			<xs:element name="EventOut" type="EventOut" />
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="port" type="xs:string" use="required" />
 	</xs:complexType>
 
 	<xs:complexType name="OnCondition">
-		<xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="StateAssignment" type="StateAssignment" />
 			<xs:element name="EventOut" type="EventOut" />
 			<xs:element name="Transition" type="Transition" minOccurs="0"
 				maxOccurs="1" />
 			<!-- only on OnCondition inside Regime... -->
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="test" type="xs:string" use="required" />
 	</xs:complexType>
 
@@ -258,12 +258,12 @@
 	</xs:complexType>
 
 	<xs:complexType name="Regime">
-		<xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
 			<xs:element name="TimeDerivative" type="TimeDerivative" />
 			<xs:element name="OnEntry" type="OnStart" minOccurs="0"
 				maxOccurs="1" />
 			<xs:element name="OnCondition" type="OnCondition" />
-		</xs:sequence>
+		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="initial" type="TrueOrFalse" use="optional" />
 	</xs:complexType>
