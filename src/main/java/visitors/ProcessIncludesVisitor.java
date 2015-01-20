@@ -54,6 +54,12 @@ public class ProcessIncludesVisitor extends BaseVisitor<Object, Throwable> {
 
 		return unextendedLems;
 	}
+	public Lems visit(extended.Component component) throws Throwable {
+		System.out.println("#found component " + component.toString());
+		//resolvedLems.getComponentType().add(component);
+
+		return unextendedLems;
+	}
 	//TODO: add visit for all other lems subelements
 
 	public Lems getUnextendedLems() {
