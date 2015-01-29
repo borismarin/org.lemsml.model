@@ -1,6 +1,7 @@
 package parser;
 
 import java.io.File;
+import java.net.URL;
 
 import visitors.AddTypeToComponentVisitor;
 import visitors.BuildNameComponentTypeMapVisitor;
@@ -20,6 +21,12 @@ public class LemsParser {
 	public LemsParser(File lemsdocument, File schema) {
 		this.lems = LemsXmlUtils.unmarshall(lemsdocument, schema);
 		this.cwd = lemsdocument.getParentFile();
+		this.schema = schema;
+	}
+	
+	public LemsParser(URL lemsdocumenturl, File schema) {
+		this.lems = LemsXmlUtils.unmarshall(lemsdocumenturl, schema);
+		//this.cwd = lemsdocumenturl.getParentFile();
 		this.schema = schema;
 	}
 
