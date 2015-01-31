@@ -77,6 +77,8 @@
 			default="0" />
 		<xs:attribute name="n" type="xs:integer" use="optional"
 			default="0" />
+		<xs:attribute name="j" type="xs:integer" use="optional"
+			default="0" />
 	</xs:complexType>
 
 	<xs:complexType name="Unit">
