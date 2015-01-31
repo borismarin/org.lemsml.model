@@ -32,16 +32,15 @@ public class LemsParser {
 	}
 
 	public void populateNameComponentTypeHM() throws Throwable {
-		LemsVisitorUtils.traverseWithVisitor(lems, new BuildNameComponentTypeMapVisitor(lems));
+		LemsVisitorUtils.visitList(lems.getComponentType(), new BuildNameComponentTypeMapVisitor(lems));
 	}
 
 	public void decorateComponentsWithType() throws Throwable {
-		LemsVisitorUtils.traverseWithVisitor(lems, new AddTypeToComponentVisitor(lems));
+		LemsVisitorUtils.visitList(lems.getComponent(), new AddTypeToComponentVisitor(lems));
 	}
 
 	public void processIncludes() throws Throwable {
 		ProcessIncludesVisitor incProcVisitor = new ProcessIncludesVisitor(lems, schema, cwd);
-		//traverseWithVisitor((Visitable) lems, incProcVisitor);
 		LemsVisitorUtils.visitList(lems.getInclude(), incProcVisitor);
 		this.lems = incProcVisitor.getResolvedLems();
 	}
