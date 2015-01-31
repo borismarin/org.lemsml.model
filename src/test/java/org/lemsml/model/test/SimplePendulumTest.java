@@ -2,6 +2,9 @@ package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static tec.units.ri.util.SI.KILOGRAM;
+import static tec.units.ri.util.SI.SECOND;
+import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
 
 import java.io.File;
 import java.util.List;
@@ -11,6 +14,7 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
+import parser.LemsParser;
 import parser.LemsXmlUtils;
 import parser.XmlFileUtils;
 import extended.Lems;
@@ -45,5 +49,16 @@ public class SimplePendulumTest extends BaseTest {
 		assertEquals(ParameterList.get(0).getDescription(), "Mass of the bob");
 	}
 
+	@Test
+	public void testDimensions() throws Throwable {
+
+		LemsParser parser = new LemsParser(lemsdoc, schema);
+		parser.processDimensions();
+		assertEquals(parser.getLems().getNameToDimension().get("time"),
+				SECOND.getDimension());
+		assertEquals(
+				parser.getLems().getNameToDimension().get("angular_momentum"),
+				SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
+	}
 
 }

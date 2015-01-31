@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 
 import visitors.AddTypeToComponentVisitor;
+import visitors.AddUOMToDimensionVisitor;
 import visitors.BuildNameComponentTypeMapVisitor;
 import visitors.ProcessIncludesVisitor;
 import extended.Lems;
@@ -31,12 +32,11 @@ public class LemsParser {
 	}
 
 	public void populateNameComponentTypeHM() throws Throwable {
-//		traverseWithVisitor((Visitable) lems.getComponentType(), new BuildNameComponentTypeMapVisitor(lems));
-		LemsVisitorUtils.visitList(lems.getComponentType(), new BuildNameComponentTypeMapVisitor(lems));
+		LemsVisitorUtils.traverseWithVisitor(lems, new BuildNameComponentTypeMapVisitor(lems));
 	}
 
 	public void decorateComponentsWithType() throws Throwable {
-		LemsVisitorUtils.visitList(lems.getComponent(), new AddTypeToComponentVisitor(lems));
+		LemsVisitorUtils.traverseWithVisitor(lems, new AddTypeToComponentVisitor(lems));
 	}
 
 	public void processIncludes() throws Throwable {
@@ -44,5 +44,9 @@ public class LemsParser {
 		//traverseWithVisitor((Visitable) lems, incProcVisitor);
 		LemsVisitorUtils.visitList(lems.getInclude(), incProcVisitor);
 		this.lems = incProcVisitor.getResolvedLems();
+	}
+
+	public void processDimensions() throws Throwable {
+		LemsVisitorUtils.traverseWithVisitor(lems, new AddUOMToDimensionVisitor(lems));
 	}
 }

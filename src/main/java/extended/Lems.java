@@ -12,7 +12,7 @@ import org.lemsml.model.ComponentType;
 public class Lems extends org.lemsml.model.Lems {
 
 	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
-	private Map<String, Unit<?>> nameToDimension = new HashMap<String, Unit<?>>();
+	private Map<String, javax.measure.Dimension> nameToDimension = new HashMap<String, javax.measure.Dimension>();
 	private Map<String, Unit<?>> nameToUnit = new HashMap<String, Unit<?>>();
 
 	public ComponentType getComponentTypeByName(String name) {
@@ -30,12 +30,12 @@ public class Lems extends org.lemsml.model.Lems {
 	}
 
 
-	public Map<String, Unit<?>> getNameToDimension() {
+	public Map<String, javax.measure.Dimension> getNameToDimension() {
 		return nameToDimension;
 	}
 
 
-	public void setNameToDimension(Map<String, Unit<?>> nameToDimension) {
+	public void setNameToDimension(Map<String, javax.measure.Dimension> nameToDimension) {
 		this.nameToDimension = nameToDimension;
 	}
 
