@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jxb:bindings 
+    version="2.0"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
+    xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    extensionBindingPrefixes="simplify">
+
+   <jxb:bindings schemaLocation="LEMS_v0.9.0.xsd" node="/xs:schema">
+     
+      <jxb:schemaBindings>
+         <jxb:package name="org.lemsml.model" />
+      </jxb:schemaBindings>
+      
+      <jxb:bindings node="//xs:element[@name='Lems']">
+         <jxb:class implClass="extended.Lems"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:choice[@maxOccurs='unbounded']">
+         <simplify:as-element-property/>
+      </jxb:bindings>
+      
+      <jxb:bindings node=".//xs:complexType[@name='Component']">
+         <jxb:class implClass="extended.Component"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='Component']">
+         <jxb:class ref="extended.Component"/>
+      </jxb:bindings>
+
+      <jxb:bindings node=".//xs:complexType[@name='Dimension']">
+         <jxb:class implClass="extended.Dimension"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='Dimension']">
+         <jxb:class ref="extended.Dimension"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
+         <jxb:property>
+            <jxb:baseType>
+               <xjc:javaType adapter="extended.PhysicalQuantityAdapter" name="extended.PhysicalQuantity" /> 
+            </jxb:baseType>
+         </jxb:property>
+      </jxb:bindings>
+      
+   </jxb:bindings>
+   
+</jxb:bindings>

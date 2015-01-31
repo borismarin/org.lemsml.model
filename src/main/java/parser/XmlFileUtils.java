@@ -1,4 +1,4 @@
-package org.lemsml.model.test;
+package parser;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
 
 public class XmlFileUtils {
 
-	static boolean validate(File document, File schema) {
+	public static boolean validate(File document, File schema) {
 		boolean ret = false;
 		try {
 			System.out.print("Validating file " + document.getName()
@@ -38,7 +38,7 @@ public class XmlFileUtils {
 		return ret;
 	}
 
-	static File transform(File document, File transformation) {
+	public static File transform(File document, File transformation) {
 		System.out.println("Applying XSLT " + transformation.getName()
 				+ " to file " + document.getName() + "... ");
 		String orig_name = document.getPath();
@@ -62,7 +62,7 @@ public class XmlFileUtils {
 		return outputFile;
 	}
 
-	static Schema parseSchema(File schema) {
+	public static Schema parseSchema(File schema) {
 		Schema parsedSchema = null;
 		SchemaFactory sf = SchemaFactory
 				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);

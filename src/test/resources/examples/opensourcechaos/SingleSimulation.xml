@@ -1,4 +1,4 @@
-<Lems>
+<Lems xmlns="http://www.neuroml.org/lems/0.8.0">
 
 
 <ComponentType name="Display">

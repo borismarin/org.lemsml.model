@@ -1,0 +1,44 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.8.0">
+
+<!--
+
+    LEMS definition of a simple pendulum.
+
+-->
+
+<Include file="BaseUnits.xml"/>
+
+<ComponentType name="SimplePendulum"
+    description="Equations of motion for a simple pendulum with mass _m_ and length _l_ ">
+    
+    <Parameter name="m" dimension="mass" description="Mass of the bob"/>
+    <Parameter name="l" dimension="length" description="Length of the limb"/>
+    <Parameter name="g" dimension="acceleration" description="Gravitational acceleration"/>
+
+    <!-- Initial Conditions -->
+    <Parameter name="theta_0" dimension="none"/>
+    <Parameter name="p_0" dimension="angular_momentum"/>
+
+    <Exposure name="theta" dimension="none"/>
+    <Exposure name="p" dimension="angular_momentum"/>
+    
+    <Dynamics>
+        
+        <StateVariable name="theta" dimension="none" exposure="theta"/>
+        <StateVariable name="p" dimension="angular_momentum" exposure="p"/>
+		
+        <TimeDerivative variable="theta" value="p / (2*m*l*l)"/>
+        <TimeDerivative variable="p" value="-m*g*l*sin(theta)"/>
+        
+        <OnStart>
+            <StateAssignment variable="theta" value="theta_0"/>
+            <StateAssignment variable="p" value="p_0"/>
+        </OnStart>
+        
+    </Dynamics>
+    
+</ComponentType>
+
+
+</Lems>
+

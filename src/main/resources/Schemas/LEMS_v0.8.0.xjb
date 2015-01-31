@@ -11,6 +11,11 @@
 			<jxb:package name="org.lemsml.model" />
 		</jxb:schemaBindings>
 
+		<jxb:bindings node="//xs:element[@name='Lems']">
+			<jxb:class implClass="extended.Lems" />
+		</jxb:bindings>
+
+
 		<jxb:bindings multiple="true" node=".//xs:choice[@maxOccurs='unbounded']">
 			<simplify:as-element-property />
 		</jxb:bindings>

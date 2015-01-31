@@ -1,0 +1,35 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.8.0">
+
+<Include file="BaseUnits.xml"/>
+<Include file="SingleSimulation.xml"/>
+<Include file="SimplePendulum.xml"/>
+
+<!-- Specify which component to run -->
+<Target component="sim1"/>
+
+<!-- parameter set for chaotic attractor -->
+<Component type="SimplePendulum" id="pend" l="1m" m="1kg" g="1m_per_s2"
+    theta_0="1.0"  p_0="0kg_m2_per_s"/>
+
+<Component type="Simulation" id="sim1" length="100s" step="0.001s" target="pend" method="rk4">
+
+    <Component type="Display" id="d1" title="theta timeseries"
+        timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
+        <Line id ="th" quantity="theta" scale="1" color="#ff0000" timeScale="1s"/>
+    </Component>
+    
+    <Component type="Display" id="d2" title="p timeseries"
+        timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
+        <Line id ="p" quantity="p" scale="1" color="#0000ff" timeScale="1s"/>
+    </Component>
+
+<!--
+    <Component type="OutputFile" id="out" fileName="pend.dat">
+        <OutputColumn id="th" quantity="theta"/>
+        <OutputColumn id="p" quantity="p"/>
+    </Component>
+-->
+
+</Component>
+
+</Lems>

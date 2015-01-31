@@ -1,0 +1,19 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.6"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.6 https://raw.github.com/LEMS/LEMS/master/Schemas/LEMS/LEMS_v0.6.xsd">
+    <Dimension name="time" t="1"/>
+    <Dimension name="length" l="1"/>
+    <Dimension name="mass" m="1"/>
+    <Dimension name="acceleration" l="1" t="-2"/>
+    <Dimension name="angular_momentum" l="2" t="-1" m="1"/>
+    <Dimension name="angular_mass" l="2" m="1"/>
+    <Dimension name="per_time" t="-1"/>
+
+    <Unit symbol="s" dimension="time"/>
+    <Unit symbol="per_s" dimension="per_time"/>
+    <Unit symbol="m" dimension="length"/>
+    <Unit symbol="kg" dimension="mass"/>
+    <Unit symbol="m_per_s2" dimension="acceleration"/>
+    <Unit symbol="kg_m2_per_s" dimension="angular_momentum"/>
+    <Unit symbol="kg_m2" dimension="angular_mass"/>
+</Lems>

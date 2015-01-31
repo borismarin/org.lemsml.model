@@ -6,25 +6,19 @@
     <version>0.0.1</version>
     <packaging>bundle</packaging>
     <properties>
-        <build.version2>0.8.0</build.version2>
+        <build.version2>0.9.0</build.version2>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
    		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics</artifactId>
-			<version>0.6.4</version>
+        	<version>0.9.2</version>
 		</dependency>
         <dependency>
-            <groupId>com.sun.tools.xjc.maven2</groupId>
-            <artifactId>maven-jaxb-plugin</artifactId>
-            <version>1.1.1</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jaxb-impl</artifactId>
-                    <groupId>com.sun.xml.bind</groupId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.jvnet.jaxb2.maven2</groupId>
+            <artifactId>maven-jaxb2-plugin</artifactId>
+            <version>0.12.3</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -32,11 +26,6 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
-        <!-- <dependency>
-            <groupId>org.neuroml.model.injectingplugin</groupId>
-            <artifactId>org.neuroml.model.injectingplugin</artifactId>
-            <version>1.4.0</version>
-        </dependency> -->
     </dependencies>
     <build>
         <plugins>
@@ -96,7 +85,7 @@
             <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.8.2</version>
+                <version>0.12.3</version>
                 <executions>
                     <execution>
                         <id>LEMSML</id>
@@ -104,10 +93,11 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
+                        	<specVersion>2.2</specVersion>
                         	<extension>true</extension>
                             <args>
-                            <!-- <arg>-Xneuromlcodeinjector</arg> -->
                                 <arg>-XtoString</arg>
+                                <arg>-Xcopyable</arg>
                                 <arg>-Xsimplify</arg>
 								<arg>-Xvisitor</arg>
 								<arg>-Xvisitor-package:org.lemsml.visitors</arg>
@@ -116,7 +106,6 @@
                             <bindingIncludes>
                                 <include>LEMS_v${build.version2}.xjb</include>
                             </bindingIncludes>
-                            <forceRegenerate>true</forceRegenerate>
                             <schemaDirectory>src/main/resources/Schemas</schemaDirectory>
                             <generateDirectory>${project.build.directory}/generated-sources/LEMS</generateDirectory>
                             <schemaIncludes>
@@ -126,7 +115,7 @@
 								<plugin>
 									<groupId>com.massfords</groupId>
 									<artifactId>jaxb-visitor</artifactId>
-									<version>1.13</version>
+									<version>2.2-SNAPSHOT</version>
 								</plugin>
                                 <!-- <plugin>
                                     <groupId>org.neuroml.model.injectingplugin</groupId>
@@ -136,7 +125,7 @@
                                 <plugin>
 									<groupId>org.jvnet.jaxb2_commons</groupId>
 									<artifactId>jaxb2-basics</artifactId>
-									<version>0.6.4</version>
+									<version>0.9.2</version>
 								</plugin>
                             </plugins>
                         </configuration>

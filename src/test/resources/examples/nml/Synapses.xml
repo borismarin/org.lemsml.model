@@ -1,6 +1,6 @@
-<Lems xmlns="http://www.neuroml.org/lems/0.8.0"
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.neuroml.org/lems/0.8.0"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.9.0"
       description="A number of synaptic ComponentTypes for use in NeuroML 2 documents. These generally extend the _baseSynapse_ ComponentType.">
 
 
