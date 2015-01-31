@@ -10,18 +10,18 @@ import parser.LemsParser;
 public class BuildNameComponentTypeMapVisitorTest extends BaseTest {
 
 	private File schema;
-	private File hr_def;
+	private File lemsdoc;
 
 	@Before
 	public void setUp() {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
-		hr_def = getLocalFile("/examples/nml/HindmarshRose3d.xml");
+		lemsdoc = getLocalFile("/examples/nml/HindmarshRose3d.xml");
 	}
 
 	@Test
 	public void test() throws Throwable {
 
-		LemsParser parser = new LemsParser(hr_def, schema);
+		LemsParser parser = new LemsParser(lemsdoc, schema);
 
 		parser.populateNameComponentTypeHM();
 	}
