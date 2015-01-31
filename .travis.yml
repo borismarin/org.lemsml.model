@@ -2,14 +2,13 @@ language: java
 
 jdk:
   - openjdk7
-  - openjdk6
   - oraclejdk7
 
 install:
     # we are using features from jaxb-visitor which haven't been
     # published in the central maven repos yet.
     - git clone https://github.com/massfords/jaxb-visitor.git
-    - cd jaxb-visior
+    - cd jaxb-visitor
     - mvn install
     - cd $TRAVIS_BUILD_DIR 
     
