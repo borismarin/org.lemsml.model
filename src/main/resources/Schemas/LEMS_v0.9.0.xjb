@@ -14,19 +14,27 @@
       </jxb:schemaBindings>
       
       <jxb:bindings node="//xs:element[@name='Lems']">
-         <jxb:class implClass="extended.Lems" />
+         <jxb:class implClass="extended.Lems"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node=".//xs:choice[@maxOccurs='unbounded']">
-         <simplify:as-element-property />
+         <simplify:as-element-property/>
       </jxb:bindings>
       
       <jxb:bindings node=".//xs:complexType[@name='Component']">
-         <jxb:class implClass="extended.Component" />
+         <jxb:class implClass="extended.Component"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node=".//xs:element[@type='Component']">
-         <jxb:class ref="extended.Component" />
+         <jxb:class ref="extended.Component"/>
+      </jxb:bindings>
+
+      <jxb:bindings node=".//xs:complexType[@name='Dimension']">
+         <jxb:class implClass="extended.Dimension"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='Dimension']">
+         <jxb:class ref="extended.Dimension"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
