@@ -3,6 +3,7 @@ package extended;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.measure.Unit;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.ComponentType;
@@ -10,20 +11,42 @@ import org.lemsml.model.ComponentType;
 @XmlTransient
 public class Lems extends org.lemsml.model.Lems {
 
-	private Map<String, ComponentType> componentTypesByNameHM = new HashMap<String, ComponentType>();
+	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
+	private Map<String, Unit<?>> nameToDimension = new HashMap<String, Unit<?>>();
+	private Map<String, Unit<?>> nameToUnit = new HashMap<String, Unit<?>>();
 
 	public ComponentType getComponentTypeByName(String name) {
-		return componentTypesByNameHM.get(name);
+		return nameToCompType.get(name);
 	}
 
 
 	public void registerComponentTypeName(String name, ComponentType ct) {
-		this.componentTypesByNameHM.put(name, ct);
+		this.nameToCompType.put(name, ct);
 	}
 
 
 	public Map<String, ComponentType> getComponentTypesByNameHM() {
-		return componentTypesByNameHM;
+		return nameToCompType;
+	}
+
+
+	public Map<String, Unit<?>> getNameToDimension() {
+		return nameToDimension;
+	}
+
+
+	public void setNameToDimension(Map<String, Unit<?>> nameToDimension) {
+		this.nameToDimension = nameToDimension;
+	}
+
+
+	public Map<String, Unit<?>> getNameToUnit() {
+		return nameToUnit;
+	}
+
+
+	public void setNameToUnit(Map<String, Unit<?>> nameToUnit) {
+		this.nameToUnit = nameToUnit;
 	}
 
 
