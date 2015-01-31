@@ -8,8 +8,10 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 
-import parser.LemsParser;
-import parser.XmlFileUtils;
+import compiler.parser.LEMSParser;
+import compiler.parser.XMLUtils;
+
+import extended.Lems;
 
 public class IncludesVisitorTest extends BaseTest {
 
@@ -24,16 +26,16 @@ public class IncludesVisitorTest extends BaseTest {
 
 	@Test
 	public void validate() {
-		assertTrue(XmlFileUtils.validate(include0, schema));
+		assertTrue(XMLUtils.validate(include0, schema));
 	}
 
 	@Test
-	public void testUnmarshalling() throws Throwable {
+	public void testIncludeVisitor() throws Throwable {
 
-		LemsParser parser = new LemsParser(include0, schema);
-		parser.processIncludes();
-		assertEquals(parser.getLems().getConstant().size(), 3);
-		System.out.println(parser.getLems().getConstant().get(0).getValue());
+		LEMSParser parser = new LEMSParser(include0, schema);
+		Lems lemsDoc=parser.parse();
+		assertEquals(lemsDoc.getConstant().size(), 3);
+		System.out.println(lemsDoc.getConstant().get(0).getValue());
 	}
 
 }

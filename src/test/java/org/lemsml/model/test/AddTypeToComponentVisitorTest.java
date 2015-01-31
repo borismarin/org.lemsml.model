@@ -8,8 +8,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 
-import parser.LemsParser;
+import compiler.LEMSCompilerFrontend;
+import compiler.parser.LEMSParser;
 import extended.Component;
+import extended.Lems;
 
 public class AddTypeToComponentVisitorTest extends BaseTest {
 
@@ -25,21 +27,22 @@ public class AddTypeToComponentVisitorTest extends BaseTest {
 	@Test
 	public void testComponentTypeVisitor() throws Throwable {
 
-		LemsParser parser = new LemsParser(lemsdoc, schema);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsdoc, schema);
+		Lems lemsDoc=compiler.generateLEMSDocument();
 
 		// Creates the {String name : ComponentType type} HM used during parsing
-		parser.populateNameComponentTypeHM();
+
 		System.out.println("##### Generated name:ComponentType HM");
-		Map<String, ComponentType> nameTypeMap = parser.getLems().getComponentTypesByNameHM();
+		Map<String, ComponentType> nameTypeMap = lemsDoc.getComponentTypesByNameHM();
 		for (Entry<String, ComponentType> entry : nameTypeMap.entrySet()) {
 			System.out.println(entry.getKey() + " : "
 					+ entry.getValue().getClass().toString() + " " + entry.getValue().getName());
 		}
 
 		// Adds the corresponding ComponentType to each Component
-		parser.decorateComponentsWithType();
+
 		System.out.println("##### Decorated Components with type");
-		for (Component comp : parser.getLems().getComponent()) {
+		for (Component comp : lemsDoc.getComponent()) {
 			System.out.println(comp + " : " + comp.get_ComponentType());
 		}
 

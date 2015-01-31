@@ -12,13 +12,14 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
-import parser.LemsParser;
-import parser.LemsXmlUtils;
-import parser.XmlFileUtils;
+import compiler.LEMSCompilerFrontend;
+import compiler.parser.LEMSXMLReader;
+import compiler.parser.XMLUtils;
+
 import extended.Lems;
 
 /**
- * @author boris
+ * @author borismarin
  *
  */
 public class HindmarshRoseTest extends BaseTest {
@@ -38,12 +39,12 @@ public class HindmarshRoseTest extends BaseTest {
 
 	@Test
 	public void validateComponent() {
-		assertTrue(XmlFileUtils.validate(hindMarshRoseCompTypeFile, lemsSchemaFile));
+		assertTrue(XMLUtils.validate(hindMarshRoseCompTypeFile, lemsSchemaFile));
 	}
 
 	@Test
 	public void validateSimulation() {
-		assertTrue(XmlFileUtils.validate(hindMarshRoseSimFile, lemsSchemaFile));
+		assertTrue(XMLUtils.validate(hindMarshRoseSimFile, lemsSchemaFile));
 	}
 
 	@Test
@@ -51,12 +52,12 @@ public class HindmarshRoseTest extends BaseTest {
 		File xslt = getLocalFile("/Schemas/canonical.xslt");
 		System.out
 				.println("Asserting that a noncanonical file fails to validate...");
-		assertFalse(XmlFileUtils.validate(nonCanonHindMarshRoseSimFile, lemsSchemaFile));
+		assertFalse(XMLUtils.validate(nonCanonHindMarshRoseSimFile, lemsSchemaFile));
 
 		System.out
 				.println("Asserting that the canonicalized version validates...");
-		File transformed = XmlFileUtils.transform(nonCanonHindMarshRoseSimFile, xslt);
-		assertTrue(XmlFileUtils.validate(transformed, lemsSchemaFile));
+		File transformed = XMLUtils.transform(nonCanonHindMarshRoseSimFile, xslt);
+		assertTrue(XMLUtils.validate(transformed, lemsSchemaFile));
 	}
 
 	private void validateHRComponentType(ComponentType hr_candidate) {
@@ -74,7 +75,7 @@ public class HindmarshRoseTest extends BaseTest {
 	@Test
 	public void testUnmarshallingComponent() {
 
-		Lems lems = LemsXmlUtils.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
+		Lems lems = LEMSXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
 		ComponentType hindMarshRoseCompType = lems.getComponentType().get(0);
 		validateHRComponentType(hindMarshRoseCompType);
 
@@ -83,13 +84,12 @@ public class HindmarshRoseTest extends BaseTest {
 	@Test
 	public void testParsing() throws Throwable {
 
-		LemsParser parser = new LemsParser(hindMarshRoseSimFile, lemsSchemaFile);
+		LEMSCompilerFrontend compiler=new LEMSCompilerFrontend(hindMarshRoseSimFile, lemsSchemaFile);
+		
+		Lems lemsDoc=compiler.generateLEMSDocument();
 
-		parser.processIncludes();
-		parser.populateNameComponentTypeHM();
-		parser.decorateComponentsWithType();
-
-		ComponentType hindRoseCompType = parser.getLems().getComponentTypeByName(
+		
+		ComponentType hindRoseCompType = lemsDoc.getComponentTypeByName(
 				"hindmarshRoseCell");
 		validateHRComponentType(hindRoseCompType);
 
