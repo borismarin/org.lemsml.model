@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
-import org.lemsml.model.Dimension;
 import org.lemsml.model.Include;
 import org.lemsml.model.Lems;
 import org.lemsml.model.Target;
@@ -67,7 +66,7 @@ public class ProcessIncludesVisitor extends BaseVisitor<Object, Throwable> {
 	}
 
 	@Override
-	public Lems visit(Dimension dimension) throws Throwable {
+	public Lems visit(extended.Dimension dimension) throws Throwable {
 		resolvedLems.getDimension().add(dimension);
 		return unextendedLems;
 	}
