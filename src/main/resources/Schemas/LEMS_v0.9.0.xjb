@@ -36,6 +36,14 @@
       <jxb:bindings multiple="true" node=".//xs:element[@type='Dimension']">
          <jxb:class ref="extended.Dimension"/>
       </jxb:bindings>
+
+      <jxb:bindings node=".//xs:complexType[@name='Unit']">
+         <jxb:class implClass="extended.Unit"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='Unit']">
+         <jxb:class ref="extended.Unit"/>
+      </jxb:bindings>
       
       <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
          <jxb:property>
