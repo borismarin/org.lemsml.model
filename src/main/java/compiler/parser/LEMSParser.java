@@ -58,7 +58,7 @@ public class LEMSParser
 	{
 		ProcessIncludesVisitor processIncludesVisitor = new ProcessIncludesVisitor(lems, schema, cwd);
 		lems.accept(processIncludesVisitor);
-		lems = processIncludesVisitor.getResolvedLems();
+		lems = processIncludesVisitor.getInputLems();
 	}
 	
 	

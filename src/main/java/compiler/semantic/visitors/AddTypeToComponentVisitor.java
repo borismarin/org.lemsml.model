@@ -33,7 +33,7 @@ public class AddTypeToComponentVisitor extends TraversingVisitor<Boolean, Throwa
 	public Boolean visit(Component comp) throws Throwable
 	{
 		ComponentType ctToSet = ((extended.Lems) this.lems).getComponentTypeByName(comp.getType());
-		comp.set_ComponentType(ctToSet);
+		comp.setComponentType(ctToSet);
 		return true;
 	}
 

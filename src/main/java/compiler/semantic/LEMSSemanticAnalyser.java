@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compiler.semantic;
 
 import compiler.semantic.visitors.AddTypeToComponentVisitor;
@@ -14,9 +11,9 @@ import extended.Lems;
  */
 public class LEMSSemanticAnalyser
 {
-	
+
 	private Lems lems;
-	
+
 	/**
 	 * @param lems
 	 */
@@ -26,31 +23,29 @@ public class LEMSSemanticAnalyser
 		this.lems = lems;
 	}
 
-	
 	/**
-	 * @throws Throwable 
+	 * @throws Throwable
 	 * 
 	 */
 	public void analyse() throws Throwable
 	{
 
-		//DECORATION
+		// DECORATION
 		BuildNameComponentTypeMapVisitor buildComponentTypeMapVisitor = new BuildNameComponentTypeMapVisitor(lems);
 		lems.accept(buildComponentTypeMapVisitor);
-		
+
 		AddTypeToComponentVisitor addTypeToComponentVisitor = new AddTypeToComponentVisitor(lems);
 		lems.accept(addTypeToComponentVisitor);
-		
-		//ERROR CHECKING
-		//TODO
-		//Type mismatch
-		//Undeclared variable
-		//Reserved identifier misuse
-		//Multiple declaration of variable in a scope
-		//Accessing an out of scope variable
-		//Actual and formal parameter mismatch
-		
+
+		// ERROR CHECKING
+		// TODO
+		// Type mismatch
+		// Undeclared variable
+		// Reserved identifier misuse
+		// Multiple declaration of variable in a scope
+		// Accessing an out of scope variable
+		// Actual and formal parameter mismatch
+
 	}
-	
-	
+
 }

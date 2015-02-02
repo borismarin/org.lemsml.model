@@ -24,7 +24,9 @@ public class BuildNameComponentTypeMapVisitor extends TraversingVisitor<Boolean,
 		this.lems = lems;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.ComponentType)
 	 */
 	@Override

@@ -33,8 +33,8 @@ public class IncludesVisitorTest extends BaseTest {
 	public void testIncludeVisitor() throws Throwable {
 
 		LEMSParser parser = new LEMSParser(include0, schema);
-		Lems lemsDoc=parser.parse();
-		assertEquals(lemsDoc.getConstant().size(), 3);
+		Lems lemsDoc = parser.parse();
+		assertEquals(3, lemsDoc.getConstant().size());
 		System.out.println(lemsDoc.getConstant().get(0).getValue());
 	}
 

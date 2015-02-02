@@ -15,6 +15,12 @@ public class ExtObjectFactory extends ObjectFactory
 	}
 
 	@Override
+	public Dimension createDimension()
+	{
+		return new Dimension();
+	}
+
+	@Override
 	public Lems createLems()
 	{
 		return new Lems();

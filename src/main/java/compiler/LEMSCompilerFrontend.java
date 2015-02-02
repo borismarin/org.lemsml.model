@@ -1,16 +1,15 @@
-/**
- * 
- */
 package compiler;
 
 import java.io.File;
 
 import compiler.parser.LEMSParser;
 import compiler.semantic.LEMSSemanticAnalyser;
+
 import extended.Lems;
 
 /**
  * @author matteocantarelli
+ * @author borismarin
  * 
  */
 public class LEMSCompilerFrontend
@@ -47,9 +46,8 @@ public class LEMSCompilerFrontend
 		// Second step: perform semantic analysis
 		LEMSSemanticAnalyser semanticAnalyser = new LEMSSemanticAnalyser(lemsDocument);
 		semanticAnalyser.analyse();
-		
+
 		return lemsDocument;
 	}
-
 
 }

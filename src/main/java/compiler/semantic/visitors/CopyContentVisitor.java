@@ -1,6 +1,3 @@
-/**
- * 
- */
 package compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
@@ -15,6 +12,7 @@ import extended.Lems;
 
 /**
  * @author matteocantarelli
+ * @author borismarin
  *
  */
 public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
