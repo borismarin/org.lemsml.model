@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URL;
 
 import compiler.semantic.visitors.ProcessIncludes;
+
 import extended.Lems;
 
 /**
@@ -17,32 +18,30 @@ public class LEMSParser
 	private File cwd;
 	private File schema;
 
-
 	/**
-	 * @param lemsdocument
+	 * @param lemsDocFile
 	 * @param schema
 	 */
-	public LEMSParser(File lemsdocument, File schema)
+	public LEMSParser(File lemsDocFile, File schema)
 	{
-		this.lems = LEMSXMLReader.unmarshall(lemsdocument, schema);
-		this.cwd = lemsdocument.getParentFile();
+		this.lems = LEMSXMLReader.unmarshall(lemsDocFile, schema);
+		this.cwd = lemsDocFile.getParentFile();
 		this.schema = schema;
 	}
 
 	/**
-	 * @param lemsdocumenturl
+	 * @param lemsDocURL
 	 * @param schema
 	 */
-	public LEMSParser(URL lemsdocumenturl, File schema)
+	public LEMSParser(URL lemsDocURL, File schema)
 	{
-		this.lems = LEMSXMLReader.unmarshall(lemsdocumenturl, schema);
+		this.lems = LEMSXMLReader.unmarshall(lemsDocURL, schema);
 		// this.cwd = lemsdocumenturl.getParentFile();
 		this.schema = schema;
 	}
-	
-	
+
 	/**
-	 * @throws Throwable 
+	 * @throws Throwable
 	 * 
 	 */
 	public Lems parse() throws Throwable
@@ -50,7 +49,7 @@ public class LEMSParser
 		processIncludes();
 		return lems;
 	}
-	
+
 	/**
 	 * @throws Throwable
 	 */
@@ -60,9 +59,5 @@ public class LEMSParser
 		lems.accept(processIncludes);
 		lems = processIncludes.getInputLems();
 	}
-	
-	
-
-
 
 }
