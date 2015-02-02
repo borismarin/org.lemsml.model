@@ -11,7 +11,7 @@ import extended.Lems;
  * @author borismarin
  *
  */
-public class BuildNameComponentTypeMapVisitor extends TraversingVisitor<Boolean, Throwable>
+public class BuildNameToCompTypeMap extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
@@ -19,7 +19,7 @@ public class BuildNameComponentTypeMapVisitor extends TraversingVisitor<Boolean,
 	/**
 	 * @param lems
 	 */
-	public BuildNameComponentTypeMapVisitor(Lems lems)
+	public BuildNameToCompTypeMap(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;

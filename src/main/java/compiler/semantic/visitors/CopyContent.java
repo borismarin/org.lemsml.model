@@ -17,7 +17,7 @@ import extended.Lems;
  * @author borismarin
  *
  */
-public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
+public class CopyContent extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems resolvedLems;
@@ -25,7 +25,7 @@ public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 	/**
 	 * 
 	 */
-	public CopyContentVisitor(Lems lems)
+	public CopyContent(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		resolvedLems = lems;

@@ -3,7 +3,7 @@ package compiler.parser;
 import java.io.File;
 import java.net.URL;
 
-import compiler.semantic.visitors.ProcessIncludesVisitor;
+import compiler.semantic.visitors.ProcessIncludes;
 import extended.Lems;
 
 /**
@@ -56,9 +56,9 @@ public class LEMSParser
 	 */
 	private void processIncludes() throws Throwable
 	{
-		ProcessIncludesVisitor processIncludesVisitor = new ProcessIncludesVisitor(lems, schema, cwd);
-		lems.accept(processIncludesVisitor);
-		lems = processIncludesVisitor.getInputLems();
+		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd);
+		lems.accept(processIncludes);
+		lems = processIncludes.getInputLems();
 	}
 	
 	

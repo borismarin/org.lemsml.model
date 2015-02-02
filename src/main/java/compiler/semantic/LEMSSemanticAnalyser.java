@@ -1,8 +1,8 @@
 package compiler.semantic;
 
-import compiler.semantic.visitors.AddTypeToComponentVisitor;
-import compiler.semantic.visitors.AddUOMToDimensionVisitor;
-import compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
+import compiler.semantic.visitors.AddTypeToComponent;
+import compiler.semantic.visitors.AddUOMToDimension;
+import compiler.semantic.visitors.BuildNameToCompTypeMap;
 
 import extended.Lems;
 
@@ -32,14 +32,14 @@ public class LEMSSemanticAnalyser
 	{
 
 		// DECORATION
-		BuildNameComponentTypeMapVisitor buildComponentTypeMapVisitor = new BuildNameComponentTypeMapVisitor(lems);
+		BuildNameToCompTypeMap buildComponentTypeMapVisitor = new BuildNameToCompTypeMap(lems);
 		lems.accept(buildComponentTypeMapVisitor);
 
-		AddTypeToComponentVisitor addTypeToComponentVisitor = new AddTypeToComponentVisitor(lems);
-		lems.accept(addTypeToComponentVisitor);
+		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
+		lems.accept(addTypeToComponent);
 
-		AddUOMToDimensionVisitor addUOMToDimensionVisitor = new AddUOMToDimensionVisitor(lems);
-		lems.accept(addUOMToDimensionVisitor);
+		AddUOMToDimension addUOMToDimension = new AddUOMToDimension(lems);
+		lems.accept(addUOMToDimension);
 
 		// ERROR CHECKING
 		// TODO

@@ -13,7 +13,7 @@ import compiler.parser.XMLUtils;
 
 import extended.Lems;
 
-public class IncludesVisitorTest extends BaseTest {
+public class ProcessIncludesTest extends BaseTest {
 
 	private File schema;
 	private File include0;

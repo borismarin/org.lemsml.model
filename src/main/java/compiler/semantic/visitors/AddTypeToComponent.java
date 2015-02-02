@@ -12,7 +12,7 @@ import extended.Lems;
  * @author borismarin
  *
  */
-public class AddTypeToComponentVisitor extends TraversingVisitor<Boolean, Throwable>
+public class AddTypeToComponent extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
@@ -20,7 +20,7 @@ public class AddTypeToComponentVisitor extends TraversingVisitor<Boolean, Throwa
 	/**
 	 * @param lems
 	 */
-	public AddTypeToComponentVisitor(Lems lems)
+	public AddTypeToComponent(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;

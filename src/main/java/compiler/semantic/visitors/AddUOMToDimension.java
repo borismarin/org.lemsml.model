@@ -22,12 +22,12 @@ import extended.Lems;
  * @author borismarin
  *
  */
-public class AddUOMToDimensionVisitor extends TraversingVisitor<Boolean, Throwable>
+public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
 
-	public AddUOMToDimensionVisitor(Lems lems)
+	public AddUOMToDimension(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
