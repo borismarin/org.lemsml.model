@@ -3,7 +3,6 @@ package compiler.semantic.visitors;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
-import org.lemsml.model.Unit;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -11,6 +10,7 @@ import org.lemsml.visitors.TraversingVisitor;
 import extended.Component;
 import extended.Dimension;
 import extended.Lems;
+import extended.Unit;
 
 /**
  * @author matteocantarelli

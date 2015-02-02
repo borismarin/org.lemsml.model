@@ -8,6 +8,10 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.ComponentType;
 
+/**
+ * @author borismarin
+ *
+ */
 @XmlTransient
 public class Lems extends org.lemsml.model.Lems
 {
@@ -24,6 +28,16 @@ public class Lems extends org.lemsml.model.Lems
 	public void registerComponentTypeName(String name, ComponentType ct)
 	{
 		this.nameToCompType.put(name, ct);
+	}
+
+	public void registerDimensionName(String name, javax.measure.Dimension dim)
+	{
+		this.nameToDimension.put(name, dim);
+	}
+
+	public void registerUnitName(String name, javax.measure.Unit<?> unit)
+	{
+		this.nameToUnit.put(name, unit);
 	}
 
 	public Map<String, ComponentType> getComponentTypesByNameHM()

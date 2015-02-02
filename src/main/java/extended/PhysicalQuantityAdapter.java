@@ -5,6 +5,10 @@ import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 
+/**
+ * @author borismarin
+ *
+ */
 public class PhysicalQuantityAdapter extends XmlAdapter<String, PhysicalQuantity>
 {
 

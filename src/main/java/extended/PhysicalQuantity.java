@@ -1,5 +1,9 @@
 package extended;
 
+/**
+ * @author borismarin
+ *
+ */
 public class PhysicalQuantity
 {
 
