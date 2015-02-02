@@ -5,15 +5,24 @@ import javax.xml.bind.annotation.XmlRegistry;
 import org.lemsml.model.ObjectFactory;
 
 @XmlRegistry
-public class ExtObjectFactory extends ObjectFactory {
+public class ExtObjectFactory extends ObjectFactory
+{
 
 	@Override
-	public Component createComponent() {
+	public Component createComponent()
+	{
 		return new Component();
 	}
 
 	@Override
-	public Lems createLems() {
+	public Dimension createDimension()
+	{
+		return new Dimension();
+	}
+
+	@Override
+	public Lems createLems()
+	{
 		return new Lems();
 	}
 }

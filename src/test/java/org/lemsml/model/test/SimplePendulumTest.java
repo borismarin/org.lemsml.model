@@ -11,8 +11,9 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
-import parser.LemsXmlUtils;
-import parser.XmlFileUtils;
+import compiler.parser.LEMSXMLReader;
+import compiler.parser.XMLUtils;
+
 import extended.Lems;
 
 public class SimplePendulumTest extends BaseTest {
@@ -28,13 +29,13 @@ public class SimplePendulumTest extends BaseTest {
 
 	@Test
 	public void validate() {
-		assertTrue(XmlFileUtils.validate(lemsdoc, schema));
+		assertTrue(XMLUtils.validate(lemsdoc, schema));
 	}
 
 	@Test
 	public void testUnmarshalling() {
 
-		Lems lems = LemsXmlUtils.unmarshall(lemsdoc, schema);
+		Lems lems = LEMSXMLReader.unmarshall(lemsdoc, schema);
 		ComponentType pendCompType = lems.getComponentType().get(0);
 
 		String desc = pendCompType.getDescription();
