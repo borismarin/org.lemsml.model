@@ -18,6 +18,10 @@ import org.lemsml.visitors.TraversingVisitor;
 import extended.Dimension;
 import extended.Lems;
 
+/**
+ * @author borismarin
+ *
+ */
 public class AddUOMToDimensionVisitor extends TraversingVisitor<Boolean, Throwable>
 {
 
@@ -54,6 +58,5 @@ public class AddUOMToDimensionVisitor extends TraversingVisitor<Boolean, Throwab
 	{
 		return lems;
 	}
-
 
 }
