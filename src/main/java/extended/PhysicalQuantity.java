@@ -1,29 +1,34 @@
 package extended;
 
+public class PhysicalQuantity
+{
 
-public class PhysicalQuantity {
+	public Float value;
+	public String unit;
 
-    public Float value;
-    public String unit;
-
-	public Float getValue() {
+	public Float getValue()
+	{
 		return value;
 	}
 
-	public String getUnit() {
+	public String getUnit()
+	{
 		return unit;
 	}
 
-	public void setUnit(String unit) {
+	public void setUnit(String unit)
+	{
 		this.unit = unit;
 	}
 
-	public void setValue(Float value) {
+	public void setValue(Float value)
+	{
 		this.value = value;
 	}
-	
+
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "PhysicalQuantity [value=" + value + ", unit=" + unit + "]";
 	}
 

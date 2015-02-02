@@ -2,9 +2,6 @@ package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static tec.units.ri.util.SI.KILOGRAM;
-import static tec.units.ri.util.SI.SECOND;
-import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
 
 import java.io.File;
 import java.util.List;
@@ -14,9 +11,14 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
-import parser.LemsParser;
-import parser.LemsXmlUtils;
-import parser.XmlFileUtils;
+import compiler.LEMSCompilerFrontend;
+import compiler.parser.LEMSXMLReader;
+import compiler.parser.XMLUtils;
+
+import static tec.units.ri.util.SI.KILOGRAM;
+import static tec.units.ri.util.SI.SECOND;
+import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
+
 import extended.Lems;
 
 public class SimplePendulumTest extends BaseTest {
@@ -32,13 +34,13 @@ public class SimplePendulumTest extends BaseTest {
 
 	@Test
 	public void validate() {
-		assertTrue(XmlFileUtils.validate(lemsdoc, schema));
+		assertTrue(XMLUtils.validate(lemsdoc, schema));
 	}
 
 	@Test
 	public void testUnmarshalling() {
 
-		Lems lems = LemsXmlUtils.unmarshall(lemsdoc, schema);
+		Lems lems = LEMSXMLReader.unmarshall(lemsdoc, schema);
 		ComponentType pendCompType = lems.getComponentType().get(0);
 
 		String desc = pendCompType.getDescription();
@@ -49,15 +51,16 @@ public class SimplePendulumTest extends BaseTest {
 		assertEquals(ParameterList.get(0).getDescription(), "Mass of the bob");
 	}
 
+
 	@Test
 	public void testDimensions() throws Throwable {
 
-		LemsParser parser = new LemsParser(lemsdoc, schema);
-		parser.processDimensions();
-		assertEquals(parser.getLems().getNameToDimension().get("time"),
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsdoc, schema);
+		Lems lemsDoc=compiler.generateLEMSDocument();
+		assertEquals(lemsDoc.getNameToDimension().get("time"),
 				SECOND.getDimension());
 		assertEquals(
-				parser.getLems().getNameToDimension().get("angular_momentum"),
+				lemsDoc.getNameToDimension().get("angular_momentum"),
 				SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
 	}
 
