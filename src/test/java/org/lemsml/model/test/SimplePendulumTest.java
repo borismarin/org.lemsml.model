@@ -63,8 +63,8 @@ public class SimplePendulumTest extends BaseTest
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile, schema);
 		Lems lemsDoc = compiler.generateLEMSDocument();
-		assertEquals(lemsDoc.getNameToDimension().get("time"), SECOND.getDimension());
-		assertEquals(lemsDoc.getNameToDimension().get("angular_momentum"), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
+		assertEquals(lemsDoc.getNameToDimension().get("time").getDimension(), SECOND.getDimension());
+		assertEquals(lemsDoc.getNameToDimension().get("angular_momentum").getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
 	}
 
 }

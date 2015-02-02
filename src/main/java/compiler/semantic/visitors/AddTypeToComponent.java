@@ -37,20 +37,4 @@ public class AddTypeToComponent extends TraversingVisitor<Boolean, Throwable>
 		return true;
 	}
 
-	/**
-	 * @return
-	 */
-	public Lems getLems()
-	{
-		return lems;
-	}
-
-	/**
-	 * @param lems
-	 */
-	public void setLems(Lems lems)
-	{
-		this.lems = lems;
-	}
-
 }

@@ -3,7 +3,7 @@ package compiler.semantic;
 import compiler.semantic.visitors.AddTypeToComponent;
 import compiler.semantic.visitors.BuildNameToDimensionMap;
 import compiler.semantic.visitors.BuildNameToCompTypeMap;
-
+import compiler.semantic.visitors.BuildSymbolToUnitMap;
 import extended.Lems;
 
 /**
@@ -40,6 +40,9 @@ public class LEMSSemanticAnalyser
 
 		BuildNameToDimensionMap buildNameToDimensionMap = new BuildNameToDimensionMap(lems);
 		lems.accept(buildNameToDimensionMap);
+
+		BuildSymbolToUnitMap buildSymbolToUnitMap = new BuildSymbolToUnitMap(lems);
+		lems.accept(buildSymbolToUnitMap);
 
 		// ERROR CHECKING
 		// TODO
