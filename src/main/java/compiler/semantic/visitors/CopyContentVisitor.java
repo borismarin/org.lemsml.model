@@ -8,6 +8,8 @@ import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
+import extended.Component;
+import extended.Dimension;
 import extended.Lems;
 
 /**
@@ -17,19 +19,18 @@ import extended.Lems;
  */
 public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 {
-	
+
 	private Lems resolvedLems;
 
 	/**
 	 * 
 	 */
-	public CopyContentVisitor(extended.Lems lems)
+	public CopyContentVisitor(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
-		resolvedLems=lems;
+		resolvedLems = lems;
 	}
 
-	
 	@Override
 	public Boolean visit(Constant constant)
 	{
@@ -46,7 +47,7 @@ public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 	}
 
 	@Override
-	public Boolean visit(extended.Component component)
+	public Boolean visit(Component component)
 	{
 		resolvedLems.getComponent().add(component);
 		return true;
@@ -60,7 +61,7 @@ public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 	}
 
 	@Override
-	public Boolean visit(extended.Dimension dimension)
+	public Boolean visit(Dimension dimension)
 	{
 		resolvedLems.getDimension().add(dimension);
 		return true;

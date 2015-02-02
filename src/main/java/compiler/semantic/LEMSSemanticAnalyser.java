@@ -37,8 +37,8 @@ public class LEMSSemanticAnalyser
 
 		AddTypeToComponentVisitor addTypeToComponentVisitor = new AddTypeToComponentVisitor(lems);
 		lems.accept(addTypeToComponentVisitor);
-		
-		AddUOMToDimensionVisitor addUOMToDimensionVisitor=new AddUOMToDimensionVisitor(lems);
+
+		AddUOMToDimensionVisitor addUOMToDimensionVisitor = new AddUOMToDimensionVisitor(lems);
 		lems.accept(addUOMToDimensionVisitor);
 
 		// ERROR CHECKING
