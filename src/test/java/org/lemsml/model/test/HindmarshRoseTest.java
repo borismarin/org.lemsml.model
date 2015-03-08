@@ -13,7 +13,7 @@ import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 
 import compiler.LEMSCompilerFrontend;
-import compiler.parser.LEMSXMLReader;
+import compiler.parser.JaxbXMLReader;
 import compiler.parser.XMLUtils;
 
 import extended.Lems;
@@ -79,7 +79,7 @@ public class HindmarshRoseTest extends BaseTest
 	public void testUnmarshallingComponent()
 	{
 
-		Lems lems = LEMSXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
+		Lems lems = JaxbXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
 		ComponentType hindMarshRoseCompType = lems.getComponentType().get(0);
 		validateHRComponentType(hindMarshRoseCompType);
 

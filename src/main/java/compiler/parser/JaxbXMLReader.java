@@ -8,28 +8,28 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import extended.ExtObjectFactory;
-import extended.Lems;
 
 /**
  * @author borismarin
  *
  */
-public class LEMSXMLReader
+public class JaxbXMLReader 
 {
 
 	/**
 	 * @param document
 	 * @param schema
+	 * @return 
 	 * @return
 	 */
-	public static Lems unmarshall(File document, File schema)
+	public static <T> T unmarshall(File document, File schema)
 	{
 
-		Lems lems = null;
+		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(schema);
 		try
 		{
-			lems = (Lems) unmarshaller.unmarshal(document);
+			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
 		}
 		catch(JAXBException e)
 		{
@@ -37,22 +37,23 @@ public class LEMSXMLReader
 			e.printStackTrace();
 		}
 
-		return lems;
+		return unmarshalledDoc;
 	}
 
 	/**
 	 * @param document
 	 * @param schema
+	 * @return 
 	 * @return
 	 */
-	public static Lems unmarshall(URL document, File schema)
+	public static <T> T unmarshall(URL document, File schema)
 	{
 
-		Lems lems = null;
+		T lems = null;
 		Unmarshaller unmarshaller = getUnmarshaller(schema);
 		try
 		{
-			lems = (Lems) unmarshaller.unmarshal(document);
+			lems = (T) unmarshaller.unmarshal(document);
 		}
 		catch(JAXBException e)
 		{
