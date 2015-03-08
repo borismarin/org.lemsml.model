@@ -49,11 +49,11 @@ public class JaxbXMLReader
 	public static <T> T unmarshall(URL document, File schema)
 	{
 
-		T lems = null;
+		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(schema);
 		try
 		{
-			lems = (T) unmarshaller.unmarshal(document);
+			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
 		}
 		catch(JAXBException e)
 		{
@@ -61,7 +61,7 @@ public class JaxbXMLReader
 			e.printStackTrace();
 		}
 
-		return lems;
+		return unmarshalledDoc;
 	}
 
 	/**
