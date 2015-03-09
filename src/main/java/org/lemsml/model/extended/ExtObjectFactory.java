@@ -4,6 +4,10 @@ import javax.xml.bind.annotation.XmlRegistry;
 
 import org.lemsml.model.ObjectFactory;
 
+/**
+ * @author borismarin
+ *
+ */
 @XmlRegistry
 public class ExtObjectFactory extends ObjectFactory
 {
@@ -18,6 +22,12 @@ public class ExtObjectFactory extends ObjectFactory
 	public Dimension createDimension()
 	{
 		return new Dimension();
+	}
+
+	@Override
+	public Unit createUnit()
+	{
+		return new Unit();
 	}
 
 	@Override

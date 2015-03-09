@@ -21,12 +21,12 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class AddUOMToDimensionVisitor extends TraversingVisitor<Boolean, Throwable>
+public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
 
-	public AddUOMToDimensionVisitor(Lems lems)
+	public AddUOMToDimension(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
@@ -48,7 +48,7 @@ public class AddUOMToDimensionVisitor extends TraversingVisitor<Boolean, Throwab
 	@Override
 	public Boolean visit(Dimension dimension) throws Throwable
 	{
-		dimension.setDimension(LemsDimensionToUOM(dimension));
+		dimension.setDimension((Unit<?>) LemsDimensionToUOM(dimension));
 		lems.getNameToDimension().put(dimension.getName(), dimension.getDimension());
 		return true;
 	}

@@ -14,7 +14,7 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
+public class CopyContent extends TraversingVisitor<Boolean, Throwable>
 {
 	
 	private Lems resolvedLems;
@@ -22,7 +22,7 @@ public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 	/**
 	 * 
 	 */
-	public CopyContentVisitor(org.lemsml.model.extended.Lems lems)
+	public CopyContent(org.lemsml.model.extended.Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		resolvedLems=lems;
@@ -68,7 +68,7 @@ public class CopyContentVisitor extends TraversingVisitor<Boolean, Throwable>
 	@Override
 	public Boolean visit(Unit unit)
 	{
-		resolvedLems.getUnit().add(unit);
+		resolvedLems.getUnit().add((org.lemsml.model.extended.Unit) unit);
 		return true;
 	}
 }

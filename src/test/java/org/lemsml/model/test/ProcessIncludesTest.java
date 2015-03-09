@@ -11,7 +11,7 @@ import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
 
-public class IncludesVisitorTest extends BaseTest {
+public class ProcessIncludesTest extends BaseTest {
 
 	private File schema;
 	private File include0;

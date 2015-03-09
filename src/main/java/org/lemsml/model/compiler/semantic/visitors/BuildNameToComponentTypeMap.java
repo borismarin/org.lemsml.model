@@ -1,8 +1,7 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.Component;
+import org.lemsml.model.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -11,7 +10,7 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class AddTypeToComponentVisitor extends TraversingVisitor<Boolean, Throwable>
+public class BuildNameToComponentTypeMap extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
@@ -19,20 +18,21 @@ public class AddTypeToComponentVisitor extends TraversingVisitor<Boolean, Throwa
 	/**
 	 * @param lems
 	 */
-	public AddTypeToComponentVisitor(Lems lems)
+	public BuildNameToComponentTypeMap(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.Component)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.ComponentType)
 	 */
 	@Override
-	public Boolean visit(Component comp) throws Throwable
+	public Boolean visit(ComponentType ct) throws Throwable
 	{
-		ComponentType ctToSet = this.lems.getComponentTypeByName(comp.getType());
-		comp.setComponentType(ctToSet);
+		((org.lemsml.model.extended.Lems) this.lems).registerComponentTypeName(ct.getName(), ct);
 		return true;
 	}
 

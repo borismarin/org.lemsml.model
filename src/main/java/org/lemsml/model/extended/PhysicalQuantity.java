@@ -1,5 +1,9 @@
 package org.lemsml.model.extended;
 
+/**
+ * @author borismarin
+ *
+ */
 public class PhysicalQuantity
 {
 

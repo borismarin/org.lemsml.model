@@ -7,15 +7,15 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.compiler.parser.LEMSParser;
-import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponentVisitor;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
+import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
 import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin
  *
  */
-public class AddTypeToComponentVisitorTest extends BaseTest
+public class AddTypeToComponentTest extends BaseTest
 {
 
 	private File schema;
@@ -36,14 +36,14 @@ public class AddTypeToComponentVisitorTest extends BaseTest
 		Lems lemsDocument = parser.parse();
 
 		// Creates the {String name : ComponentType type} HM used during parsing
-		BuildNameComponentTypeMapVisitor buildComponentTypeMapVisitor = new BuildNameComponentTypeMapVisitor(lemsDocument);
+		BuildNameToComponentTypeMap buildComponentTypeMapVisitor = new BuildNameToComponentTypeMap(lemsDocument);
 		lemsDocument.accept(buildComponentTypeMapVisitor);
 		// There are 6 ComponentTypes in standalone_pend
-		assertEquals(6, lemsDocument.getComponentTypesByNameHM().size());
+		assertEquals(6, lemsDocument.getNameToCompType().size());
 
 		// Adds the corresponding ComponentType to each Component
-		AddTypeToComponentVisitor addTypeToComponentVisitor = new AddTypeToComponentVisitor(lemsDocument);
-		lemsDocument.accept(addTypeToComponentVisitor);
+		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lemsDocument);
+		lemsDocument.accept(addTypeToComponent);
 		// The first component in standalone_pend is <Component type = "SimplePendulum" id="pend" ...
 		assertEquals("SimplePendulum", lemsDocument.getComponent().get(0).getComponentType().getName());
 

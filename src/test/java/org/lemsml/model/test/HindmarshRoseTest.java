@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
-import org.lemsml.model.compiler.parser.LEMSXMLReader;
+import org.lemsml.model.compiler.parser.JaxbXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
 
@@ -77,7 +77,7 @@ public class HindmarshRoseTest extends BaseTest
 	public void testUnmarshallingComponent()
 	{
 
-		Lems lems = LEMSXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
+		Lems lems = JaxbXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
 		ComponentType hindMarshRoseCompType = lems.getComponentType().get(0);
 		validateHRComponentType(hindMarshRoseCompType);
 

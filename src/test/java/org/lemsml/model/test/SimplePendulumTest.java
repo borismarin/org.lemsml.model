@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
-import org.lemsml.model.compiler.parser.LEMSXMLReader;
+import org.lemsml.model.compiler.parser.JaxbXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
 
@@ -45,7 +45,7 @@ public class SimplePendulumTest extends BaseTest
 	public void testUnmarshalling()
 	{
 
-		Lems lems = LEMSXMLReader.unmarshall(pendLemsFile, schema);
+		Lems lems = JaxbXMLReader.unmarshall(pendLemsFile, schema);
 		ComponentType pendCompType = lems.getComponentType().get(0);
 
 		String desc = pendCompType.getDescription();
@@ -61,8 +61,8 @@ public class SimplePendulumTest extends BaseTest
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile, schema);
 		Lems lemsDoc = compiler.generateLEMSDocument();
-		assertEquals(lemsDoc.getNameToDimension().get("time"), SECOND.getDimension());
-		assertEquals(lemsDoc.getNameToDimension().get("angular_momentum"), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
+		assertEquals(lemsDoc.getNameToDimension().get("time").getDimension(), SECOND.getDimension());
+		assertEquals(lemsDoc.getNameToDimension().get("angular_momentum").getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
 	}
 
 }

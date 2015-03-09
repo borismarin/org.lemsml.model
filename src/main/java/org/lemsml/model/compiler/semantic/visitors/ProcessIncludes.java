@@ -3,7 +3,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 import java.io.File;
 
 import org.lemsml.model.Include;
-import org.lemsml.model.compiler.parser.LEMSXMLReader;
+import org.lemsml.model.compiler.parser.JaxbXMLReader;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
@@ -13,7 +13,7 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class ProcessIncludesVisitor extends TraversingVisitor<Boolean, Throwable>
+public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems inputLems;
@@ -25,7 +25,7 @@ public class ProcessIncludesVisitor extends TraversingVisitor<Boolean, Throwable
 	 * @param schema
 	 * @param cwd
 	 */
-	public ProcessIncludesVisitor(Lems lems, File schema, File cwd)
+	public ProcessIncludes(Lems lems, File schema, File cwd)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.inputLems = lems;
@@ -42,15 +42,15 @@ public class ProcessIncludesVisitor extends TraversingVisitor<Boolean, Throwable
 	public Boolean visit(Include inc) throws Throwable
 	{
 		File includedFile = new File(cwd.getPath(), inc.getFile());
-		Lems includedLems = LEMSXMLReader.unmarshall(includedFile, schema);
+		Lems includedLems = JaxbXMLReader.unmarshall(includedFile, schema);
 
 		// recursively process inputs
-		ProcessIncludesVisitor incProcVisitor = new ProcessIncludesVisitor(includedLems, schema, cwd);
+		ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems, schema, cwd);
 		incProcVisitor.setTraverseFirst(true);
 		includedLems.accept(incProcVisitor);
 
 		// will copy the content of the visited LEMS document to inputLems
-		CopyContentVisitor extractContentVisitor = new CopyContentVisitor(inputLems);
+		CopyContent extractContentVisitor = new CopyContent(inputLems);
 		extractContentVisitor.setTraverseFirst(true);
 		includedLems.accept(extractContentVisitor);
 

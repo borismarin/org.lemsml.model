@@ -3,18 +3,24 @@ package org.lemsml.model.extended;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.measure.Unit;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.ComponentType;
 
+/**
+ * @author borismarin
+ *
+ */
 @XmlTransient
 public class Lems extends org.lemsml.model.Lems
 {
 
 	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
-	private Map<String, javax.measure.Dimension> nameToDimension = new HashMap<String, javax.measure.Dimension>();
-	private Map<String, Unit<?>> nameToUnit = new HashMap<String, Unit<?>>();
+	// TODO: notice that there is a discrepancy between what LEMS calls dimensions
+	// and what UOM calls dimensions. We'll thus confusingly use Unit<?> here
+	// to store a dimension...
+	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
+	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
 
 	public ComponentType getComponentTypeByName(String name)
 	{
@@ -26,29 +32,29 @@ public class Lems extends org.lemsml.model.Lems
 		this.nameToCompType.put(name, ct);
 	}
 
-	public Map<String, ComponentType> getComponentTypesByNameHM()
+	public void registerDimensionName(String name, javax.measure.Unit<?> dim)
+	{
+		this.nameToDimension.put(name, dim);
+	}
+
+	public void registerUnitName(String name, javax.measure.Unit<?> unit)
+	{
+		this.symbolToUnit.put(name, unit);
+	}
+
+	public Map<String, ComponentType> getNameToCompType()
 	{
 		return nameToCompType;
 	}
 
-	public Map<String, javax.measure.Dimension> getNameToDimension()
+	public Map<String, javax.measure.Unit<?>> getNameToDimension()
 	{
 		return nameToDimension;
 	}
 
-	public void setNameToDimension(Map<String, javax.measure.Dimension> nameToDimension)
+	public Map<String, javax.measure.Unit<?>> getSymbolToUnit()
 	{
-		this.nameToDimension = nameToDimension;
-	}
-
-	public Map<String, Unit<?>> getNameToUnit()
-	{
-		return nameToUnit;
-	}
-
-	public void setNameToUnit(Map<String, Unit<?>> nameToUnit)
-	{
-		this.nameToUnit = nameToUnit;
+		return symbolToUnit;
 	}
 
 }
