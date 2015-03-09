@@ -1,4 +1,4 @@
-package compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Lems;
@@ -32,7 +32,7 @@ public class BuildNameComponentTypeMapVisitor extends TraversingVisitor<Boolean,
 	@Override
 	public Boolean visit(ComponentType ct) throws Throwable
 	{
-		((extended.Lems) this.lems).registerComponentTypeName(ct.getName(), ct);
+		((org.lemsml.model.extended.Lems) this.lems).registerComponentTypeName(ct.getName(), ct);
 		return true;
 	}
 

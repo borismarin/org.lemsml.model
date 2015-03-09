@@ -1,4 +1,4 @@
-package compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import static tec.units.ri.AbstractUnit.ONE;
 import static tec.units.ri.util.SI.AMPERE;
@@ -11,12 +11,11 @@ import static tec.units.ri.util.SI.SECOND;
 
 import javax.measure.Unit;
 
+import org.lemsml.model.extended.Dimension;
+import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-
-import extended.Dimension;
-import extended.Lems;
 
 /**
  * @author borismarin

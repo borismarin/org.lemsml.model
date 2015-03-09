@@ -1,10 +1,9 @@
-package compiler.semantic;
+package org.lemsml.model.compiler.semantic;
 
-import compiler.semantic.visitors.AddTypeToComponentVisitor;
-import compiler.semantic.visitors.AddUOMToDimensionVisitor;
-import compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
-
-import extended.Lems;
+import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponentVisitor;
+import org.lemsml.model.compiler.semantic.visitors.AddUOMToDimensionVisitor;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin

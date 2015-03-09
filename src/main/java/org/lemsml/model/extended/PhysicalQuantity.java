@@ -1,4 +1,4 @@
-package extended;
+package org.lemsml.model.extended;
 
 public class PhysicalQuantity
 {

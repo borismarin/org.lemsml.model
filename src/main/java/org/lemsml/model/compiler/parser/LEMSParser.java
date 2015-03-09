@@ -1,10 +1,10 @@
-package compiler.parser;
+package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.net.URL;
 
-import compiler.semantic.visitors.ProcessIncludesVisitor;
-import extended.Lems;
+import org.lemsml.model.compiler.semantic.visitors.ProcessIncludesVisitor;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin

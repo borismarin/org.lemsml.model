@@ -1,11 +1,10 @@
-package compiler;
+package org.lemsml.model.compiler;
 
 import java.io.File;
 
-import compiler.parser.LEMSParser;
-import compiler.semantic.LEMSSemanticAnalyser;
-
-import extended.Lems;
+import org.lemsml.model.compiler.parser.LEMSParser;
+import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author matteocantarelli

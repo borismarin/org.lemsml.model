@@ -14,7 +14,7 @@
       </jxb:schemaBindings>
       
       <jxb:bindings node="//xs:element[@name='Lems']">
-         <jxb:class implClass="extended.Lems"/>
+         <jxb:class implClass="org.lemsml.model.extended.Lems"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node=".//xs:choice[@maxOccurs='unbounded']">
@@ -22,25 +22,25 @@
       </jxb:bindings>
       
       <jxb:bindings node=".//xs:complexType[@name='Component']">
-         <jxb:class implClass="extended.Component"/>
+         <jxb:class implClass="org.lemsml.model.extended.Component"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node=".//xs:element[@type='Component']">
-         <jxb:class ref="extended.Component"/>
+         <jxb:class ref="org.lemsml.model.extended.Component"/>
       </jxb:bindings>
 
       <jxb:bindings node=".//xs:complexType[@name='Dimension']">
-         <jxb:class implClass="extended.Dimension"/>
+         <jxb:class implClass="org.lemsml.model.extended.Dimension"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node=".//xs:element[@type='Dimension']">
-         <jxb:class ref="extended.Dimension"/>
+         <jxb:class ref="org.lemsml.model.extended.Dimension"/>
       </jxb:bindings>
       
       <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
          <jxb:property>
             <jxb:baseType>
-               <xjc:javaType adapter="extended.PhysicalQuantityAdapter" name="extended.PhysicalQuantity" /> 
+               <xjc:javaType adapter="org.lemsml.model.extended.PhysicalQuantityAdapter" name="org.lemsml.model.extended.PhysicalQuantity" /> 
             </jxb:baseType>
          </jxb:property>
       </jxb:bindings>

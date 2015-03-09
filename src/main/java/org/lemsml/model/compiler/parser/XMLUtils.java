@@ -1,4 +1,4 @@
-package compiler.parser;
+package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.io.IOException;

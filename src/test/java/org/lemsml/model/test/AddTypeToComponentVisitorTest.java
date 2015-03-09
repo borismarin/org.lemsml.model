@@ -6,12 +6,10 @@ import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import compiler.parser.LEMSParser;
-import compiler.semantic.visitors.AddTypeToComponentVisitor;
-import compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
-
-import extended.Lems;
+import org.lemsml.model.compiler.parser.LEMSParser;
+import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponentVisitor;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameComponentTypeMapVisitor;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin
