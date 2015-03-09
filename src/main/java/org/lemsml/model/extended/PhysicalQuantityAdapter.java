@@ -1,4 +1,4 @@
-package extended;
+package org.lemsml.model.extended;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

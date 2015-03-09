@@ -13,12 +13,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
-
-import compiler.LEMSCompilerFrontend;
-import compiler.parser.JaxbXMLReader;
-import compiler.parser.XMLUtils;
-
-import extended.Lems;
+import org.lemsml.model.compiler.LEMSCompilerFrontend;
+import org.lemsml.model.compiler.parser.JaxbXMLReader;
+import org.lemsml.model.compiler.parser.XMLUtils;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin

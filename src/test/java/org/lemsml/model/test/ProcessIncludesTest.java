@@ -7,11 +7,9 @@ import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import compiler.parser.LEMSParser;
-import compiler.parser.XMLUtils;
-
-import extended.Lems;
+import org.lemsml.model.compiler.parser.LEMSParser;
+import org.lemsml.model.compiler.parser.XMLUtils;
+import org.lemsml.model.extended.Lems;
 
 public class ProcessIncludesTest extends BaseTest {
 

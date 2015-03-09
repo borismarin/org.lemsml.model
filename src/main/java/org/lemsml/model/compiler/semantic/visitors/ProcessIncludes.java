@@ -1,15 +1,13 @@
-package compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import java.io.File;
 
 import org.lemsml.model.Include;
+import org.lemsml.model.compiler.parser.JaxbXMLReader;
+import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-
-import compiler.parser.JaxbXMLReader;
-
-import extended.Lems;
 
 /**
  * @author borismarin

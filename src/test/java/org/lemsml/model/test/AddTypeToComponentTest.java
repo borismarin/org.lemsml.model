@@ -6,12 +6,10 @@ import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import compiler.parser.LEMSParser;
-import compiler.semantic.visitors.AddTypeToComponent;
-import compiler.semantic.visitors.BuildNameToCompTypeMap;
-
-import extended.Lems;
+import org.lemsml.model.compiler.parser.LEMSParser;
+import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin
@@ -38,7 +36,7 @@ public class AddTypeToComponentTest extends BaseTest
 		Lems lemsDocument = parser.parse();
 
 		// Creates the {String name : ComponentType type} HM used during parsing
-		BuildNameToCompTypeMap buildComponentTypeMapVisitor = new BuildNameToCompTypeMap(lemsDocument);
+		BuildNameToComponentTypeMap buildComponentTypeMapVisitor = new BuildNameToComponentTypeMap(lemsDocument);
 		lemsDocument.accept(buildComponentTypeMapVisitor);
 		// There are 6 ComponentTypes in standalone_pend
 		assertEquals(6, lemsDocument.getNameToCompType().size());

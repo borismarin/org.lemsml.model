@@ -1,10 +1,10 @@
-package compiler.semantic;
+package org.lemsml.model.compiler.semantic;
 
-import compiler.semantic.visitors.AddTypeToComponent;
-import compiler.semantic.visitors.BuildNameToDimensionMap;
-import compiler.semantic.visitors.BuildNameToCompTypeMap;
-import compiler.semantic.visitors.BuildSymbolToUnitMap;
-import extended.Lems;
+import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToDimensionMap;
+import org.lemsml.model.compiler.semantic.visitors.BuildSymbolToUnitMap;
+import org.lemsml.model.extended.Lems;
 
 /**
  * @author borismarin
@@ -32,7 +32,7 @@ public class LEMSSemanticAnalyser
 	{
 
 		// DECORATION
-		BuildNameToCompTypeMap buildComponentTypeMapVisitor = new BuildNameToCompTypeMap(lems);
+		BuildNameToComponentTypeMap buildComponentTypeMapVisitor = new BuildNameToComponentTypeMap(lems);
 		lems.accept(buildComponentTypeMapVisitor);
 
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);

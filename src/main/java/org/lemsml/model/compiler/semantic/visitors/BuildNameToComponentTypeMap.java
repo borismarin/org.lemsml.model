@@ -1,17 +1,16 @@
-package compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-
-import extended.Lems;
 
 /**
  * @author borismarin
  *
  */
-public class BuildNameToCompTypeMap extends TraversingVisitor<Boolean, Throwable>
+public class BuildNameToComponentTypeMap extends TraversingVisitor<Boolean, Throwable>
 {
 
 	private Lems lems;
@@ -19,7 +18,7 @@ public class BuildNameToCompTypeMap extends TraversingVisitor<Boolean, Throwable
 	/**
 	 * @param lems
 	 */
-	public BuildNameToCompTypeMap(Lems lems)
+	public BuildNameToComponentTypeMap(Lems lems)
 	{
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
@@ -33,7 +32,7 @@ public class BuildNameToCompTypeMap extends TraversingVisitor<Boolean, Throwable
 	@Override
 	public Boolean visit(ComponentType ct) throws Throwable
 	{
-		this.lems.registerComponentTypeName(ct.getName(), ct);
+		((org.lemsml.model.extended.Lems) this.lems).registerComponentTypeName(ct.getName(), ct);
 		return true;
 	}
 

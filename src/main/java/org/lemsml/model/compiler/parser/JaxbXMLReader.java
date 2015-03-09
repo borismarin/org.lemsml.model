@@ -1,4 +1,4 @@
-package compiler.parser;
+package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.net.URL;
@@ -7,7 +7,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import extended.ExtObjectFactory;
+import org.lemsml.model.extended.ExtObjectFactory;
 
 /**
  * @author borismarin

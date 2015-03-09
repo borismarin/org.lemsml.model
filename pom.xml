@@ -141,7 +141,7 @@
 								<plugin>
 									<groupId>com.massfords</groupId>
 									<artifactId>jaxb-visitor</artifactId>
-									<version>2.2-SNAPSHOT</version>
+									<version>2.2</version>
 								</plugin>
 								<!-- <plugin> <groupId>org.neuroml.model.injectingplugin</groupId> 
 									<artifactId>org.neuroml.model.injectingplugin</artifactId> <version>1.4.0</version> 

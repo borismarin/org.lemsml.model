@@ -1,4 +1,4 @@
-package extended;
+package org.lemsml.model.extended;
 
 import java.util.HashMap;
 import java.util.Map;

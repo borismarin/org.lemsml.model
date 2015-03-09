@@ -1,12 +1,11 @@
-package compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Component;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-
-import extended.Component;
-import extended.Lems;
 
 /**
  * @author borismarin
@@ -35,6 +34,22 @@ public class AddTypeToComponent extends TraversingVisitor<Boolean, Throwable>
 		ComponentType ctToSet = this.lems.getComponentTypeByName(comp.getType());
 		comp.setComponentType(ctToSet);
 		return true;
+	}
+
+	/**
+	 * @return
+	 */
+	public Lems getLems()
+	{
+		return lems;
+	}
+
+	/**
+	 * @param lems
+	 */
+	public void setLems(Lems lems)
+	{
+		this.lems = lems;
 	}
 
 }
