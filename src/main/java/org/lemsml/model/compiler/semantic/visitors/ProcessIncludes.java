@@ -3,7 +3,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 import java.io.File;
 
 import org.lemsml.model.Include;
-import org.lemsml.model.compiler.parser.JaxbXMLReader;
+import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
@@ -42,7 +42,7 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
 	public Boolean visit(Include inc) throws Throwable
 	{
 		File includedFile = new File(cwd.getPath(), inc.getFile());
-		Lems includedLems = JaxbXMLReader.unmarshall(includedFile, schema);
+		Lems includedLems = LEMSXMLReader.unmarshall(includedFile, schema);
 
 		// recursively process inputs
 		ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems, schema, cwd);

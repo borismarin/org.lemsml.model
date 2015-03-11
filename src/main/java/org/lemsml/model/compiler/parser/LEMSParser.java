@@ -23,7 +23,7 @@ public class LEMSParser
 	 */
 	public LEMSParser(File lemsDocFile, File schema)
 	{
-		this.lems = JaxbXMLReader.<Lems>unmarshall(lemsDocFile, schema);
+		this.lems = LEMSXMLReader.unmarshall(lemsDocFile, schema);
 		this.cwd = lemsDocFile.getParentFile();
 		this.schema = schema;
 	}
@@ -34,7 +34,7 @@ public class LEMSParser
 	 */
 	public LEMSParser(URL lemsDocURL, File schema)
 	{
-		this.lems = JaxbXMLReader.<Lems>unmarshall(lemsDocURL, schema);
+		this.lems = LEMSXMLReader.unmarshall(lemsDocURL, schema);
 		// this.cwd = lemsdocumenturl.getParentFile();
 		this.schema = schema;
 	}

@@ -14,7 +14,7 @@ import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
-import org.lemsml.model.compiler.parser.JaxbXMLReader;
+import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
 
@@ -45,7 +45,7 @@ public class SimplePendulumTest extends BaseTest
 	public void testUnmarshalling()
 	{
 
-		Lems lems = JaxbXMLReader.unmarshall(pendLemsFile, schema);
+		Lems lems = LEMSXMLReader.unmarshall(pendLemsFile, schema);
 		ComponentType pendCompType = lems.getComponentType().get(0);
 
 		String desc = pendCompType.getDescription();

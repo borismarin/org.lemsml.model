@@ -7,8 +7,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
-import org.lemsml.model.extended.ExtObjectFactory;
-
 /**
  * @author borismarin
  *
@@ -22,11 +20,11 @@ public class JaxbXMLReader
 	 * @return 
 	 * @return
 	 */
-	public static <T> T unmarshall(File document, File schema)
+	public static <T> T unmarshall(File document, File schema, Object objFactory)
 	{
 
 		T unmarshalledDoc = null;
-		Unmarshaller unmarshaller = getUnmarshaller(schema);
+		Unmarshaller unmarshaller = getUnmarshaller(schema, objFactory);
 		try
 		{
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
@@ -46,11 +44,11 @@ public class JaxbXMLReader
 	 * @return 
 	 * @return
 	 */
-	public static <T> T unmarshall(URL document, File schema)
+	public static <T> T unmarshall(URL document, File schema, Object objFactory)
 	{
 
 		T unmarshalledDoc = null;
-		Unmarshaller unmarshaller = getUnmarshaller(schema);
+		Unmarshaller unmarshaller = getUnmarshaller(schema, objFactory);
 		try
 		{
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
@@ -68,15 +66,15 @@ public class JaxbXMLReader
 	 * @param schema
 	 * @return
 	 */
-	private static Unmarshaller getUnmarshaller(File schema)
+	public static Unmarshaller getUnmarshaller(File schema, Object objFactory)
 	{
 		Unmarshaller unmarshaller = null;
 		try
 		{
-			JAXBContext jc = JAXBContext.newInstance(ExtObjectFactory.class);
+			JAXBContext jc = JAXBContext.newInstance(objFactory.getClass());
 			unmarshaller = jc.createUnmarshaller();
 			unmarshaller.setSchema(XMLUtils.parseSchema(schema));
-			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", new ExtObjectFactory());
+			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", objFactory);
 		}
 		catch(JAXBException e)
 		{
