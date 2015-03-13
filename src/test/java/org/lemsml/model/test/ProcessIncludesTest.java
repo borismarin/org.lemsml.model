@@ -32,8 +32,8 @@ public class ProcessIncludesTest extends BaseTest {
 
 		LEMSParser parser = new LEMSParser(include0, schema);
 		Lems lemsDoc = parser.parse();
-		assertEquals(3, lemsDoc.getConstant().size());
-		System.out.println(lemsDoc.getConstant().get(0).getValue());
+		assertEquals(3, lemsDoc.getConstants().size());
+		System.out.println(lemsDoc.getConstants().get(0).getValue());
 	}
 
 }

@@ -69,7 +69,7 @@ public class HindmarshRoseTest extends BaseTest
 				desc,
 				"     The Hindmarsh Rose model is a simplified point cell model which     captures complex firing patterns of single neurons, such as     periodic and chaotic bursting. It in a fast spiking subsystem,     which is a generalization of the Fitzhugh-Nagumo system, coupled     to a slower subsystem which allows the model to fire bursts. The     dynamical variables x,y,z correspond to the membrane potential, a     recovery variable, and a slower adaptation current, respectively.     ");
 
-		List<Parameter> ParameterList = hr_candidate.getParameter();
+		List<Parameter> ParameterList = hr_candidate.getParameters();
 		assertEquals(ParameterList.get(0).getDescription(), "cubic term in x         nullcline");
 	}
 
@@ -78,7 +78,7 @@ public class HindmarshRoseTest extends BaseTest
 	{
 
 		Lems lems = LEMSXMLReader.unmarshall(hindMarshRoseCompTypeFile, lemsSchemaFile);
-		ComponentType hindMarshRoseCompType = lems.getComponentType().get(0);
+		ComponentType hindMarshRoseCompType = lems.getComponentTypes().get(0);
 		validateHRComponentType(hindMarshRoseCompType);
 
 	}

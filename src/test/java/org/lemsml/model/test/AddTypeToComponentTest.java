@@ -45,7 +45,7 @@ public class AddTypeToComponentTest extends BaseTest
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lemsDocument);
 		lemsDocument.accept(addTypeToComponent);
 		// The first component in standalone_pend is <Component type = "SimplePendulum" id="pend" ...
-		assertEquals("SimplePendulum", lemsDocument.getComponent().get(0).getComponentType().getName());
+		assertEquals("SimplePendulum", lemsDocument.getComponents().get(0).getComponentType().getName());
 
 	}
 

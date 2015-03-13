@@ -32,7 +32,7 @@ public class CopyContent extends TraversingVisitor<Boolean, Throwable>
 	@Override
 	public Boolean visit(Constant constant)
 	{
-		resolvedLems.getConstant().add(constant);
+		resolvedLems.getConstants().add(constant);
 		return true;
 
 	}
@@ -40,35 +40,35 @@ public class CopyContent extends TraversingVisitor<Boolean, Throwable>
 	@Override
 	public Boolean visit(ComponentType componentType)
 	{
-		resolvedLems.getComponentType().add(componentType);
+		resolvedLems.getComponentTypes().add(componentType);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Component component)
 	{
-		resolvedLems.getComponent().add(component);
+		resolvedLems.getComponents().add(component);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Target target)
 	{
-		resolvedLems.getTarget().add(target);
+		resolvedLems.getTargets().add(target);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Dimension dimension)
 	{
-		resolvedLems.getDimension().add(dimension);
+		resolvedLems.getDimensions().add(dimension);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Unit unit)
 	{
-		resolvedLems.getUnit().add((org.lemsml.model.extended.Unit) unit);
+		resolvedLems.getUnits().add((org.lemsml.model.extended.Unit) unit);
 		return true;
 	}
 }

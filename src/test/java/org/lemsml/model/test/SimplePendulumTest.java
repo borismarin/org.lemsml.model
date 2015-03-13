@@ -46,12 +46,12 @@ public class SimplePendulumTest extends BaseTest
 	{
 
 		Lems lems = LEMSXMLReader.unmarshall(pendLemsFile, schema);
-		ComponentType pendCompType = lems.getComponentType().get(0);
+		ComponentType pendCompType = lems.getComponentTypes().get(0);
 
 		String desc = pendCompType.getDescription();
 		assertEquals(desc, "Equations of motion for a simple pendulum with mass _m_ and length _l_ ");
 
-		List<Parameter> ParameterList = pendCompType.getParameter();
+		List<Parameter> ParameterList = pendCompType.getParameters();
 		assertEquals(ParameterList.get(0).getDescription(), "Mass of the bob");
 	}
 
