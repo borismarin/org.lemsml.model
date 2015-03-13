@@ -15,11 +15,14 @@ import org.lemsml.model.ComponentType;
 public class Lems extends org.lemsml.model.Lems
 {
 
+	@XmlTransient
 	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
 	// TODO: notice that there is a discrepancy between what LEMS calls dimensions
 	// and what UOM calls dimensions. We'll thus confusingly use Unit<?> here
 	// to store a dimension...
+	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
+	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
 
 	public ComponentType getComponentTypeByName(String name)
