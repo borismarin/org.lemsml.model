@@ -24,7 +24,7 @@ public class JaxbXMLReader
 	{
 
 		T unmarshalledDoc = null;
-		Unmarshaller unmarshaller = getUnmarshaller(schema, objFactory);
+		Unmarshaller unmarshaller = getUnmarshaller(objFactory);
 		try
 		{
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
@@ -48,7 +48,7 @@ public class JaxbXMLReader
 	{
 
 		T unmarshalledDoc = null;
-		Unmarshaller unmarshaller = getUnmarshaller(schema, objFactory);
+		Unmarshaller unmarshaller = getUnmarshaller(objFactory);
 		try
 		{
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
@@ -62,30 +62,7 @@ public class JaxbXMLReader
 		return unmarshalledDoc;
 	}
 
-	/**
-	 * @param schema
-	 * @return
-	 */
-	public static Unmarshaller getUnmarshaller(File schema, Object objFactory)
-	{
-		Unmarshaller unmarshaller = null;
-		try
-		{
-			JAXBContext jc = JAXBContext.newInstance(objFactory.getClass());
-			unmarshaller = jc.createUnmarshaller();
-			unmarshaller.setSchema(XMLUtils.parseSchema(schema));
-			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", objFactory);
-		}
-		catch(JAXBException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
-		return unmarshaller;
-	}
-
-	//non-validating unmarshaller
 	public static Unmarshaller getUnmarshaller(Object objFactory)
 	{
 		Unmarshaller unmarshaller = null;
