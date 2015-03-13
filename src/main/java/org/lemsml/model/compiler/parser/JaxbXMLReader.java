@@ -85,4 +85,23 @@ public class JaxbXMLReader
 		return unmarshaller;
 	}
 
+	//non-validating unmarshaller
+	public static Unmarshaller getUnmarshaller(Object objFactory)
+	{
+		Unmarshaller unmarshaller = null;
+		try
+		{
+			JAXBContext jc = JAXBContext.newInstance(objFactory.getClass());
+			unmarshaller = jc.createUnmarshaller();
+			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", objFactory);
+		}
+		catch(JAXBException e)
+		{
+//			 TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return unmarshaller;
+	}
+
 }
