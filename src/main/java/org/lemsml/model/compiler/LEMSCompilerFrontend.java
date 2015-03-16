@@ -32,6 +32,19 @@ public class LEMSCompilerFrontend
 		this.schema = lemsSchemaFile;
 	}
 
+	public LEMSCompilerFrontend(File lemsFile)
+	{
+		super();
+		this.lemsFile = lemsFile;
+		this.schema = getCurrentSchema();
+	}
+
+	private File getCurrentSchema()
+	{
+		//TODO: hardcode that somewhere else
+		return new File(getClass().getResource("/Schemas/LEMS_v0.9.0.xsd").getFile());
+	}
+
 	/**
 	 * @throws Throwable
 	 * 
