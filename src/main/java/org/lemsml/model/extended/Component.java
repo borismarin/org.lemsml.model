@@ -11,6 +11,7 @@ import org.lemsml.model.ComponentType;
 @XmlTransient
 public class Component extends org.lemsml.model.Component
 {
+	@XmlTransient
 	ComponentType _ComponentType;
 
 	public ComponentType getComponentType()
