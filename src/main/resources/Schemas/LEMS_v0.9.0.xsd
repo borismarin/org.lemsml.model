@@ -314,10 +314,8 @@
 			<xs:element name="Path" type="Path" />
 			<xs:element name="Text" type="Text" />
 			<xs:element name="Dynamics" type="Dynamics" />
-			<xs:element name="Structure" type="Structure" minOccurs="0"
-				maxOccurs="1" />
-			<xs:element name="Simulation" type="Simulation" minOccurs="0"
-				maxOccurs="1" />
+			<xs:element name="Structure" type="Structure"/>
+			<xs:element name="Simulation" type="Simulation"/>
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="extends" type="xs:string" use="optional" />

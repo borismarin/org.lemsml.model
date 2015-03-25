@@ -1,0 +1,20 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+
+    <Constant name="const0" value="-0.1e-12nS"/>
+
+    <ComponentType name="DependsOnExposed">
+        <StateVariable name="x" dimension="none" exposure="x"/>
+        <DerivedVariable name="R" dimension="none" exposure="R" value="s * ( x - x1 ) - z"/>
+        <TimeDerivative variable="x" value="(P - z) / SEC"/>
+        <Dynamics>
+             
+        </Dynamics>
+    </ComponentType>
+
+    <ComponentType name="TwoExpressions">
+        <DerivedVariable name="dv0_const0" value="const0*10"/> 
+        <Child name="child0_dv0" type="DependsOn_dv0"/>
+    </ComponentType>
+
+</Lems>
+
