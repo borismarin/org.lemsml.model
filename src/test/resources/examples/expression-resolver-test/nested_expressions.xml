@@ -1,0 +1,20 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+
+	<Constant name="const0" value="-0.1" dimension="none" />
+
+	<ComponentType name="DependsOn_derpar0">
+		<Parameter name="par1" dimension="none" />
+		<DerivedParameter name="derpar1" dimension="none" value="derpar0 * par1" />
+	</ComponentType>
+
+	<ComponentType name="Exposes_dv0">
+		<Exposure name="derpar0" dimension="none" />
+		<Child name="child0" type="DependsOn_derpar0" />
+        <DerivedParameter name="derpar0" value="const0*10"/>
+	</ComponentType>
+
+	<Component type="DependsOn_derpar0" par1="10" id="comp0" />
+
+
+</Lems>
+

@@ -14,26 +14,24 @@ import org.lemsml.model.extended.Lems;
 public class ExpressionResolverTest extends BaseTest {
 
 	private File schema;
-	private File include0;
 
 	@Before
 	public void setUp() {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
-		include0 = getLocalFile("/examples/expression-resolver-test/include0.xml");
 	}
 
-	@Test
-	public void validate() {
-		assertTrue(XMLUtils.validate(include0, schema));
-	}
 
 	@Test
-	public void testIncludeVisitor() throws Throwable {
+	public void testNested() throws Throwable {
 
-		LEMSParser parser = new LEMSParser(include0, schema);
-		Lems lemsDoc = parser.parse();
-		assertEquals(3, lemsDoc.getConstants().size());
-		System.out.println(lemsDoc.getConstants().get(0).getValue());
+		File lemsDoc = getLocalFile("/examples/expression-resolver-test/nested_expressions.xml");
+
+		LEMSParser parser = new LEMSParser(lemsDoc, schema);
+		assertTrue(XMLUtils.validate(lemsDoc, schema));
+		Lems parsedLems = parser.parse();
+
+		System.out.println(parsedLems.getConstants().get(0).getValue());
+		assertEquals(-0.1, parsedLems.getConstants().get(0).getValue().getValue(), 1e-6);
 	}
 
 }
