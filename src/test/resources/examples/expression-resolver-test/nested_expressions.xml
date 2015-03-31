@@ -2,18 +2,35 @@
 
 	<Constant name="const0" value="-0.1" dimension="none" />
 
-	<ComponentType name="DependsOn_derpar0">
-		<Parameter name="par1" dimension="none" />
-		<DerivedParameter name="derpar1" dimension="none" value="derpar0 * par1" />
+
+	<ComponentType name="DependsOn_dv0_p0">
+		<Parameter name="p1" dimension="none" />
+		<DerivedParameter name="dp1" dimension="none" value="p0 * p1" />
+
+		<Requirement name="dv0" dimension="none" />
+		<Requirement name="p0" dimension="none" />
+
+		<Dynamics>
+			<StateVariable name="x" exposure="x" />
+			<TimeDerivative variable="x" value="const0*dp1/p0/p1*x" />
+		</Dynamics>
+
 	</ComponentType>
 
-	<ComponentType name="Exposes_dv0">
-		<Exposure name="derpar0" dimension="none" />
-		<Child name="child0" type="DependsOn_derpar0" />
-        <DerivedParameter name="derpar0" value="const0*10"/>
+
+	<ComponentType name="Exposes_dv0_p0">
+		<Child name="child0" type="DependsOn_dv0_p0" />
+		<Parameter name="p0" dimension="none" />
+
+		<Exposure name="dv0" dimension="none" />
+		<Dynamics>
+			<DerivedVariable name="dv0" value="1e1*const0" exposure="dv0" />
+		</Dynamics>
 	</ComponentType>
 
-	<Component type="DependsOn_derpar0" par1="10" id="comp0" />
+	<Component type="Exposes_dv0_p0" p0="1" id="comp0">
+		<Component type="DependsOn_dv0_p0" p1="10" id="comp1" />
+	</Component>
 
 
 </Lems>
