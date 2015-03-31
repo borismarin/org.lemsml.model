@@ -42,7 +42,7 @@ public class XMLUtils
 		catch(SAXException e)
 		{
 			// e.printStackTrace();
-			System.out.println("Invalid!!");
+			System.out.println("Invalid!!, cause:\n\t" + e.getMessage());
 		}
 		catch(IOException e)
 		{
