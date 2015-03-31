@@ -2,6 +2,7 @@ package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToConstantMap;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToDimensionMap;
 import org.lemsml.model.compiler.semantic.visitors.BuildSymbolToUnitMap;
 import org.lemsml.model.extended.Lems;
@@ -43,6 +44,9 @@ public class LEMSSemanticAnalyser
 
 		BuildSymbolToUnitMap buildSymbolToUnitMap = new BuildSymbolToUnitMap(lems);
 		lems.accept(buildSymbolToUnitMap);
+
+		BuildNameToConstantMap buildNameToConstantMap = new BuildNameToConstantMap(lems);
+		lems.accept(buildNameToConstantMap);
 
 		// ERROR CHECKING
 		// TODO
