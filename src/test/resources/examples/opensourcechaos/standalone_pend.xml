@@ -45,7 +45,6 @@
   <!-- Specify which component to run -->
   <Target component="sim1"/>
 
-  <!-- parameter set for chaotic attractor -->
   <Component type="SimplePendulum" id="pend" l="1m" m="1kg" g="1m_per_s2"
 			 theta_0="1.0"  p_0="0kg_m2_per_s"/>
 
