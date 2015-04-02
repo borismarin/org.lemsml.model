@@ -3,6 +3,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.compiler.utils.UOMUtils;
+import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Dimension;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Unit;
@@ -26,6 +27,12 @@ public class BuildNameToObjectMaps extends
 		super(new DepthFirstTraverserImpl<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
+	}
+
+	@Override
+	public Boolean visit(Component c) throws Throwable {
+		this.lems.registerComponentId(c.getId(), c);
+		return true;
 	}
 
 	@Override

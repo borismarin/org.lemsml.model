@@ -16,11 +16,8 @@
 	v0.6 & v0.7 were updates prompted by the refactored Java LEMS implementation (https://github.com/robertcannon/jLEMS)
 	and pylems (https://github.com/lisphacker/pylems)
 -->
-<xs:schema 
-	xmlns="http://www.neuroml.org/lems/0.9.0" 
-	xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	targetNamespace="http://www.neuroml.org/lems/0.9.0"
-	elementFormDefault="qualified"
+<xs:schema xmlns="http://www.neuroml.org/lems/0.9.0" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	targetNamespace="http://www.neuroml.org/lems/0.9.0" elementFormDefault="qualified"
 	attributeFormDefault="unqualified">
 
 
@@ -54,7 +51,8 @@
 		<xs:attribute name="timesFile" type="xs:string" use="optional">
 			<xs:annotation>
 				<xs:documentation>jLEMS only optional attribute to also write a file
-					containing actual times used in the simulation.</xs:documentation>
+					containing actual times used in the simulation.
+				</xs:documentation>
 			</xs:annotation>
 		</xs:attribute>
 	</xs:complexType>
@@ -283,11 +281,12 @@
 
 	<xs:complexType name="Component">
 		<xs:sequence>
-			<xs:element minOccurs="0" maxOccurs="unbounded" name="Component" type="Component"/>
+			<xs:element minOccurs="0" maxOccurs="unbounded" name="Component"
+				type="Component" />
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required" />
 		<xs:attribute name="id" type="xs:string" use="required" />
-        <xs:anyAttribute processContents="lax"/>
+		<xs:anyAttribute processContents="lax" />
 
 	</xs:complexType>
 
@@ -314,8 +313,8 @@
 			<xs:element name="Path" type="Path" />
 			<xs:element name="Text" type="Text" />
 			<xs:element name="Dynamics" type="Dynamics" />
-			<xs:element name="Structure" type="Structure"/>
-			<xs:element name="Simulation" type="Simulation"/>
+			<xs:element name="Structure" type="Structure" />
+			<xs:element name="Simulation" type="Simulation" />
 		</xs:choice>
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="extends" type="xs:string" use="optional" />
@@ -338,7 +337,9 @@
 
 	<xs:complexType name="Parameter">
 		<xs:complexContent>
-			<xs:extension base="NamedDimensionalType" />
+			<xs:extension base="NamedDimensionalType">
+				<xs:attribute name="value" use="optional" type="PhysicalQuantity" />
+			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
 

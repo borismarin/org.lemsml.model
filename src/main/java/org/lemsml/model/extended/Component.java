@@ -3,6 +3,7 @@ package org.lemsml.model.extended;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.NamedDimensionalType;
@@ -29,7 +30,7 @@ public class Component extends org.lemsml.model.Component {
 			String name) {
 		Boolean ret = false;
 		for (NamedDimensionalType t : nameables) {
-			if (t.getName() == name) {
+			if (t.getName().equals(name)) {
 				ret = true;
 				break;
 			}
@@ -40,8 +41,8 @@ public class Component extends org.lemsml.model.Component {
 	public PhysicalQuantity getParameterValue(String parName)
 			throws LEMSParserException {
 		if (hasName(this.getComponentType().getParameters(), parName)) {
-			return (new PhysicalQuantityAdapter()).unmarshal(this
-					.getOtherAttributes().get(parName));
+			String parVal = this.getOtherAttributes().get(new QName(parName));
+			return (new PhysicalQuantityAdapter()).unmarshal(parVal);
 		} else {
 			throw new LEMSParserException("Parameter " + parName
 					+ " not allowed in ComponentType "

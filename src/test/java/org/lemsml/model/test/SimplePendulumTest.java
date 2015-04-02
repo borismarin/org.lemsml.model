@@ -16,6 +16,7 @@ import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
+import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 
 /**
@@ -27,12 +28,15 @@ public class SimplePendulumTest extends BaseTest
 
 	private File schema;
 	private File pendLemsFile;
+	private Lems compiledLems;
 
 	@Before
-	public void setUp()
+	public void setUp() throws Throwable
 	{
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		pendLemsFile = getLocalFile("/examples/opensourcechaos/standalone_pend.xml");
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile, schema);
+		compiledLems = compiler.generateLEMSDocument();
 	}
 
 	@Test
@@ -53,16 +57,21 @@ public class SimplePendulumTest extends BaseTest
 
 		List<Parameter> ParameterList = pendCompType.getParameters();
 		assertEquals(ParameterList.get(0).getDescription(), "Mass of the bob");
+		
+	}
+
+	@Test
+	public void testDecoration() throws Throwable
+	{
+		assertEquals(compiledLems.getComponentById("pend").getParameterValue("l").getValue(), 1.0, 1e-6);
 	}
 
 	@Test
 	public void testDimensions() throws Throwable
 	{
 
-		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile, schema);
-		Lems lemsDoc = compiler.generateLEMSDocument();
-		assertEquals(lemsDoc.getNameToDimension().get("time").getDimension(), SECOND.getDimension());
-		assertEquals(lemsDoc.getNameToDimension().get("angular_momentum").getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
+		assertEquals(compiledLems.getNameToDimension().get("time").getDimension(), SECOND.getDimension());
+		assertEquals(compiledLems.getNameToDimension().get("angular_momentum").getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
 	}
 
 }
