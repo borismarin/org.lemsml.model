@@ -1,4 +1,4 @@
-package org.lemsml.model.compiler.semantic.visitors;
+package org.lemsml.model.compiler.utils;
 
 import static tec.units.ri.AbstractUnit.ONE;
 import static tec.units.ri.util.SI.AMPERE;
@@ -12,27 +12,10 @@ import static tec.units.ri.util.SI.SECOND;
 import javax.measure.Unit;
 
 import org.lemsml.model.extended.Dimension;
-import org.lemsml.model.extended.Lems;
-import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
-import org.lemsml.visitors.TraversingVisitor;
 
-/**
- * @author borismarin
- *
- */
-public class BuildNameToDimensionMap extends TraversingVisitor<Boolean, Throwable>
-{
-
-	private Lems lems;
-
-	public BuildNameToDimensionMap(Lems lems)
-	{
-		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
-		this.lems = lems;
-	}
-
-	public Unit<?> LemsDimensionToUOM(Dimension lemsDim)
+public abstract class UOMUtils {
+	
+	public static Unit<?> LemsDimensionToUOM(Dimension lemsDim)
 	{
 		Unit<?> dim = ONE;
 		dim = dim.multiply(AMPERE.pow(lemsDim.getI().intValue()));
@@ -46,19 +29,6 @@ public class BuildNameToDimensionMap extends TraversingVisitor<Boolean, Throwabl
 		// and what UOM calls dimensions. We'll thus confusingly return an Unit<?>
 		// here instead of a javax.measure.dimension dim.getDimension()
 		return dim;
-	}
-
-	@Override
-	public Boolean visit(Dimension dimension) throws Throwable
-	{
-		dimension.setDimension(LemsDimensionToUOM(dimension));
-		lems.getNameToDimension().put(dimension.getName(), dimension.getDimension());
-		return true;
-	}
-
-	public Lems getLems()
-	{
-		return lems;
 	}
 
 }

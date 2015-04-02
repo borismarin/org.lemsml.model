@@ -1,10 +1,7 @@
 package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToConstantMap;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToDimensionMap;
-import org.lemsml.model.compiler.semantic.visitors.BuildSymbolToUnitMap;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.extended.Lems;
 
 /**
@@ -33,20 +30,12 @@ public class LEMSSemanticAnalyser
 	{
 
 		// DECORATION
-		BuildNameToComponentTypeMap buildComponentTypeMapVisitor = new BuildNameToComponentTypeMap(lems);
-		lems.accept(buildComponentTypeMapVisitor);
+
+		BuildNameToObjectMaps mapBuilder = new BuildNameToObjectMaps(lems);
+		lems.accept(mapBuilder);
 
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);
-
-		BuildNameToDimensionMap buildNameToDimensionMap = new BuildNameToDimensionMap(lems);
-		lems.accept(buildNameToDimensionMap);
-
-		BuildSymbolToUnitMap buildSymbolToUnitMap = new BuildSymbolToUnitMap(lems);
-		lems.accept(buildSymbolToUnitMap);
-
-		BuildNameToConstantMap buildNameToConstantMap = new BuildNameToConstantMap(lems);
-		lems.accept(buildNameToConstantMap);
 
 		// ERROR CHECKING
 		// TODO
