@@ -29,7 +29,7 @@ public class PhysicalQuantityAdapter extends XmlAdapter<String, PhysicalQuantity
 			if(matcher.find())
 			{
 				pq.setValue(Float.parseFloat(matcher.group(1)));
-				pq.setUnit(matcher.group(2));
+				pq.setUnitSymbol(matcher.group(2));
 			}
 
 			return pq;
@@ -38,7 +38,7 @@ public class PhysicalQuantityAdapter extends XmlAdapter<String, PhysicalQuantity
 
 	public String marshal(PhysicalQuantity pq)
 	{
-		return (pq.getValue().toString() + pq.getUnit());
+		return (pq.getValue().toString() + pq.getUnitSymbol());
 	}
 
 }

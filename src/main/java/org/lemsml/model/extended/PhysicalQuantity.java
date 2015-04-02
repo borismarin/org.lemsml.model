@@ -8,21 +8,30 @@ public class PhysicalQuantity
 {
 
 	public Float value;
-	public String unit;
+	public String unitSymbol;
+	public Unit unit;
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
 
 	public Float getValue()
 	{
 		return value;
 	}
 
-	public String getUnit()
+	public String getUnitSymbol()
 	{
-		return unit;
+		return unitSymbol;
 	}
 
-	public void setUnit(String unit)
+	public void setUnitSymbol(String unit)
 	{
-		this.unit = unit;
+		this.unitSymbol = unit;
 	}
 
 	public void setValue(Float value)
@@ -33,7 +42,7 @@ public class PhysicalQuantity
 	@Override
 	public String toString()
 	{
-		return "PhysicalQuantity [value=" + value + ", unit=" + unit + "]";
+		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol + "]";
 	}
 
 }
