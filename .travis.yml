@@ -4,6 +4,14 @@ language: java
 jdk:
   - openjdk7
   - oraclejdk7
+
+install:
+  - git clone https://github.com/borismarin/expr-parser.git
+  - cd expr-parser
+  - mvn install
+  - cd $TRAVIS_BUILD_DIR 
+
+
  
 
 
