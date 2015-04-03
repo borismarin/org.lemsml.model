@@ -54,12 +54,15 @@ public class LEMSCompilerFrontend
 		// First step: parse the LEMS file
 		LEMSParser parser = new LEMSParser(lemsFile, schema);
 		lemsDocument = parser.parse();
-
 		// Second step: perform semantic analysis
-		LEMSSemanticAnalyser semanticAnalyser = new LEMSSemanticAnalyser(lemsDocument);
-		semanticAnalyser.analyse();
+		semanticAnalysis(lemsDocument);
 
 		return lemsDocument;
+	}
+	
+	public void semanticAnalysis(Lems lemsDocument) throws Throwable{
+		LEMSSemanticAnalyser semanticAnalyser = new LEMSSemanticAnalyser(lemsDocument);
+		semanticAnalyser.analyse();
 	}
 
 }
