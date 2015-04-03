@@ -9,7 +9,6 @@ import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
 import java.io.File;
 import java.util.List;
 
-import javax.measure.Quantity;
 import javax.measure.Unit;
 
 import org.junit.Before;
@@ -66,23 +65,19 @@ public class SimplePendulumTest extends BaseTest {
 	}
 
 	@Test
-	public void testDecoration() throws Throwable
-	{
-		Component pend = compiledLems.getComponentById("pend");
-		PhysicalQuantity l = pend.getParameterValue("l");
-		Unit<?> unitL = compiledLems.getUnitBySymbol(l.getUnitSymbol());
-		assertEquals(l.getValue(), 1.0, 1e-6);
-//		AbstractQuantity<?> length = new NumberQuantity<Quantity<Q>>(l.getValue(), 
-	}
-
-	@Test
 	public void testDimensions() throws Throwable {
 
-		assertEquals(compiledLems.getDimensionByName("time")
-				.getDimension(), SECOND.getDimension());
+		assertEquals(compiledLems.getDimensionByName("time").getDimension(),
+				SECOND.getDimension());
 		assertEquals(compiledLems.getDimensionByName("angular_momentum")
 				.getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM)
 				.getDimension());
+
+		Component pend = compiledLems.getComponentById("pend");
+		PhysicalQuantity l = pend.getParameterValue("l");
+		Unit<?> unitL = compiledLems.getUnitBySymbol(l.getUnitSymbol());
+		AbstractQuantity<?> length = NumberQuantity.of(l.getValue(), unitL);
+		assertEquals(length.toSI().getValue().floatValue(), 1.0, 1e-8);
 	}
 
 }

@@ -45,7 +45,7 @@
   <!-- Specify which component to run -->
   <Target component="sim1"/>
 
-  <Component type="SimplePendulum" id="pend" l="1m" m="1kg" g="1m_per_s2"
+  <Component type="SimplePendulum" id="pend" l="1e-3km" m="1kg" g="1m_per_s2"
 			 theta_0="1.0"  p_0="0kg_m2_per_s"/>
 
   <Component type="Simulation" id="sim1" length="100s" step="0.001s" target="pend" method="rk4">
@@ -82,6 +82,7 @@
   <Unit symbol="s" dimension="time"/>
   <Unit symbol="per_s" dimension="per_time"/>
   <Unit symbol="m" dimension="length"/>
+  <Unit symbol="km" dimension="length" power="3"/>
   <Unit symbol="kg" dimension="mass"/>
   <Unit symbol="m_per_s2" dimension="acceleration"/>
   <Unit symbol="kg_m2_per_s" dimension="angular_momentum"/>
