@@ -9,6 +9,9 @@ import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
 import java.io.File;
 import java.util.List;
 
+import javax.measure.Quantity;
+import javax.measure.Unit;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
@@ -18,60 +21,68 @@ import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.PhysicalQuantity;
+
+import tec.units.ri.AbstractQuantity;
+import tec.units.ri.quantity.NumberQuantity;
 
 /**
  * @author borismarin
  *
  */
-public class SimplePendulumTest extends BaseTest
-{
+public class SimplePendulumTest extends BaseTest {
 
 	private File schema;
 	private File pendLemsFile;
 	private Lems compiledLems;
 
 	@Before
-	public void setUp() throws Throwable
-	{
+	public void setUp() throws Throwable {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		pendLemsFile = getLocalFile("/examples/opensourcechaos/standalone_pend.xml");
-		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile, schema);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile,
+				schema);
 		compiledLems = compiler.generateLEMSDocument();
 	}
 
 	@Test
-	public void validate()
-	{
+	public void validate() {
 		assertTrue(XMLUtils.validate(pendLemsFile, schema));
 	}
 
 	@Test
-	public void testUnmarshalling()
-	{
+	public void testUnmarshalling() {
 
 		Lems lems = LEMSXMLReader.unmarshall(pendLemsFile, schema);
 		ComponentType pendCompType = lems.getComponentTypes().get(0);
 
 		String desc = pendCompType.getDescription();
-		assertEquals(desc, "Equations of motion for a simple pendulum with mass _m_ and length _l_ ");
+		assertEquals(desc,
+				"Equations of motion for a simple pendulum with mass _m_ and length _l_ ");
 
 		List<Parameter> ParameterList = pendCompType.getParameters();
 		assertEquals(ParameterList.get(0).getDescription(), "Mass of the bob");
-		
+
 	}
 
 	@Test
 	public void testDecoration() throws Throwable
 	{
-		assertEquals(compiledLems.getComponentById("pend").getParameterValue("l").getValue(), 1.0, 1e-6);
+		Component pend = compiledLems.getComponentById("pend");
+		PhysicalQuantity l = pend.getParameterValue("l");
+		Unit<?> unitL = compiledLems.getUnitBySymbol(l.getUnitSymbol());
+		assertEquals(l.getValue(), 1.0, 1e-6);
+//		AbstractQuantity<?> length = new NumberQuantity<Quantity<Q>>(l.getValue(), 
 	}
 
 	@Test
-	public void testDimensions() throws Throwable
-	{
+	public void testDimensions() throws Throwable {
 
-		assertEquals(compiledLems.getNameToDimension().get("time").getDimension(), SECOND.getDimension());
-		assertEquals(compiledLems.getNameToDimension().get("angular_momentum").getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM).getDimension());
+		assertEquals(compiledLems.getDimensionByName("time")
+				.getDimension(), SECOND.getDimension());
+		assertEquals(compiledLems.getDimensionByName("angular_momentum")
+				.getDimension(), SQUARE_METRES_PER_SECOND.multiply(KILOGRAM)
+				.getDimension());
 	}
 
 }

@@ -50,15 +50,14 @@ public class BuildNameToObjectMaps extends
 	@Override
 	public Boolean visit(Dimension dimension) throws Throwable {
 		dimension.setDimension(UOMUtils.LemsDimensionToUOM(dimension));
-		lems.getNameToDimension().put(dimension.getName(),
+		lems.registerDimensionName(dimension.getName(),
 				dimension.getDimension());
 		return true;
 	}
 	
 	@Override
 	public Boolean visit(Unit unit) throws Throwable {
-		javax.measure.Unit<?> dim = lems.getNameToDimension().get(
-				unit.getDimension());
+		javax.measure.Unit<?> dim = lems.getDimensionByName(unit.getDimension());
 
 		// That's why we don't store a javax.measure.Dimension in nameToDim:
 		// dimensions can't be operated with
@@ -67,7 +66,7 @@ public class BuildNameToObjectMaps extends
 		uomUnit = uomUnit.shift(unit.getOffset());
 
 		unit.setUnit(uomUnit);
-		lems.getSymbolToUnit().put(unit.getSymbol(), uomUnit);
+		lems.registerUnitSymbol(unit.getSymbol(), uomUnit);
 		return true;
 	}
 

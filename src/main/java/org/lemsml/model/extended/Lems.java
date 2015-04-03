@@ -47,16 +47,12 @@ public class Lems extends org.lemsml.model.Lems {
 		return nameToDimension.get(name);
 	}
 
+	public javax.measure.Unit<?> getUnitBySymbol(String name) {
+		return symbolToUnit.get(name);
+	}
+
 	public Map<String, ComponentType> getNameToCompType() {
 		return nameToCompType;
-	}
-
-	public Map<String, javax.measure.Unit<?>> getNameToDimension() {
-		return nameToDimension;
-	}
-
-	public Map<String, javax.measure.Unit<?>> getSymbolToUnit() {
-		return symbolToUnit;
 	}
 
 	public void registerComponentId(String id, Component c) {
@@ -76,7 +72,7 @@ public class Lems extends org.lemsml.model.Lems {
 		this.nameToDimension.put(name, dim);
 	}
 
-	public void registerUnitName(String name, javax.measure.Unit<?> unit) {
+	public void registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
 		this.symbolToUnit.put(name, unit);
 	}
 

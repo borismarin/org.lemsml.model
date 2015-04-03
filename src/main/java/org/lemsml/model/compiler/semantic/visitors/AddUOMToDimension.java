@@ -49,7 +49,7 @@ public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable>
 	public Boolean visit(Dimension dimension) throws Throwable
 	{
 		dimension.setDimension((Unit<?>) LemsDimensionToUOM(dimension));
-		lems.getNameToDimension().put(dimension.getName(), dimension.getDimension());
+		lems.registerDimensionName(dimension.getName(), dimension.getDimension());
 		return true;
 	}
 
