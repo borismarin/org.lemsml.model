@@ -26,7 +26,7 @@ public class LEMSSemanticAnalyser
 	 * @throws Throwable
 	 * 
 	 */
-	public void analyse() throws Throwable
+	public Lems analyse() throws Throwable
 	{
 
 		// DECORATION
@@ -45,6 +45,10 @@ public class LEMSSemanticAnalyser
 		// Multiple declaration of variable in a scope
 		// Accessing an out of scope variable
 		// Actual and formal parameter mismatch
+		ComponentDefinitionChecker componentChecker = new ComponentDefinitionChecker(lems);
+		lems.accept(componentChecker);
+		
+		return lems;
 
 	}
 

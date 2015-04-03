@@ -39,7 +39,7 @@ public class AddTypeToComponentTest extends BaseTest
 		BuildNameToObjectMaps mapBuilder = new BuildNameToObjectMaps(lemsDocument);
 		lemsDocument.accept(mapBuilder);
 		// There are 6 ComponentTypes in standalone_pend
-		assertEquals(6, lemsDocument.getNameToCompType().size());
+		assertEquals(6, lemsDocument.getNameToCompTypeMap().size());
 
 		// Adds the corresponding ComponentType to each Component
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lemsDocument);

@@ -14,7 +14,6 @@ import org.lemsml.model.extended.Lems;
 public class LEMSCompilerFrontend
 {
 
-	Lems lemsDocument;
 	File lemsFile;
 	File cwd;
 	File schema;
@@ -52,17 +51,22 @@ public class LEMSCompilerFrontend
 	public Lems generateLEMSDocument() throws Throwable
 	{
 		// First step: parse the LEMS file
-		LEMSParser parser = new LEMSParser(lemsFile, schema);
-		lemsDocument = parser.parse();
-		// Second step: perform semantic analysis
-		semanticAnalysis(lemsDocument);
+		Lems parsedLems = parseLemsFile(lemsFile, schema);
 
-		return lemsDocument;
+		// Second step: perform semantic analysis
+		semanticAnalysis(parsedLems);
+
+		return parsedLems;
+	}
+
+	static public Lems parseLemsFile(File document, File schema) throws Throwable {
+		LEMSParser parser = new LEMSParser(document, schema);
+		return parser.parse();
 	}
 	
-	public void semanticAnalysis(Lems lemsDocument) throws Throwable{
+    static public Lems semanticAnalysis(Lems lemsDocument) throws Throwable{
 		LEMSSemanticAnalyser semanticAnalyser = new LEMSSemanticAnalyser(lemsDocument);
-		semanticAnalyser.analyse();
+		return semanticAnalyser.analyse();
 	}
 
 }

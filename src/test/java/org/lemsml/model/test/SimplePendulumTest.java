@@ -3,6 +3,7 @@ package org.lemsml.model.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static tec.units.ri.util.SI.KILOGRAM;
+import static tec.units.ri.util.SI.METRE;
 import static tec.units.ri.util.SI.SECOND;
 import static tec.units.ri.util.SI.SQUARE_METRES_PER_SECOND;
 
@@ -10,14 +11,17 @@ import java.io.File;
 import java.util.List;
 
 import javax.measure.Unit;
+import javax.xml.namespace.QName;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
+import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
+import org.lemsml.model.exceptions.LEMSParserException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.PhysicalQuantity;
@@ -75,9 +79,40 @@ public class SimplePendulumTest extends BaseTest {
 
 		Component pend = compiledLems.getComponentById("pend");
 		PhysicalQuantity l = pend.getParameterValue("l");
+
 		Unit<?> unitL = compiledLems.getUnitBySymbol(l.getUnitSymbol());
+		assertEquals(unitL, METRE.multiply(1000));
+
 		AbstractQuantity<?> length = NumberQuantity.of(l.getValue(), unitL);
+		assertEquals(length.getValue().floatValue(), 0.001, 1e-8);
 		assertEquals(length.toSI().getValue().floatValue(), 1.0, 1e-8);
+	}
+
+	//TODO: proper exceptions
+	@Test(expected = LEMSParserException.class)
+	public void testInexistentParameter() throws Throwable {
+
+		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
+		Component fakePend = new Component();
+		fakePend.setType("SimplePendulum");
+		fakePend.getOtherAttributes().put(new QName("fakePar"), "123");
+		fakeLems.getComponents().add(fakePend);
+
+		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+
+	}
+
+	//TODO: proper exceptions
+	@Test(expected = LEMSParserException.class)
+	public void testInexistentComponentType() throws Throwable {
+
+		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
+		Component fakeComp = new Component();
+		fakeComp.setType("ThisTypeIsUndefined");
+		fakeLems.getComponents().add(fakeComp);
+
+		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+
 	}
 
 }

@@ -51,7 +51,7 @@ public class Lems extends org.lemsml.model.Lems {
 		return symbolToUnit.get(name);
 	}
 
-	public Map<String, ComponentType> getNameToCompType() {
+	public Map<String, ComponentType> getNameToCompTypeMap() {
 		return nameToCompType;
 	}
 
