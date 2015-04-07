@@ -33,12 +33,6 @@ public class AddParameterValuesToComponent extends
 	public Void visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
-		if (null == type) {
-			throw new LEMSCompilerException(
-					"Trying to build Component of unknow type "
-							+ comp.getType(),
-					LEMSCompilerError.ComponentTypeNotDefined);
-		}
 
 		for (Parameter p : type.getParameters()) {
 			if (!comp.getOtherAttributes().keySet()
