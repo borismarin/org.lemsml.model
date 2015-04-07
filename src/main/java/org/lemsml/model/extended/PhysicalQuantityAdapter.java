@@ -9,25 +9,20 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
  * @author borismarin
  *
  */
-public class PhysicalQuantityAdapter extends XmlAdapter<String, PhysicalQuantity>
-{
+public class PhysicalQuantityAdapter extends
+		XmlAdapter<String, PhysicalQuantity> {
 
-	public PhysicalQuantity unmarshal(String value)
-	{
-		if(value == null)
-		{
+	public PhysicalQuantity unmarshal(String value) {
+		if (value == null) {
 			return null;
-		}
-		else
-		{
+		} else {
 			String regExp = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
 			PhysicalQuantity pq = new PhysicalQuantity();
 
 			Pattern pattern = Pattern.compile(regExp);
 			Matcher matcher = pattern.matcher(value);
 
-			if(matcher.find())
-			{
+			if (matcher.find()) {
 				pq.setValue(Float.parseFloat(matcher.group(1)));
 				pq.setUnitSymbol(matcher.group(2));
 			}
@@ -36,8 +31,7 @@ public class PhysicalQuantityAdapter extends XmlAdapter<String, PhysicalQuantity
 		}
 	}
 
-	public String marshal(PhysicalQuantity pq)
-	{
+	public String marshal(PhysicalQuantity pq) {
 		return (pq.getValue().toString() + pq.getUnitSymbol());
 	}
 

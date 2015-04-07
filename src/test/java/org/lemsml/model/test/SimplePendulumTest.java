@@ -88,7 +88,7 @@ public class SimplePendulumTest extends BaseTest {
 		assertEquals(length.toSI().getValue().floatValue(), 1.0, 1e-8);
 	}
 
-	//TODO: proper exceptions
+	// TODO: proper exceptions
 	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentParameter() throws Throwable {
 
@@ -102,7 +102,7 @@ public class SimplePendulumTest extends BaseTest {
 
 	}
 
-	//TODO: proper exceptions
+	// TODO: proper exceptions
 	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentComponentType() throws Throwable {
 

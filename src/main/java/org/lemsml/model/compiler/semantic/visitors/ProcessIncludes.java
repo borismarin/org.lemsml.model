@@ -13,8 +13,7 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
-{
+public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
 
 	private Lems inputLems;
 	private File cwd;
@@ -25,9 +24,9 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
 	 * @param schema
 	 * @param cwd
 	 */
-	public ProcessIncludes(Lems lems, File schema, File cwd)
-	{
-		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
+	public ProcessIncludes(Lems lems, File schema, File cwd) {
+		super(new DepthFirstTraverserImpl<Throwable>(),
+				new BaseVisitor<Boolean, Throwable>());
 		this.inputLems = lems;
 		this.cwd = cwd;
 		this.schema = schema;
@@ -36,16 +35,17 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.Include)
+	 * @see
+	 * org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.Include)
 	 */
 	@Override
-	public Boolean visit(Include inc) throws Throwable
-	{
+	public Boolean visit(Include inc) throws Throwable {
 		File includedFile = new File(cwd.getPath(), inc.getFile());
 		Lems includedLems = LEMSXMLReader.unmarshall(includedFile, schema);
 
 		// recursively process inputs
-		ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems, schema, cwd);
+		ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems,
+				schema, cwd);
 		incProcVisitor.setTraverseFirst(true);
 		includedLems.accept(incProcVisitor);
 
@@ -60,8 +60,7 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable>
 	/**
 	 * @return
 	 */
-	public Lems getInputLems()
-	{
+	public Lems getInputLems() {
 		return inputLems;
 	}
 

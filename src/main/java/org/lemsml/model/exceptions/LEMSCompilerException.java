@@ -8,8 +8,7 @@ public class LEMSCompilerException extends Exception {
 
 	public LEMSCompilerError errorCode;
 
-
-	public LEMSCompilerException(String message, LEMSCompilerError err){
+	public LEMSCompilerException(String message, LEMSCompilerError err) {
 		super(message);
 		this.errorCode = err;
 	}

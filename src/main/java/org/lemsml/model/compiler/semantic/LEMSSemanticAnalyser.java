@@ -9,16 +9,14 @@ import org.lemsml.model.extended.Lems;
  * @author borismarin
  *
  */
-public class LEMSSemanticAnalyser
-{
+public class LEMSSemanticAnalyser {
 
 	private Lems lems;
 
 	/**
 	 * @param lems
 	 */
-	public LEMSSemanticAnalyser(Lems lems)
-	{
+	public LEMSSemanticAnalyser(Lems lems) {
 		super();
 		this.lems = lems;
 	}
@@ -27,8 +25,7 @@ public class LEMSSemanticAnalyser
 	 * @throws Throwable
 	 * 
 	 */
-	public Lems analyse() throws Throwable
-	{
+	public Lems analyse() throws Throwable {
 
 		// DECORATION
 
@@ -38,7 +35,8 @@ public class LEMSSemanticAnalyser
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);
 
-		AddParameterValuesToComponent paramAdder = new AddParameterValuesToComponent(lems);
+		AddParameterValuesToComponent paramAdder = new AddParameterValuesToComponent(
+				lems);
 		lems.accept(paramAdder);
 
 		// ERROR CHECKING
@@ -49,7 +47,7 @@ public class LEMSSemanticAnalyser
 		// Multiple declaration of variable in a scope
 		// Accessing an out of scope variable
 		// Actual and formal parameter mismatch
-		
+
 		return lems;
 
 	}

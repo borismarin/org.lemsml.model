@@ -4,8 +4,7 @@ package org.lemsml.model.extended;
  * @author borismarin
  *
  */
-public class PhysicalQuantity
-{
+public class PhysicalQuantity {
 
 	public Float value;
 	public String unitSymbol;
@@ -19,30 +18,26 @@ public class PhysicalQuantity
 		this.unit = unit;
 	}
 
-	public Float getValue()
-	{
+	public Float getValue() {
 		return value;
 	}
 
-	public String getUnitSymbol()
-	{
+	public String getUnitSymbol() {
 		return unitSymbol;
 	}
 
-	public void setUnitSymbol(String unit)
-	{
+	public void setUnitSymbol(String unit) {
 		this.unitSymbol = unit;
 	}
 
-	public void setValue(Float value)
-	{
+	public void setValue(Float value) {
 		this.value = value;
 	}
 
 	@Override
-	public String toString()
-	{
-		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol + "]";
+	public String toString() {
+		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol
+				+ "]";
 	}
 
 }

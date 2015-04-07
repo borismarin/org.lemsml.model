@@ -23,10 +23,12 @@ public class ExpressionResolverTest extends BaseTest {
 
 		File lemsDoc = getLocalFile("/examples/expression-resolver-test/nested_expressions.xml");
 
-		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsDoc, schema);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsDoc,
+				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		assertEquals(-0.1, compiledLems.getConstantByName("const0").getValue().getValue(), 1e-6);
+		assertEquals(-0.1, compiledLems.getConstantByName("const0").getValue()
+				.getValue(), 1e-6);
 	}
 
 }

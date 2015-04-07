@@ -21,19 +21,17 @@ import org.lemsml.visitors.TraversingVisitor;
  * @author borismarin
  *
  */
-public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable>
-{
+public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
-	public AddUOMToDimension(Lems lems)
-	{
-		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Boolean, Throwable>());
+	public AddUOMToDimension(Lems lems) {
+		super(new DepthFirstTraverserImpl<Throwable>(),
+				new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
 	}
 
-	public javax.measure.Dimension LemsDimensionToUOM(Dimension lemsDim)
-	{
+	public javax.measure.Dimension LemsDimensionToUOM(Dimension lemsDim) {
 		Unit<?> dim = ONE;
 		dim = dim.multiply(AMPERE.pow(lemsDim.getI().intValue()));
 		dim = dim.multiply(CANDELA.pow(lemsDim.getJ().intValue()));
@@ -46,16 +44,11 @@ public class AddUOMToDimension extends TraversingVisitor<Boolean, Throwable>
 	}
 
 	@Override
-	public Boolean visit(Dimension dimension) throws Throwable
-	{
+	public Boolean visit(Dimension dimension) throws Throwable {
 		dimension.setDimension((Unit<?>) LemsDimensionToUOM(dimension));
-		lems.registerDimensionName(dimension.getName(), dimension.getDimension());
+		lems.registerDimensionName(dimension.getName(),
+				dimension.getDimension());
 		return true;
-	}
-
-	public Lems getLems()
-	{
-		return lems;
 	}
 
 }

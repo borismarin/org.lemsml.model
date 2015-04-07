@@ -8,18 +8,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class Unit extends org.lemsml.model.Unit
-{
+public class Unit extends org.lemsml.model.Unit {
 
 	private javax.measure.Unit<?> unit;
 
-	public javax.measure.Unit<?> getUnit()
-	{
+	public javax.measure.Unit<?> getUnit() {
 		return this.unit;
 	}
 
-	public void setUnit(javax.measure.Unit<?> unit)
-	{
+	public void setUnit(javax.measure.Unit<?> unit) {
 		this.unit = unit;
 	}
 
