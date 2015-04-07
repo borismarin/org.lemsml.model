@@ -24,7 +24,7 @@ import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.ParameterValue;
+import org.lemsml.model.extended.ParameterInstance;
 import org.lemsml.model.extended.PhysicalQuantity;
 
 import tec.units.ri.AbstractQuantity;
@@ -137,9 +137,10 @@ public class SimplePendulumTest extends BaseTest {
 	public void testComponentDecoration() throws Throwable {
 
 		Component pend = compiledLems.getComponentById("pend");
-		ComponentType pendType = compiledLems.getComponentTypeByName("SimplePendulum");
+		ComponentType pendType = compiledLems
+				.getComponentTypeByName("SimplePendulum");
 
-		ParameterValue length = pend.getParameterByName("l");
+		ParameterInstance length = pend.getParameterByName("l");
 		assertTrue(pendType.getParameters().contains(length.getDefinition()));
 		assertTrue(length.getValue().getUnit().equals(METRE.multiply(1000)));
 

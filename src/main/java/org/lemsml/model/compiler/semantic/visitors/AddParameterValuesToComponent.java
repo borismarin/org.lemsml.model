@@ -8,11 +8,17 @@ import org.lemsml.model.Parameter;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.ParameterValue;
+import org.lemsml.model.extended.ParameterInstance;
+import org.lemsml.model.extended.PhysicalQuantity;
+import org.lemsml.model.extended.PhysicalQuantityAdapter;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
+/**
+ * @author borismarin
+ *
+ */
 public class AddParameterValuesToComponent extends
 		TraversingVisitor<Void, Throwable> {
 
@@ -24,27 +30,27 @@ public class AddParameterValuesToComponent extends
 		this.lems = lems;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.Component)
-	 */
 	@Override
 	public Void visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
 
 		// Reads parameters (defined by the ComponentType) from the attributes
-		for (Parameter p : type.getParameters()) {
-			String pName = p.getName();
+		// TODO: shouldn't comp.registerParameter be responsible for checking
+		// the comptype to see if the par is allowed?
+		for (Parameter parDef : type.getParameters()) {
+			String pName = parDef.getName();
 			QName qualiPName = new QName(pName);
 			if (comp.getOtherAttributes().keySet().contains(qualiPName)) {
 				String valueUnit = comp.getOtherAttributes().get(qualiPName);
-				// TODO: not sure this is the best container
-				ParameterValue pVal = new ParameterValue(p, valueUnit);
-				pVal.getValue().setUnit(lems.getUnitBySymbol(pVal.getValue().getUnitSymbol()));
-				comp.registerParameter(p, pVal);
+				// TODO: review ParameterValue, looking overcomplicated
+				PhysicalQuantity quant = new PhysicalQuantityAdapter()
+						.unmarshal(valueUnit);
+				quant.setUnit(lems.getUnitBySymbol(quant.getUnitSymbol()));
+				ParameterInstance parInst = new ParameterInstance();
+				parInst.setValue(quant);
+				parInst.setDefinition(parDef);
+				comp.registerParameter(parDef, parInst);
 			} else {
 				throw new LEMSCompilerException("Components of type "
 						+ comp.getType() + " must define parameter " + pName,
@@ -52,8 +58,7 @@ public class AddParameterValuesToComponent extends
 			}
 		}
 		// TODO: handle spurious attributes ie. those that don't correspond to
-		// anything
-		// in the ComponentType definition
+		// anything in the ComponentType definition
 		return null;
 	}
 
