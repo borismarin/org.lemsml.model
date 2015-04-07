@@ -21,7 +21,7 @@ import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
-import org.lemsml.model.exceptions.LEMSParserException;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.PhysicalQuantity;
@@ -89,7 +89,7 @@ public class SimplePendulumTest extends BaseTest {
 	}
 
 	//TODO: proper exceptions
-	@Test(expected = LEMSParserException.class)
+	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentParameter() throws Throwable {
 
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
@@ -103,7 +103,7 @@ public class SimplePendulumTest extends BaseTest {
 	}
 
 	//TODO: proper exceptions
-	@Test(expected = LEMSParserException.class)
+	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentComponentType() throws Throwable {
 
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();

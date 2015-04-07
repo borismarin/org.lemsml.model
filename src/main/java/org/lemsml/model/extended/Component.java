@@ -6,8 +6,9 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.LEMSCompilerError;
 import org.lemsml.model.NamedDimensionalType;
-import org.lemsml.model.exceptions.LEMSParserException;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 
 /**
  * @author borismarin
@@ -39,14 +40,15 @@ public class Component extends org.lemsml.model.Component {
 	}
 
 	public PhysicalQuantity getParameterValue(String parName)
-			throws LEMSParserException {
-		if (hasName(this.getComponentType().getParameters(), parName)) {
+			throws LEMSCompilerException {
+		ComponentType type = this.getComponentType();
+		if (hasName(type.getParameters(), parName)) {
 			String parVal = this.getOtherAttributes().get(new QName(parName));
 			return (new PhysicalQuantityAdapter()).unmarshal(parVal);
 		} else {
-			throw new LEMSParserException("Parameter " + parName
-					+ " not allowed in ComponentType "
-					+ this.getComponentType());
+			throw new LEMSCompilerException("ComponentType" + type
+					+ " does not allow parameter " + parName,
+					LEMSCompilerError.ParameterNotAllowed);
 		}
 	}
 }

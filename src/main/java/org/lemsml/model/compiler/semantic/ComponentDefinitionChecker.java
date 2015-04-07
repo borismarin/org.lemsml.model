@@ -3,8 +3,9 @@ package org.lemsml.model.compiler.semantic;
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
+import org.lemsml.model.LEMSCompilerError;
 import org.lemsml.model.Parameter;
-import org.lemsml.model.exceptions.LEMSParserException;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
@@ -36,16 +37,16 @@ public class ComponentDefinitionChecker extends
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
 		if (null == type) {
-			throw new LEMSParserException(
+			throw new LEMSCompilerException(
 					"Trying to build Component of unknow type "
-							+ comp.getType());
+							+ comp.getType(), LEMSCompilerError.ComponentTypeNotDefined);
 		}
 
 		for (Parameter p : type.getParameters()) {
 			if (!comp.getOtherAttributes().keySet().contains(new QName(p.getName()))) {
-				throw new LEMSParserException("Components of type "
+				throw new LEMSCompilerException("Components of type "
 						+ comp.getType() + " must define parameter "
-						+ p.getName());
+						+ p.getName(), LEMSCompilerError.RequiredParameterUndefined);
 			}
 		}
 		return null;
