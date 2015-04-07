@@ -1,5 +1,7 @@
 package org.lemsml.model.extended;
 
+import javax.measure.Unit;
+
 /**
  * @author borismarin
  *
@@ -8,13 +10,13 @@ public class PhysicalQuantity {
 
 	public Float value;
 	public String unitSymbol;
-	public Unit unit;
+	public Unit<?> unit;
 
-	public Unit getUnit() {
+	public Unit<?> getUnit() {
 		return unit;
 	}
 
-	public void setUnit(Unit unit) {
+	public void setUnit(Unit<?> unit) {
 		this.unit = unit;
 	}
 

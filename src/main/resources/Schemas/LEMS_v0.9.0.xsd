@@ -321,7 +321,6 @@
 		<xs:attribute name="description" type="xs:string" use="optional" />
 	</xs:complexType>
 
-	<!-- for Parameter, StateVariable etc. -->
 	<xs:complexType name="NamedDimensionalType" abstract="true">
 		<xs:attribute name="name" type="xs:string" use="required" />
 		<xs:attribute name="dimension" type="xs:string" use="optional"
@@ -337,9 +336,7 @@
 
 	<xs:complexType name="Parameter">
 		<xs:complexContent>
-			<xs:extension base="NamedDimensionalType">
-				<xs:attribute name="value" use="optional" type="PhysicalQuantity" />
-			</xs:extension>
+			<xs:extension base="NamedDimensionalType"/>
 		</xs:complexContent>
 	</xs:complexType>
 
@@ -452,11 +449,6 @@
 		<xs:attribute name="value" type="xs:string" use="required" />
 	</xs:complexType>
 
-	<!--<xs:complexType name="OnCondition"> <xs:sequence> <xs:element name="StateAssignment" 
-		type="StateAssignment" minOccurs="0" maxOccurs="unbounded"/> <xs:element 
-		name="EventOut" type="EventOut" minOccurs="0" maxOccurs="unbounded"/> <xs:element 
-		name="Transition" type="Transition" minOccurs="0" maxOccurs="1"/> </xs:sequence> 
-		<xs:attribute name="test" type="xs:string" use="required"/> </xs:complexType> -->
 
 	<xs:complexType name="KineticScheme">
 		<xs:attribute name="name" type="xs:string" use="required" />

@@ -8,6 +8,7 @@ import org.lemsml.model.Parameter;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.ParameterValue;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -34,15 +35,25 @@ public class AddParameterValuesToComponent extends
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
 
+		// Reads parameters (defined by the ComponentType) from the attributes
 		for (Parameter p : type.getParameters()) {
-			if (!comp.getOtherAttributes().keySet()
-					.contains(new QName(p.getName()))) {
+			String pName = p.getName();
+			QName qualiPName = new QName(pName);
+			if (comp.getOtherAttributes().keySet().contains(qualiPName)) {
+				String valueUnit = comp.getOtherAttributes().get(qualiPName);
+				// TODO: not sure this is the best container
+				ParameterValue pVal = new ParameterValue(p, valueUnit);
+				pVal.getValue().setUnit(lems.getUnitBySymbol(pVal.getValue().getUnitSymbol()));
+				comp.registerParameter(p, pVal);
+			} else {
 				throw new LEMSCompilerException("Components of type "
-						+ comp.getType() + " must define parameter "
-						+ p.getName(),
+						+ comp.getType() + " must define parameter " + pName,
 						LEMSCompilerError.RequiredParameterUndefined);
 			}
 		}
+		// TODO: handle spurious attributes ie. those that don't correspond to
+		// anything
+		// in the ComponentType definition
 		return null;
 	}
 

@@ -1,14 +1,14 @@
 package org.lemsml.model.extended;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlTransient;
-import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.LEMSCompilerError;
 import org.lemsml.model.NamedDimensionalType;
-import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.Parameter;
 
 /**
  * @author borismarin
@@ -18,6 +18,9 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 public class Component extends org.lemsml.model.Component {
 	@XmlTransient
 	ComponentType _ComponentType;
+	
+	@XmlTransient
+	private Map<String, ParameterValue> nameToParameterValue = new HashMap<String, ParameterValue>();
 
 	public ComponentType getComponentType() {
 		return _ComponentType;
@@ -26,6 +29,7 @@ public class Component extends org.lemsml.model.Component {
 	public void setComponentType(ComponentType _ComponentType) {
 		this._ComponentType = _ComponentType;
 	}
+	
 
 	public Boolean hasName(List<? extends NamedDimensionalType> nameables,
 			String name) {
@@ -39,16 +43,25 @@ public class Component extends org.lemsml.model.Component {
 		return ret;
 	}
 
-	public PhysicalQuantity getParameterValue(String parName)
-			throws LEMSCompilerException {
-		ComponentType type = this.getComponentType();
-		if (hasName(type.getParameters(), parName)) {
-			String parVal = this.getOtherAttributes().get(new QName(parName));
-			return (new PhysicalQuantityAdapter()).unmarshal(parVal);
-		} else {
-			throw new LEMSCompilerException("ComponentType" + type
-					+ " does not allow parameter " + parName,
-					LEMSCompilerError.ParameterNotAllowed);
-		}
+//	public PhysicalQuantity getParameterValue(String parName)
+//			throws LEMSCompilerException {
+//		ComponentType type = this.getComponentType();
+//		if (hasName(type.getParameters(), parName)) {
+//			String parVal = this.getOtherAttributes().get(new QName(parName));
+//			return (new PhysicalQuantityAdapter()).unmarshal(parVal);
+//		} else {
+//			//TODO: shouldn't this type of error be handled somewhere else? 
+//			throw new LEMSCompilerException("ComponentType" + type
+//					+ " does not allow parameter " + parName,
+//					LEMSCompilerError.ParameterNotAllowed);
+//		}
+//	}
+
+	public void registerParameter(Parameter pDef, ParameterValue pVal) {
+		this.nameToParameterValue.put(pDef.getName(), pVal);
+	}
+
+	public ParameterValue getParameterByName(String name) {
+		return this.nameToParameterValue.get(name);
 	}
 }

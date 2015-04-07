@@ -24,6 +24,7 @@ import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.ParameterValue;
 import org.lemsml.model.extended.PhysicalQuantity;
 
 import tec.units.ri.AbstractQuantity;
@@ -78,17 +79,21 @@ public class SimplePendulumTest extends BaseTest {
 				.getDimension());
 
 		Component pend = compiledLems.getComponentById("pend");
-		PhysicalQuantity l = pend.getParameterValue("l");
+		PhysicalQuantity length = pend.getParameterByName("l").getValue();
 
-		Unit<?> unitL = compiledLems.getUnitBySymbol(l.getUnitSymbol());
+		// the "l" parameter is defined in kilometres
+		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnitSymbol());
 		assertEquals(unitL, METRE.multiply(1000));
 
-		AbstractQuantity<?> length = NumberQuantity.of(l.getValue(), unitL);
-		assertEquals(length.getValue().floatValue(), 0.001, 1e-8);
-		assertEquals(length.toSI().getValue().floatValue(), 1.0, 1e-8);
+		// testing conversion to SI
+		AbstractQuantity<?> lenghtWithUnit = NumberQuantity.of(
+				length.getValue(), unitL);
+		assertEquals(lenghtWithUnit.getValue().floatValue(), 0.001, 1e-8);
+		assertEquals(lenghtWithUnit.toSI().getValue().floatValue(), 1.0, 1e-8);
 	}
 
 	// TODO: proper exceptions
+	// TODO: standalone tests for inexistent stuff
 	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentParameter() throws Throwable {
 
@@ -104,6 +109,19 @@ public class SimplePendulumTest extends BaseTest {
 
 	// TODO: proper exceptions
 	@Test(expected = LEMSCompilerException.class)
+	public void testInexistentComponent() throws Throwable {
+
+		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
+		Component fakeComp = new Component();
+		fakeComp.setType("NotSoSimplePendulum");
+		fakeLems.getComponents().add(fakeComp);
+
+		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+
+	}
+
+	// TODO: proper exceptions
+	@Test(expected = LEMSCompilerException.class)
 	public void testInexistentComponentType() throws Throwable {
 
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
@@ -112,6 +130,18 @@ public class SimplePendulumTest extends BaseTest {
 		fakeLems.getComponents().add(fakeComp);
 
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+
+	}
+
+	@Test
+	public void testComponentDecoration() throws Throwable {
+
+		Component pend = compiledLems.getComponentById("pend");
+		ComponentType pendType = compiledLems.getComponentTypeByName("SimplePendulum");
+
+		ParameterValue length = pend.getParameterByName("l");
+		assertTrue(pendType.getParameters().contains(length.getDefinition()));
+		assertTrue(length.getValue().getUnit().equals(METRE.multiply(1000)));
 
 	}
 

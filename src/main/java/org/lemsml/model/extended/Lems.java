@@ -36,6 +36,7 @@ public class Lems extends org.lemsml.model.Lems {
 	}
 
 	public ComponentType getComponentTypeByName(String name) {
+		//TODO: error handling here?
 		return nameToCompType.get(name);
 	}
 
