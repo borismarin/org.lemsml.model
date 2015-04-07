@@ -2,6 +2,7 @@ package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
+import org.lemsml.model.compiler.semantic.visitors.AddParameterValuesToComponent;
 import org.lemsml.model.extended.Lems;
 
 /**
@@ -37,6 +38,9 @@ public class LEMSSemanticAnalyser
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);
 
+		AddParameterValuesToComponent paramAdder = new AddParameterValuesToComponent(lems);
+		lems.accept(paramAdder);
+
 		// ERROR CHECKING
 		// TODO
 		// Type mismatch
@@ -45,8 +49,6 @@ public class LEMSSemanticAnalyser
 		// Multiple declaration of variable in a scope
 		// Accessing an out of scope variable
 		// Actual and formal parameter mismatch
-		ComponentDefinitionChecker componentChecker = new ComponentDefinitionChecker(lems);
-		lems.accept(componentChecker);
 		
 		return lems;
 

@@ -1,4 +1,4 @@
-package org.lemsml.model.compiler.semantic;
+package org.lemsml.model.compiler.semantic.visitors;
 
 import javax.xml.namespace.QName;
 
@@ -12,15 +12,12 @@ import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
-public class ComponentDefinitionChecker extends
+public class AddParameterValuesToComponent extends
 		TraversingVisitor<Void, Throwable> {
 
 	private Lems lems;
 
-	/**
-	 * @param lems
-	 */
-	public ComponentDefinitionChecker(Lems lems) {
+	public AddParameterValuesToComponent(Lems lems) {
 		super(new DepthFirstTraverserImpl<Throwable>(),
 				new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
@@ -39,31 +36,20 @@ public class ComponentDefinitionChecker extends
 		if (null == type) {
 			throw new LEMSCompilerException(
 					"Trying to build Component of unknow type "
-							+ comp.getType(), LEMSCompilerError.ComponentTypeNotDefined);
+							+ comp.getType(),
+					LEMSCompilerError.ComponentTypeNotDefined);
 		}
 
 		for (Parameter p : type.getParameters()) {
-			if (!comp.getOtherAttributes().keySet().contains(new QName(p.getName()))) {
+			if (!comp.getOtherAttributes().keySet()
+					.contains(new QName(p.getName()))) {
 				throw new LEMSCompilerException("Components of type "
 						+ comp.getType() + " must define parameter "
-						+ p.getName(), LEMSCompilerError.RequiredParameterUndefined);
+						+ p.getName(),
+						LEMSCompilerError.RequiredParameterUndefined);
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * @return
-	 */
-	public Lems getLems() {
-		return lems;
-	}
-
-	/**
-	 * @param lems
-	 */
-	public void setLems(Lems lems) {
-		this.lems = lems;
 	}
 
 }
