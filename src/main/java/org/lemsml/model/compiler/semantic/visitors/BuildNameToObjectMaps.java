@@ -31,18 +31,21 @@ public class BuildNameToObjectMaps extends
 
 	@Override
 	public Boolean visit(Component c) throws Throwable {
+		// TODO: warn if overriding
 		this.lems.registerComponentId(c.getId(), c);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(ComponentType ct) throws Throwable {
+		// TODO: warn if overriding
 		this.lems.registerComponentTypeName(ct.getName(), ct);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Constant ctt) throws Throwable {
+		// TODO: warn if overriding
 		this.lems.registerConstantName(ctt.getName(), ctt);
 		return true;
 	}
@@ -50,6 +53,7 @@ public class BuildNameToObjectMaps extends
 	@Override
 	public Boolean visit(Dimension dimension) throws Throwable {
 		dimension.setDimension(UOMUtils.LemsDimensionToUOM(dimension));
+		// TODO: warn if overriding
 		lems.registerDimensionName(dimension.getName(),
 				dimension.getDimension());
 		return true;
@@ -67,6 +71,7 @@ public class BuildNameToObjectMaps extends
 		uomUnit = uomUnit.shift(unit.getOffset());
 
 		unit.setUnit(uomUnit);
+		// TODO: warn if overriding
 		lems.registerUnitSymbol(unit.getSymbol(), uomUnit);
 		return true;
 	}
