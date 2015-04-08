@@ -1,4 +1,4 @@
-package org.lemsml.model;
+package org.lemsml.model.exceptions;
 
 public enum LEMSCompilerError {
 	ParameterNotAllowed, ComponentTypeNotDefined, RequiredParameterUndefined

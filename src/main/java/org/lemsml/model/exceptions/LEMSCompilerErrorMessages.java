@@ -1,4 +1,4 @@
-package org.lemsml.model;
+package org.lemsml.model.exceptions;
 
 import java.util.EnumMap;
 

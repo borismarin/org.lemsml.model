@@ -1,6 +1,5 @@
 package org.lemsml.model.exceptions;
 
-import org.lemsml.model.LEMSCompilerError;
 
 public class LEMSCompilerException extends Exception {
 

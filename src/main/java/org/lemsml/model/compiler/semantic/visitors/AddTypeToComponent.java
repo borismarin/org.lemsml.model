@@ -1,7 +1,7 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Component;

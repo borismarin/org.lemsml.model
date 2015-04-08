@@ -6,8 +6,8 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.LEMSCompilerError;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 
 /**
