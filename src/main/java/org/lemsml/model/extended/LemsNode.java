@@ -1,10 +1,12 @@
 package org.lemsml.model.extended;
 
+import java.io.File;
+
 import org.lemsml.model.exceptions.LEMSCompilerError;
 
 public class LemsNode {
 	private LEMSCompilerError error;
-	private String definedIn;
+	private File definedIn;
 
 	public LEMSCompilerError getError() {
 		return error;
@@ -12,11 +14,11 @@ public class LemsNode {
 	public void setError(LEMSCompilerError error) {
 		this.error = error;
 	}
-	public String getDefinedIn() {
+	public File getDefinedIn() {
 		return definedIn;
 	}
-	public void setDefinedIn(String definedIn) {
-		this.definedIn = definedIn;
+	public void setDefinedIn(File includedFile) {
+		this.definedIn = includedFile;
 	}
 
 }

@@ -1,63 +1,62 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import java.io.File;
+
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
-import org.lemsml.model.Unit;
-import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 /**
- * @author matteocantarelli
  * @author borismarin
  *
  */
-public class CopyContent extends TraversingVisitor<Boolean, Throwable> {
+public class DecorateWithSourceFile extends TraversingVisitor<Boolean, Throwable> {
 
-	private Lems resolvedLems;
+	private File sourceFile;
 
-	public CopyContent(org.lemsml.model.extended.Lems lems) {
+	public DecorateWithSourceFile(File sourceDoc) {
 		super(new DepthFirstTraverserImpl<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
-		resolvedLems = lems;
+		sourceFile = sourceDoc;
 	}
 
 	@Override
 	public Boolean visit(Constant constant) {
-		resolvedLems.getConstants().add(constant);
+		constant.setDefinedIn(sourceFile);
 		return true;
 
 	}
 
 	@Override
 	public Boolean visit(ComponentType componentType) {
-		resolvedLems.getComponentTypes().add(componentType);
+		componentType.setDefinedIn(sourceFile);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Component component) {
-		resolvedLems.getComponents().add(component);
+		component.setDefinedIn(sourceFile);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Target target) {
-		resolvedLems.getTargets().add(target);
+		target.setDefinedIn(sourceFile);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Dimension dimension) {
-		resolvedLems.getDimensions().add(dimension);
+		dimension.setDefinedIn(sourceFile);
 		return true;
 	}
 
 	@Override
-	public Boolean visit(Unit unit) {
-		resolvedLems.getUnits().add((org.lemsml.model.extended.Unit) unit);
+	public Boolean visit(org.lemsml.model.extended.Unit unit) {
+		unit.setDefinedIn(sourceFile);
 		return true;
 	}
 }

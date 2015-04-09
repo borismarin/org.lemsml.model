@@ -99,6 +99,7 @@ public class SimplePendulumTest extends BaseTest {
 
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
 		Component fakePend = new Component();
+		fakePend.setDefinedIn(pendLemsFile);
 		fakePend.setType("SimplePendulum");
 		fakePend.getOtherAttributes().put(new QName("fakePar"), "123");
 		fakeLems.getComponents().add(fakePend);
@@ -114,6 +115,7 @@ public class SimplePendulumTest extends BaseTest {
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
 		Component fakeComp = new Component();
 		fakeComp.setType("NotSoSimplePendulum");
+		fakeComp.setDefinedIn(pendLemsFile);
 		fakeLems.getComponents().add(fakeComp);
 
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
@@ -126,6 +128,7 @@ public class SimplePendulumTest extends BaseTest {
 
 		Lems fakeLems = new LEMSParser(pendLemsFile, schema).parse();
 		Component fakeComp = new Component();
+		fakeComp.setDefinedIn(pendLemsFile);
 		fakeComp.setType("ThisTypeIsUndefined");
 		fakeLems.getComponents().add(fakeComp);
 

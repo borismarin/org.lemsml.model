@@ -32,16 +32,17 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
 		this.schema = schema;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.lemsml.visitors.TraversingVisitor#visit(org.lemsml.model.Include)
-	 */
 	@Override
 	public Boolean visit(Include inc) throws Throwable {
 		File includedFile = new File(cwd.getPath(), inc.getFile());
 		Lems includedLems = LEMSXMLReader.unmarshall(includedFile, schema);
+		includedLems.setDefinedIn(includedFile);
+
+		// decorate elements to be added with source file
+		DecorateWithSourceFile addFile = new DecorateWithSourceFile(
+				includedFile);
+		addFile.setTraverseFirst(true);
+		includedLems.accept(addFile);
 
 		// recursively process inputs
 		ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems,
