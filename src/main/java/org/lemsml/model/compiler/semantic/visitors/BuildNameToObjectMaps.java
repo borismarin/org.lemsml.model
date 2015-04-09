@@ -11,8 +11,9 @@ import org.lemsml.model.extended.Unit;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -22,7 +23,7 @@ public class BuildNameToObjectMaps extends
 		TraversingVisitor<Boolean, Throwable> {
 
 	private Lems lems;
-	private static final Logger logger = LoggerFactory
+	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(BuildNameToObjectMaps.class);
 
 	private void logRegistration(String identifier, LemsNode n) {

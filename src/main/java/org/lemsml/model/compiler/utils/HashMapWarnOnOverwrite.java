@@ -3,12 +3,13 @@ package org.lemsml.model.compiler.utils;
 import java.util.HashMap;
 
 import org.lemsml.model.extended.LemsNode;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 public class HashMapWarnOnOverwrite<K, V extends LemsNode> extends HashMap<K, V> {
 	private static final long serialVersionUID = 1L;
-	private static final Logger logger = LoggerFactory.getLogger(HashMapWarnOnOverwrite.class);
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(HashMapWarnOnOverwrite.class);
 
 	@Override
 	public V put(K key, V value) {

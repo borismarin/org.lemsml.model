@@ -15,6 +15,10 @@ import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -84,6 +88,8 @@ public class HindmarshRoseTest extends BaseTest {
 
 	@Test
 	public void testParsing() throws Throwable {
+		//Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		//root.setLevel(Level.INFO);
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(
 				hindMarshRoseSimFile, lemsSchemaFile);
