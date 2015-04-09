@@ -88,8 +88,8 @@ public class HindmarshRoseTest extends BaseTest {
 
 	@Test
 	public void testParsing() throws Throwable {
-		//Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		//root.setLevel(Level.INFO);
+		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		root.setLevel(Level.DEBUG);
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(
 				hindMarshRoseSimFile, lemsSchemaFile);
@@ -100,6 +100,7 @@ public class HindmarshRoseTest extends BaseTest {
 				.getComponentTypeByName("hindmarshRoseCell");
 		validateHRComponentType(hindRoseCompType);
 
+		root.setLevel(Level.WARN);
 	}
 
 }

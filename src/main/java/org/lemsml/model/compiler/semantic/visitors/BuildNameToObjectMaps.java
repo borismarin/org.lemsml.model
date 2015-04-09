@@ -27,8 +27,10 @@ public class BuildNameToObjectMaps extends
 			.getLogger(BuildNameToObjectMaps.class);
 
 	private void logRegistration(String identifier, LemsNode n) {
-		logger.debug(String.format("Registering %s '%s', defined in %s",
-				n.getClass().getSimpleName(), identifier, n.getDefinedIn().getName()));
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Registering [%s '%s'] ",  n.getClass().getSimpleName(), identifier));
+		sb.append(String.format("defined in " + n.getDefinedIn().getName()));
+		logger.debug(sb.toString());
 	}
 
 	/**
