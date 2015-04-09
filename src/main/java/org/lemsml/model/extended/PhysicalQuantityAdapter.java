@@ -23,7 +23,7 @@ public class PhysicalQuantityAdapter extends
 			Matcher matcher = pattern.matcher(value);
 
 			if (matcher.find()) {
-				pq.setValue(Float.parseFloat(matcher.group(1)));
+				pq.setValue(Double.parseDouble(matcher.group(1)));
 				pq.setUnitSymbol(matcher.group(2));
 			}
 

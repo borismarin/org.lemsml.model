@@ -6,9 +6,9 @@ import org.lemsml.model.Parameter;
  * @author borismarin
  *
  */
-//TODO: review this class, looking ugly
-public class ParameterInstance {
-	private PhysicalQuantity value;
+// TODO: review this class, looking ugly
+public class ParameterInstance implements IValued {
+	private PhysicalQuantity dimensionalValue;
 	private Parameter definition;
 
 	public Parameter getDefinition() {
@@ -19,12 +19,17 @@ public class ParameterInstance {
 		this.definition = definition;
 	}
 
-	public PhysicalQuantity getValue() {
-		return value;
+	public PhysicalQuantity getDimensionalValue() {
+		return dimensionalValue;
 	}
 
-	public void setValue(PhysicalQuantity value) {
-		this.value = value;
+	public void setDimensionalValue(PhysicalQuantity value) {
+		this.dimensionalValue = value;
+	}
+
+	@Override
+	public Double getValue() {
+		return this.dimensionalValue.getValue();
 	}
 
 }

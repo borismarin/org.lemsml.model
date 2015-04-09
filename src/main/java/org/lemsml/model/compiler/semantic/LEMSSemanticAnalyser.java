@@ -1,5 +1,6 @@
 package org.lemsml.model.compiler.semantic;
 
+import org.lemsml.model.compiler.backend.BuildEvaluationContext;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.AddParameterValuesToComponent;
@@ -38,6 +39,9 @@ public class LEMSSemanticAnalyser {
 		AddParameterValuesToComponent paramAdder = new AddParameterValuesToComponent(
 				lems);
 		lems.accept(paramAdder);
+
+		BuildEvaluationContext ctxtBuilder = new BuildEvaluationContext(lems);
+		lems.accept(ctxtBuilder);
 
 		// ERROR CHECKING
 		// TODO

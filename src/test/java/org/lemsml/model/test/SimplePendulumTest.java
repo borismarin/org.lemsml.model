@@ -79,7 +79,7 @@ public class SimplePendulumTest extends BaseTest {
 				.getDimension());
 
 		Component pend = compiledLems.getComponentById("pend");
-		PhysicalQuantity length = pend.getParameterByName("l").getValue();
+		PhysicalQuantity length = pend.getParameterByName("l").getDimensionalValue();
 
 		// the "l" parameter is defined in kilometres
 		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnitSymbol());
@@ -142,7 +142,7 @@ public class SimplePendulumTest extends BaseTest {
 
 		ParameterInstance length = pend.getParameterByName("l");
 		assertTrue(pendType.getParameters().contains(length.getDefinition()));
-		assertTrue(length.getValue().getUnit().equals(METRE.multiply(1000)));
+		assertTrue(length.getDimensionalValue().getUnit().equals(METRE.multiply(1000)));
 
 	}
 

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
+import org.lemsml.model.compiler.utils.HashMapWarnOnOverwrite;
 
 /**
  * @author borismarin
@@ -16,11 +17,11 @@ import org.lemsml.model.Constant;
 public class Lems extends org.lemsml.model.Lems {
 
 	@XmlTransient
-	private Map<String, Component> idToComponent = new HashMap<String, Component>();
+	private Map<String, Component> idToComponent = new HashMapWarnOnOverwrite<String, Component>();
 	@XmlTransient
-	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
+	private Map<String, ComponentType> nameToCompType = new HashMapWarnOnOverwrite<String, ComponentType>();
 	@XmlTransient
-	private Map<String, Constant> nameToConstant = new HashMap<String, Constant>();
+	private Map<String, Constant> nameToConstant = new HashMapWarnOnOverwrite<String, Constant>();
 	/*
 	 * TODO: notice that there is a discrepancy between what LEMS calls
 	 * dimensions and what UOM calls dimensions. We'll thus confusingly use

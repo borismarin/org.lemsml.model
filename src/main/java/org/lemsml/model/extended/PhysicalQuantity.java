@@ -8,7 +8,7 @@ import javax.measure.Unit;
  */
 public class PhysicalQuantity {
 
-	public Float value;
+	public Double value;
 	public String unitSymbol;
 	public Unit<?> unit;
 
@@ -20,7 +20,7 @@ public class PhysicalQuantity {
 		this.unit = unit;
 	}
 
-	public Float getValue() {
+	public Double getValue() {
 		return value;
 	}
 
@@ -32,7 +32,7 @@ public class PhysicalQuantity {
 		this.unitSymbol = unit;
 	}
 
-	public void setValue(Float value) {
+	public void setValue(Double value) {
 		this.value = value;
 	}
 

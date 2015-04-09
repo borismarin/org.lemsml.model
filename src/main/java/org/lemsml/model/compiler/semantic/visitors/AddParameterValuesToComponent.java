@@ -35,23 +35,27 @@ public class AddParameterValuesToComponent extends
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
 
-		// Reads parameters (defined by the ComponentType) from the attributes
-		// TODO: shouldn't comp.registerParameter be responsible for checking
-		// the comptype to see if the par is allowed?
+		// Read parameter (defined in the ComponentType) values from the
+		// attributes
 		for (Parameter parDef : type.getParameters()) {
 			String pName = parDef.getName();
 			QName qualiPName = new QName(pName);
+			// TODO: shouldn't comp.registerParameter be responsible for
+			// checking the comptype to see if the par is allowed?
+			// OR should we just create an "invalid" parameter instance and
+			// collect errors later?
 			if (comp.getOtherAttributes().keySet().contains(qualiPName)) {
 				String valueUnit = comp.getOtherAttributes().get(qualiPName);
-				// TODO: review ParameterValue, looking overcomplicated
+				// TODO: review ParameterInstance, looking overcomplicated
 				PhysicalQuantity quant = new PhysicalQuantityAdapter()
 						.unmarshal(valueUnit);
 				quant.setUnit(lems.getUnitBySymbol(quant.getUnitSymbol()));
 				ParameterInstance parInst = new ParameterInstance();
-				parInst.setValue(quant);
+				parInst.setDimensionalValue(quant);
 				parInst.setDefinition(parDef);
 				comp.registerParameter(parDef, parInst);
 			} else {
+				// TODO : decorate ParameterInstance with error instead?
 				throw new LEMSCompilerException("Components of type "
 						+ comp.getType() + " must define parameter " + pName,
 						LEMSCompilerError.RequiredParameterUndefined);
