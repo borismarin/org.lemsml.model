@@ -1,6 +1,10 @@
 package org.lemsml.model.extended;
 
+import static tec.units.ri.AbstractUnit.ONE;
+
 import javax.measure.Unit;
+
+import tec.units.ri.quantity.NumberQuantity;
 
 /**
  * @author borismarin
@@ -17,7 +21,12 @@ public class PhysicalQuantity {
 	}
 
 	public void setUnit(Unit<?> unit) {
-		this.unit = unit;
+		if(null != unit){
+			this.unit = unit;
+		}else{
+			this.unit = ONE;
+		}
+
 	}
 
 	public Double getValue() {
@@ -40,6 +49,10 @@ public class PhysicalQuantity {
 	public String toString() {
 		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol
 				+ "]";
+	}
+	
+	public Double getValueInSI(){
+		return new Double(NumberQuantity.of(value, unit).toSI().getValue().doubleValue());
 	}
 
 }

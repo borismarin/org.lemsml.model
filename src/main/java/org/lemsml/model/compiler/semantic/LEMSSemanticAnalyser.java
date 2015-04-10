@@ -1,9 +1,9 @@
 package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.backend.BuildEvaluationContext;
+import org.lemsml.model.compiler.semantic.visitors.AddParameterValuesToComponent;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
-import org.lemsml.model.compiler.semantic.visitors.AddParameterValuesToComponent;
 import org.lemsml.model.extended.Lems;
 
 /**

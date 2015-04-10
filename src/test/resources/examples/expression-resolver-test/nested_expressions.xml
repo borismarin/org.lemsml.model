@@ -21,6 +21,7 @@
 	<ComponentType name="Exposes_dv0_p0">
 		<Child name="child0" type="DependsOn_dv0_p0" />
 		<Parameter name="p0" dimension="none" />
+		<DerivedParameter name="dp0" dimension="none" value="p0 * p0" />
 
 		<Exposure name="dv0" dimension="none" />
 		<Dynamics>
@@ -28,7 +29,7 @@
 		</Dynamics>
 	</ComponentType>
 
-	<Component type="Exposes_dv0_p0" p0="1" id="comp0">
+	<Component type="Exposes_dv0_p0" p0="2" id="comp0">
 		<Component type="DependsOn_dv0_p0" p1="10" id="comp1" />
 	</Component>
 
