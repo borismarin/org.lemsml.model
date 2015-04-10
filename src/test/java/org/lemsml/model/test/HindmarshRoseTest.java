@@ -31,8 +31,12 @@ public class HindmarshRoseTest extends BaseTest {
 	private File hindMarshRoseSimFile;
 	private File nonCanonHindMarshRoseSimFile;
 
+	Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+	Level previousLevel = logger.getLevel();
+
 	@Before
 	public void setUp() {
+		logger.setLevel(Level.INFO);
 		lemsSchemaFile = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
 		hindMarshRoseCompTypeFile = getLocalFile("/examples/nml/HindmarshRose3d.xml");
 		hindMarshRoseSimFile = getLocalFile("/examples/nml/Run_Chaotic_HindmarshRose.xml");
@@ -52,13 +56,11 @@ public class HindmarshRoseTest extends BaseTest {
 	@Test
 	public void testCanonicalize() {
 		File xslt = getLocalFile("/Schemas/canonical.xslt");
-		System.out
-				.println("Asserting that a noncanonical file fails to validate...");
+		logger.info("Asserting that a noncanonical file fails to validate...");
 		assertFalse(XMLUtils.validate(nonCanonHindMarshRoseSimFile,
 				lemsSchemaFile));
 
-		System.out
-				.println("Asserting that the canonicalized version validates...");
+		logger.info("Asserting that the canonicalized version validates...");
 		File transformed = XMLUtils.transform(nonCanonHindMarshRoseSimFile,
 				xslt);
 		assertTrue(XMLUtils.validate(transformed, lemsSchemaFile));
@@ -88,8 +90,6 @@ public class HindmarshRoseTest extends BaseTest {
 
 	@Test
 	public void testParsing() throws Throwable {
-		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.DEBUG);
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(
 				hindMarshRoseSimFile, lemsSchemaFile);
@@ -100,7 +100,7 @@ public class HindmarshRoseTest extends BaseTest {
 				.getComponentTypeByName("hindmarshRoseCell");
 		validateHRComponentType(hindRoseCompType);
 
-		root.setLevel(Level.WARN);
+		// root.setLevel(previousLevel);
 	}
 
 }

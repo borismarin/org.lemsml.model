@@ -2,10 +2,13 @@ package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashSet;
 
 import org.lemsml.model.compiler.semantic.visitors.DecorateWithSourceFile;
 import org.lemsml.model.compiler.semantic.visitors.ProcessIncludes;
 import org.lemsml.model.extended.Lems;
+
+import com.google.common.hash.HashCode;
 
 /**
  * @author borismarin
@@ -59,7 +62,7 @@ public class LEMSParser {
 		addFile.setTraverseFirst(true);
 		lems.accept(addFile);
 
-		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd);
+		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd, new HashSet<HashCode>());
 		lems.accept(processIncludes);
 		lems = processIncludes.getInputLems();
 	}

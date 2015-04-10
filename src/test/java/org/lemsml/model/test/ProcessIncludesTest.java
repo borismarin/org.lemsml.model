@@ -13,12 +13,13 @@ import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 public class ProcessIncludesTest extends BaseTest {
 
-	private static final Logger logger = LoggerFactory
+	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(ProcessIncludesTest.class);
 	private File schema;
 	private File include0;
@@ -40,7 +41,6 @@ public class ProcessIncludesTest extends BaseTest {
 		LEMSParser parser = new LEMSParser(include0, schema);
 		Lems lemsDoc = parser.parse();
 		assertEquals(3, lemsDoc.getConstants().size());
-		System.out.println(lemsDoc.getConstants().get(0).getValue());
 
 		for (ComponentType ct : lemsDoc.getComponentTypes()) {
 			logger.info(ct.getName() + " is defined in "
