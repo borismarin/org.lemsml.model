@@ -14,13 +14,18 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
  *
  */
 public class XMLUtils {
+	private static final Logger logger = (Logger) LoggerFactory
+			.getLogger(XMLUtils.class);
 
 	/**
 	 * @param document
@@ -30,18 +35,18 @@ public class XMLUtils {
 	public static boolean validate(File document, File schema) {
 		boolean ret = false;
 		try {
-			System.out.print("Validating file " + document.getName()
-					+ " against schema " + schema.getName() + "... ");
+			logger.info("Validating file {} against schema {} ...",
+					document.getName(), schema.getName());
 			StreamSource src = new StreamSource(document);
 			XMLUtils.parseSchema(schema).newValidator().validate(src);
 			ret = true;
-			System.out.println("Valid!!");
+			logger.info("\t Valid!!");
 		} catch (SAXException e) {
 			// e.printStackTrace();
-			System.out.println("Invalid!!, cause:\n\t" + e.getMessage());
+			logger.error("\t Invalid!!, cause:\n\t" + e.getMessage());
 		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("Can't open schema file!!!");
+			logger.error("Can't open schema file!!!");
 		}
 
 		return ret;
@@ -53,8 +58,8 @@ public class XMLUtils {
 	 * @return
 	 */
 	public static File transform(File document, File transformation) {
-		System.out.println("Applying XSLT " + transformation.getName()
-				+ " to file " + document.getName() + "... ");
+		logger.info("Applying XSLT " + transformation.getName() + " to file "
+				+ document.getName() + "... ");
 		String orig_name = document.getPath();
 		String transf_name = orig_name.substring(0, orig_name.lastIndexOf('.'))
 				+ "_transformed.xml";
