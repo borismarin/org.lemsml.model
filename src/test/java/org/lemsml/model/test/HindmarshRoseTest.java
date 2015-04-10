@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
@@ -100,7 +101,11 @@ public class HindmarshRoseTest extends BaseTest {
 				.getComponentTypeByName("hindmarshRoseCell");
 		validateHRComponentType(hindRoseCompType);
 
-		// root.setLevel(previousLevel);
+	}
+
+	@After
+	public void cleanUp() {
+		logger.setLevel(previousLevel);
 	}
 
 }
