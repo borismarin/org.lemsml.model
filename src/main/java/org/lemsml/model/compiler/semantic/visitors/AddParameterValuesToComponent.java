@@ -4,11 +4,11 @@ import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.ParameterInstance;
 import org.lemsml.model.extended.PhysicalQuantity;
 import org.lemsml.model.extended.PhysicalQuantityAdapter;
 import org.lemsml.visitors.BaseVisitor;
@@ -46,14 +46,11 @@ public class AddParameterValuesToComponent extends
 			// collect errors later?
 			if (comp.getOtherAttributes().keySet().contains(qualiPName)) {
 				String valueUnit = comp.getOtherAttributes().get(qualiPName);
-				// TODO: review ParameterInstance, looking overcomplicated
 				PhysicalQuantity quant = new PhysicalQuantityAdapter()
 						.unmarshal(valueUnit);
 				quant.setUnit(lems.getUnitBySymbol(quant.getUnitSymbol()));
-				ParameterInstance parInst = new ParameterInstance();
-				parInst.setDimensionalValue(quant);
-				parInst.setDefinition(parDef);
-				comp.registerParameter(parDef, parInst);
+				ISymbol<Parameter> par = new Symbol<Parameter>(parDef.getName(), parDef, quant);
+				comp.define(par);
 			} else {
 				// TODO : decorate ParameterInstance with error instead?
 				throw new LEMSCompilerException("Components of type "

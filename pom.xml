@@ -136,6 +136,7 @@
 							<specVersion>2.2</specVersion>
 							<extension>true</extension>
 							<args>
+								<arg>-Xinheritance</arg>
 								<arg>-XtoString</arg>
 								<arg>-Xsimplify</arg>
 								<arg>-Xsimplify-usePluralForm=true</arg>

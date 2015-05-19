@@ -3,9 +3,10 @@
     version="2.0"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
     xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
+    xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
     xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    extensionBindingPrefixes="simplify">
+    extensionBindingPrefixes="simplify inheritance">
 
    <jxb:bindings schemaLocation="LEMS_v0.9.0.xsd" node="/xs:schema">
    
@@ -31,6 +32,13 @@
       
       <jxb:bindings multiple="true" node=".//xs:element[@type='Component']">
          <jxb:class ref="org.lemsml.model.extended.Component"/>
+     </jxb:bindings>
+           <jxb:bindings node=".//xs:complexType[@name='ComponentType']">
+         <jxb:class implClass="org.lemsml.model.extended.ComponentType"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='ComponentType']">
+         <jxb:class ref="org.lemsml.model.extended.ComponentType"/>
       </jxb:bindings>
 
       <jxb:bindings node=".//xs:complexType[@name='Dimension']">
@@ -48,7 +56,8 @@
       <jxb:bindings multiple="true" node=".//xs:element[@type='Unit']">
          <jxb:class ref="org.lemsml.model.extended.Unit"/>
       </jxb:bindings>
-      
+
+
       <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
          <jxb:property>
             <jxb:baseType>

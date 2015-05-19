@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
@@ -24,8 +25,6 @@ import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.ParameterInstance;
-import org.lemsml.model.extended.PhysicalQuantity;
 
 import tec.units.ri.AbstractQuantity;
 import tec.units.ri.quantity.NumberQuantity;
@@ -79,10 +78,10 @@ public class SimplePendulumTest extends BaseTest {
 				.getDimension());
 
 		Component pend = compiledLems.getComponentById("pend");
-		PhysicalQuantity length = pend.getParameterByName("l").getDimensionalValue();
+		ISymbol<Parameter> length = pend.getParameterByName("l");
 
 		// the "l" parameter is defined in kilometres
-		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnitSymbol());
+		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnit().toString());
 		assertEquals(unitL, METRE.multiply(1000));
 
 		// testing conversion to SI
@@ -143,9 +142,9 @@ public class SimplePendulumTest extends BaseTest {
 		ComponentType pendType = compiledLems
 				.getComponentTypeByName("SimplePendulum");
 
-		ParameterInstance length = pend.getParameterByName("l");
-		assertTrue(pendType.getParameters().contains(length.getDefinition()));
-		assertTrue(length.getDimensionalValue().getUnit().equals(METRE.multiply(1000)));
+		ISymbol<Parameter> length = pend.getParameterByName("l");
+		assertTrue(pendType.getParameters().contains(length.getType()));
+		assertTrue(length.getUnit().equals(METRE.multiply(1000)));
 
 	}
 

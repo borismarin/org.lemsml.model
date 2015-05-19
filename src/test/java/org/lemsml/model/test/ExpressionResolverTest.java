@@ -27,8 +27,7 @@ public class ExpressionResolverTest extends BaseTest {
 				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		assertEquals(-0.1, compiledLems.getConstantByName("const0").getValue()
-				.getValue(), 1e-6);
+		assertEquals("-0.1", compiledLems.getConstantByName("const0").getValue());
 	}
 
 }

@@ -2,7 +2,6 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import java.io.File;
 
-import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
 import org.lemsml.visitors.BaseVisitor;
@@ -31,7 +30,7 @@ public class DecorateWithSourceFile extends TraversingVisitor<Boolean, Throwable
 	}
 
 	@Override
-	public Boolean visit(ComponentType componentType) {
+	public Boolean visit(org.lemsml.model.extended.ComponentType componentType) {
 		componentType.setDefinedIn(sourceFile);
 		return true;
 	}

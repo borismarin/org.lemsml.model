@@ -1,9 +1,9 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
-import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
 import org.lemsml.model.Unit;
+import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;

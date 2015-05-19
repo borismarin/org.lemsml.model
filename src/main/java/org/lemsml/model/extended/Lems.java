@@ -5,8 +5,9 @@ import java.util.Map;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
+import org.lemsml.model.compiler.IScope;
+import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.compiler.utils.HashMapWarnOnOverwrite;
 
 /**
@@ -14,7 +15,7 @@ import org.lemsml.model.compiler.utils.HashMapWarnOnOverwrite;
  *
  */
 @XmlTransient
-public class Lems extends org.lemsml.model.Lems {
+public class Lems extends org.lemsml.model.Lems implements IScope {
 
 	@XmlTransient
 	private Map<String, Component> idToComponent = new HashMapWarnOnOverwrite<String, Component>();
@@ -31,6 +32,8 @@ public class Lems extends org.lemsml.model.Lems {
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
+	@XmlTransient
+	private Map<String, ISymbol<?>> symbolTable = new HashMap<String, ISymbol<?>>();
 
 	public Component getComponentById(String id) {
 		return idToComponent.get(id);
@@ -76,6 +79,26 @@ public class Lems extends org.lemsml.model.Lems {
 
 	public void registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
 		this.symbolToUnit.put(name, unit);
+	}
+
+	@Override
+	public IScope getEnclosingScope() {
+		return null;
+	}
+
+	@Override
+	public void define(ISymbol<?> sym) {
+		this.symbolTable.put(sym.getName(), sym);
+	}
+
+	@Override
+	public ISymbol<?> resolve(String name) {
+		return this.symbolTable.get(name);
+	}
+
+	@Override
+	public String getScopeName() {
+		return "global";
 	}
 
 }

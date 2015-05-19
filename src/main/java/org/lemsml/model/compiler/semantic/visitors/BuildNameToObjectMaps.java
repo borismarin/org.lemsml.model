@@ -1,9 +1,9 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
-import org.lemsml.model.ComponentType;
 import org.lemsml.model.Constant;
 import org.lemsml.model.compiler.utils.UOMUtils;
 import org.lemsml.model.extended.Component;
+import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Dimension;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;

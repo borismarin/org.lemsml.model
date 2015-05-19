@@ -97,10 +97,11 @@
 	</xs:complexType>
 
 	<xs:complexType name="DerivedParameter">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="value" type="xs:string" use="required" />
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalType">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:simpleType name="PhysicalQuantity">
@@ -111,11 +112,11 @@
 	</xs:simpleType>
 
 	<xs:complexType name="Constant">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="value" type="PhysicalQuantity" use="required" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalType">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="ComponentReference">
@@ -336,7 +337,7 @@
 
 	<xs:complexType name="Parameter">
 		<xs:complexContent>
-			<xs:extension base="NamedDimensionalType"/>
+			<xs:extension base="NamedDimensionalType" />
 		</xs:complexContent>
 	</xs:complexType>
 
