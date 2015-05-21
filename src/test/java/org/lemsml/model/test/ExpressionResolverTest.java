@@ -27,7 +27,12 @@ public class ExpressionResolverTest extends BaseTest {
 				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		assertEquals("-0.1", compiledLems.getConstantByName("const0").getValue());
+//		assertEquals("-0.1", compiledLems.getConstantByName("const0").getValue());
+		Double p0 = new Double(2.0);
+		Double dp0 = compiledLems.getComponentById("comp0").resolve("dp0").evaluate();
+		Double dp1 = compiledLems.getComponentById("comp0").resolve("dp1").evaluate();
+		assertEquals(p0 * p0, dp0, 1e-12);
+		assertEquals(p0 * p0 * dp0, dp1, 1e-12);
 	}
 
 }

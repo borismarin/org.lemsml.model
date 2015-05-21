@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Parameter;
+import org.lemsml.model.compiler.INamed;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
@@ -16,7 +17,7 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
  *
  */
 @XmlTransient
-public class Component extends org.lemsml.model.Component implements IScope{
+public class Component extends org.lemsml.model.Component implements IScope, INamed{
 	@XmlTransient
 	ComponentType _ComponentType;
 
@@ -73,6 +74,19 @@ public class Component extends org.lemsml.model.Component implements IScope{
 	@Override
 	public ISymbol<?> resolve(String name) {
 		return this.scope.get(name);
+	}
+
+	public Map<String, ISymbol<?>> getScope() {
+		return this.scope;
+	}
+
+	@Override
+	public String getName() {
+		return this.getId();
+	}
+
+	public void setName(String name) {
+		this.id = name;
 	}
 
 }

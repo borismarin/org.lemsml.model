@@ -32,7 +32,7 @@ public class PhysicalQuantityAdapter extends
 	}
 
 	public String marshal(PhysicalQuantity pq) {
-		return (pq.getValue().toString() + pq.getUnitSymbol());
+		return (pq.evaluate().toString() + pq.getUnitSymbol());
 	}
 
 }

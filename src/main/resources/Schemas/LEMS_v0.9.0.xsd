@@ -98,24 +98,13 @@
 
 	<xs:complexType name="DerivedParameter">
 		<xs:complexContent>
-			<xs:extension base="NamedDimensionalType">
-				<xs:attribute name="value" type="xs:string" use="required" />
-			</xs:extension>
+			<xs:extension base="NamedDimensionalValuedType"/>
 		</xs:complexContent>
 	</xs:complexType>
 
-	<xs:simpleType name="PhysicalQuantity">
-		<xs:restriction base="xs:string">
-			<xs:pattern
-				value="-?([0-9]*(\.[0-9]+)?)([eE]-?[0-9]+)?[\s]*([_a-zA-Z0-9])*" />
-		</xs:restriction>
-	</xs:simpleType>
-
 	<xs:complexType name="Constant">
 		<xs:complexContent>
-			<xs:extension base="NamedDimensionalType">
-				<xs:attribute name="value" type="xs:string" use="required" />
-			</xs:extension>
+			<xs:extension base="NamedDimensionalValuedType"/>
 		</xs:complexContent>
 	</xs:complexType>
 
@@ -145,7 +134,7 @@
 
 	<xs:complexType name="Fixed">
 		<xs:attribute name="parameter" type="xs:string" use="required" />
-		<xs:attribute name="value" type="PhysicalQuantity" use="required" />
+		<xs:attribute name="value" type="xs:string" use="required" />
 		<xs:attribute name="description" type="xs:string" use="optional" />
 	</xs:complexType>
 
@@ -327,6 +316,14 @@
 		<xs:attribute name="dimension" type="xs:string" use="optional"
 			default="none" />
 		<xs:attribute name="description" type="xs:string" use="optional" />
+	</xs:complexType>
+
+	<xs:complexType name="NamedDimensionalValuedType" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalType">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Property">

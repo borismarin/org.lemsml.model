@@ -58,14 +58,6 @@
       </jxb:bindings>
 
 
-      <jxb:bindings multiple="true" node="//xs:attribute[@type='PhysicalQuantity']">
-         <jxb:property>
-            <jxb:baseType>
-               <xjc:javaType adapter="org.lemsml.model.extended.PhysicalQuantityAdapter" name="org.lemsml.model.extended.PhysicalQuantity" /> 
-            </jxb:baseType>
-         </jxb:property>
-      </jxb:bindings>
-      
    </jxb:bindings>
    
 </jxb:bindings>

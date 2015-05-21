@@ -41,7 +41,7 @@ public class PhysicalQuantity implements IDimensionalEvaluable {
 	}
 
 	@Override
-	public Double getValue() {
+	public Double evaluate() {
 		return this.value;
 	}
 

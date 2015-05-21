@@ -86,7 +86,7 @@ public class SimplePendulumTest extends BaseTest {
 
 		// testing conversion to SI
 		AbstractQuantity<?> lenghtWithUnit = NumberQuantity.of(
-				length.getValue(), unitL);
+				length.evaluate(), unitL);
 		assertEquals(lenghtWithUnit.getValue().floatValue(), 0.001, 1e-8);
 		assertEquals(lenghtWithUnit.toSI().getValue().floatValue(), 1.0, 1e-8);
 	}

@@ -1,8 +1,9 @@
 package org.lemsml.model.compiler.semantic;
 
-import org.lemsml.model.compiler.semantic.visitors.AddParameterValuesToComponent;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
+import org.lemsml.model.compiler.semantic.visitors.BuildScope;
+import org.lemsml.model.compiler.semantic.visitors.ResolveEvaluables;
 import org.lemsml.model.extended.Lems;
 
 /**
@@ -35,9 +36,11 @@ public class LEMSSemanticAnalyser {
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);
 
-		AddParameterValuesToComponent paramAdder = new AddParameterValuesToComponent(
-				lems);
-		lems.accept(paramAdder);
+		BuildScope scopeBuilder = new BuildScope(lems);
+		lems.accept(scopeBuilder);
+
+		ResolveEvaluables evalResolver = new ResolveEvaluables(lems);
+		lems.accept(evalResolver);
 
 		//BuildEvaluationContext ctxtBuilder = new BuildEvaluationContext(lems);
 		//lems.accept(ctxtBuilder);
