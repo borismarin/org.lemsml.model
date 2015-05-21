@@ -3,9 +3,9 @@ package org.lemsml.model.compiler.semantic.visitors;
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
-import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
@@ -59,7 +59,7 @@ public class BuildScope extends TraversingVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(Constant constant) throws Throwable {
-		((Lems) this.context).define(new Symbol<Constant>(constant.getName(), constant));
+		((IScope) this.context).define(new Symbol<Constant>(constant.getName(), constant));
 		return true;
 	}
 }

@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.xml.namespace.QName;
 
@@ -21,8 +20,6 @@ import org.lemsml.model.extended.PhysicalQuantityAdapter;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
-
-import com.sun.tools.classfile.Dependencies;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
