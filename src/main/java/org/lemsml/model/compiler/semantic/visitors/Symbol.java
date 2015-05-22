@@ -1,7 +1,5 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
-import static tec.units.ri.AbstractUnit.ONE;
-
 import javax.measure.Unit;
 
 import org.lemsml.model.compiler.IDimensionalEvaluable;
@@ -11,7 +9,6 @@ public class Symbol<T> implements ISymbol<T> {
 
 	private Double value;
 	private String name;
-	private Unit<?> unit = ONE;
 	private T type;
 	private IDimensionalEvaluable dimensionalValue;
 
@@ -36,7 +33,7 @@ public class Symbol<T> implements ISymbol<T> {
 
 	@Override
 	public Unit<?> getUnit() {
-		return this.unit;
+		return this.dimensionalValue.getUnit();
 	}
 
 	@Override
@@ -53,7 +50,6 @@ public class Symbol<T> implements ISymbol<T> {
 	public void setDimensionalValue(IDimensionalEvaluable quant) {
 		this.dimensionalValue = quant;
 		this.value = quant.evaluate();
-		this.unit = quant.getUnit();
 	}
 
 	public IDimensionalEvaluable getDimensionalValue() {

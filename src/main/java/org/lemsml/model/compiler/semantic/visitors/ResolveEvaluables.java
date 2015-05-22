@@ -16,7 +16,6 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.PhysicalQuantity;
-import org.lemsml.model.extended.PhysicalQuantityAdapter;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
