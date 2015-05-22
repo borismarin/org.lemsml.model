@@ -2,9 +2,14 @@ package org.lemsml.model.extended;
 
 import static tec.units.ri.AbstractUnit.ONE;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.measure.Unit;
 
 import org.lemsml.model.compiler.IDimensionalEvaluable;
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 
 import tec.units.ri.quantity.NumberQuantity;
 
@@ -12,59 +17,83 @@ import tec.units.ri.quantity.NumberQuantity;
  * @author borismarin
  *
  */
-public class PhysicalQuantity implements IDimensionalEvaluable {
+public class PhysicalQuantity implements IDimensionalEvaluable
+{
 
-	public Double value;
-	public Unit<?> unit;
+	private Double value;
+	private Unit<?> unit;
 	private String unitSymbol;
 
-	public PhysicalQuantity(Double value, String unitSymbol) {
+	public PhysicalQuantity(Double value, String unitSymbol)
+	{
 		this.value = value;
 		this.unitSymbol = unitSymbol;
 	}
 
-	public PhysicalQuantity() {
-		// TODO Auto-generated constructor stub
+	public PhysicalQuantity(String value) throws LEMSCompilerException
+	{
+		String regExp = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
+
+		Pattern pattern = Pattern.compile(regExp);
+		Matcher matcher = pattern.matcher(value);
+
+		if(matcher.find())
+		{
+			this.unitSymbol = matcher.group(2);
+			this.value = Double.parseDouble(matcher.group(1));
+		}
+		else {
+			throw new LEMSCompilerException("Could not parse ", LEMSCompilerError.CantParseValueUnit);
+		}
 	}
 
 	@Override
-	public Unit<?> getUnit() {
+	public Unit<?> getUnit()
+	{
 		return unit;
 	}
 
-	public void setUnit(Unit<?> unit) {
-		if (null != unit) {
+	public void setUnit(Unit<?> unit)
+	{
+		if(null != unit)
+		{
 			this.unit = unit;
-		} else {
+		}
+		else
+		{
 			this.unit = ONE;
 		}
 	}
 
 	@Override
-	public Double evaluate() {
+	public Double evaluate()
+	{
 		return this.value;
 	}
 
-	public String getUnitSymbol() {
+	public String getUnitSymbol()
+	{
 		return this.unitSymbol;
 	}
 
-	public void setUnitSymbol(String symb) {
+	public void setUnitSymbol(String symb)
+	{
 		this.unitSymbol = symb;
 	}
 
 	@Override
-	public String toString() {
-		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol
-				+ "]";
+	public String toString()
+	{
+		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol + "]";
 	}
 
-	public Double getValueInSI() {
-		return new Double(NumberQuantity.of(value, unit).toSI().getValue()
-				.doubleValue());
+	public Double getValueInSI()
+	{
+		return new Double(NumberQuantity.of(value, unit).toSI().getValue().doubleValue());
 	}
 
-	public void setValue(double val) {
+	public void setValue(double val)
+	{
 		this.value = val;
 	}
 
