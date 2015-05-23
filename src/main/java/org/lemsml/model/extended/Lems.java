@@ -1,6 +1,7 @@
 package org.lemsml.model.extended;
 
 import java.util.HashMap;
+import static tec.units.ri.AbstractUnit.ONE;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -30,8 +31,16 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	 */
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
+	{
+		//TODO: ugly.
+	    nameToDimension.put("none", ONE);
+	}
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
+	{
+		//TODO: ugly.
+	    symbolToUnit.put("none", ONE);
+	}
 	@XmlTransient
 	private Map<String, ISymbol<?>> symbolTable = new HashMap<String, ISymbol<?>>();
 
