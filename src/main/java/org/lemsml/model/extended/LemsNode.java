@@ -6,7 +6,8 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 
 public class LemsNode {
 	private LEMSCompilerError error;
-	private File definedIn;
+	//TODO: ugly.
+	private File definedIn = new File("");
 
 	public LEMSCompilerError getError() {
 		return error;
