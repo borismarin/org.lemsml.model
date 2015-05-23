@@ -2,7 +2,6 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
-import org.lemsml.model.Unit;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
@@ -56,7 +55,7 @@ public class CopyContent extends TraversingVisitor<Boolean, Throwable> {
 	}
 
 	@Override
-	public Boolean visit(Unit unit) {
+	public Boolean visit(org.lemsml.model.extended.Unit unit) {
 		resolvedLems.getUnits().add((org.lemsml.model.extended.Unit) unit);
 		return true;
 	}
