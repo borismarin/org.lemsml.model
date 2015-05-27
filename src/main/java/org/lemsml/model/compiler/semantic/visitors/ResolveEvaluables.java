@@ -77,7 +77,7 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 				PhysicalQuantity pq = new PhysicalQuantity(def);
 				pq.setUnit(this.lems.getUnitBySymbol(pq.getUnitSymbol()));
 				resolved.setDimensionalValue(pq);
-				//TODO: visitor-based dimensional checking?
+				// TODO: visitor-based dimensional checking?
 				checkUnits(resolved, comp);
 			} else {
 				// TODO : decorate ParameterInstance with error instead?
@@ -98,8 +98,9 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		if (uomUnitFromType == null) {
 			String err = MessageFormat
 					.format("Dimension [{0}], used in [({1}) {2}] defined in [{3}] is undefined.",
-							dimNameFromType, resolved.getType().getClass()
-									.getSimpleName(), resolved.getName(),
+							dimNameFromType,
+							resolved.getType().getClass().getSimpleName(),
+							resolved.getName(),
 							scope.getScopeName());
 			throw new LEMSCompilerException(err,
 					LEMSCompilerError.UndefinedDimension);
@@ -110,10 +111,11 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			String err = MessageFormat
 					.format("Unit mismatch for [({0}) {1}] defined in [{2}]:"
 							+ " Expecting  [{3}], but"
-							+ " dimension of [{4}] is [{5}].", resolved
-							.getType().getClass().getSimpleName(),
+							+ " dimension of [{4}] is [{5}].",
+							resolved.getType().getClass().getSimpleName(),
 							resolved.getName(), scope.getScopeName(),
-							dimFromType.toString(), unitString,
+							dimFromType.toString(),
+							unitString,
 							dimFromValue.toString());
 			throw new LEMSCompilerException(err,
 					LEMSCompilerError.DimensionalAnalysis);
@@ -130,18 +132,31 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			// a derived parameter can depend on parameters and other derpars.
 			String pName = derParDef.getName();
 			expressions.put(pName, derParDef.getValue());
-			// we only add parameters here, as other derpars are not yet
-			// resolved
+			// we only add parameters here, as other derpars are not yet resolved
 			dependencies.addNode(pName);
-			for (String dep : ExpressionParser.listSymbolsInExpression(derParDef.getValue())) {
+			for (String dep : ExpressionParser
+					.listSymbolsInExpression(derParDef.getValue())) {
 				ISymbol<?> resolved = comp.resolve(dep);
-				// ugly handling of scoping rules! 
-				if (resolved != null && resolved.getType() instanceof Parameter) {
-					//der pars can depend only on parameters (which are already resolved) or other derpars
+				if (resolved == null) {
+					String err = MessageFormat
+							.format("Symbol[{0}] undefined in  expression [{1}], at [({2}) {3}]",
+									dep, 
+									derParDef.getValue(),
+									derParDef.getClass().getSimpleName(),
+									derParDef.getName());
+					throw new LEMSCompilerException(err,
+							LEMSCompilerError.UndefinedSymbol);
+				}
+				Object depType = resolved.getType();
+				// ugly handling of scoping rules!
+				if (depType instanceof Parameter) {
+					// der pars can depend only on parameters (which are already
+					// resolved) or other derpars
 					context.put(dep, resolved.evaluate());
 				}
-				if (resolved != null && resolved.getType() instanceof DerivedParameter) {
-					//we need to build a dependency graph in order to evaluate things in the proper order
+				if (depType instanceof DerivedParameter) {
+					// we need to build a dependency graph in order to evaluate
+					// things in the proper order
 					dependencies.addNode(dep);
 					dependencies.addEdge(pName, dep);
 				}
@@ -151,8 +166,10 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String derParName : sorted) {
-			Double val = ExpressionParser.evaluateInContext(expressions.get(derParName), context);
-			DerivedParameter dparDef = (DerivedParameter) comp.resolve(derParName).getType();
+			Double val = ExpressionParser.evaluateInContext(
+					expressions.get(derParName), context);
+			DerivedParameter dparDef = (DerivedParameter) comp.resolve(
+					derParName).getType();
 			PhysicalQuantity quant = new PhysicalQuantity(val,
 					dparDef.getDimension());
 			quant.setUnit(lems.getDimensionByName(quant.getUnitSymbol()));
@@ -160,5 +177,4 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			context.put(derParName, val);
 		}
 	}
-
 }

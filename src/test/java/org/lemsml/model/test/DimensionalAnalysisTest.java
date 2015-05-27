@@ -36,11 +36,14 @@ public class DimensionalAnalysisTest extends BaseTest {
 		Lems fakeLems = compiler.generateLEMSDocument();
 		Component fakeHO = new Component();
 		fakeHO.setType("HarmonicOscillator");
+		//TODO: think about Component API (addParameter)?
 		//intentionally causing an unit mismatch error to be catched (mass in metres...)
 		fakeHO.getOtherAttributes().put(new QName("m"), "1m");
 		fakeHO.getOtherAttributes().put(new QName("k"), "1N_per_m");
 		fakeLems.getComponents().add(fakeHO);
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
 	}
+
+
 
 }
