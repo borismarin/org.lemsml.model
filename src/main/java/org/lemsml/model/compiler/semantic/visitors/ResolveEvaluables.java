@@ -57,14 +57,14 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
 		// TODO: can't we type.accept(this) here?
-		processParameters(comp, type);
-		processDerivedParameters(comp, type);
+		resolveParameters(comp, type);
+		resolveDerivedParameters(comp, type);
 		// TODO: handle spurious attributes ie. those that don't correspond to
 		// anything in the ComponentType definition
 		return null;
 	}
 
-	private void processParameters(Component comp, ComponentType type)
+	private void resolveParameters(Component comp, ComponentType type)
 			throws LEMSCompilerException {
 		// Read parameter (defined in the ComponentType) values from the
 		// attributes
@@ -120,7 +120,7 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		}
 	}
 
-	private void processDerivedParameters(Component comp, ComponentType type)
+	private void resolveDerivedParameters(Component comp, ComponentType type)
 			throws LEMSCompilerException {
 		Map<String, String> expressions = new HashMap<String, String>();
 		Map<String, Double> context = new HashMap<String, Double>();

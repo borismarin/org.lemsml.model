@@ -5,14 +5,18 @@ import java.io.File;
 import javax.xml.namespace.QName;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 
 
 public class DimensionalAnalysisTest extends BaseTest {
+	@Rule public ExpectedException exception = ExpectedException.none();
 
 	private File schema;
 	private File lemsDoc;
@@ -25,8 +29,10 @@ public class DimensionalAnalysisTest extends BaseTest {
 		compiler = new LEMSCompilerFrontend(lemsDoc, schema);
 	}
 
-	@Test(expected = LEMSCompilerException.class)
+	@Test
 	public void testWrongParameter() throws Throwable {
+		exception.expect(LEMSCompilerException.class);
+		exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
 		Lems fakeLems = compiler.generateLEMSDocument();
 		Component fakeHO = new Component();
 		fakeHO.setType("HarmonicOscillator");
@@ -35,9 +41,6 @@ public class DimensionalAnalysisTest extends BaseTest {
 		fakeHO.getOtherAttributes().put(new QName("k"), "1N_per_m");
 		fakeLems.getComponents().add(fakeHO);
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
-
-		
-
 	}
 
 }
