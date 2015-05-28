@@ -41,23 +41,21 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 
 	@Override
 	public Void visit(Constant ctt) throws Throwable {
-		buildDependeciesAndContext(this.scope, ctt);
+		addDimValToSymbol(ctt.getName(), ctt.getValue());
+		//TODO: this would handle Constants defined via expressions, as per the docs.
+		//buildDependeciesAndContext(this.scope, ctt);
 		return null;
 	}
 
 	@Override
 	public Void visit(Parameter parDef) throws LEMSCompilerException {
-		// Read parameter (defined in the ComponentType) values from the
-		// attributes
 		Component comp = (Component) this.scope;
 		String pName = parDef.getName();
 		QName qualiPName = new QName(pName);
+		// need to circumvent unschemable component structure... 
 		if (comp.getOtherAttributes().keySet().contains(qualiPName)) {
 			String def = comp.getOtherAttributes().get(qualiPName);
-			ISymbol<?> resolved = comp.resolve(pName);
-			PhysicalQuantity pq = new PhysicalQuantity(def);
-			pq.setUnit(this.lems.getUnitBySymbol(pq.getUnitSymbol()));
-			resolved.setDimensionalValue(pq);
+			addDimValToSymbol(pName, def);
 		} else {
 			// TODO : decorate ParameterInstance with error instead?
 			// how to pass extra info to it then?
@@ -66,6 +64,14 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 					LEMSCompilerError.RequiredParameterUndefined);
 		}
 		return null;
+	}
+
+	private void addDimValToSymbol(String symbolName, String symbolDef)
+			throws LEMSCompilerException {
+		ISymbol<?> resolved = this.scope.resolve(symbolName);
+		PhysicalQuantity pq = new PhysicalQuantity(symbolDef);
+		pq.setUnit(this.lems.getUnitBySymbol(pq.getUnitSymbol()));
+		resolved.setDimensionalValue(pq);
 	}
 
 	@Override
