@@ -5,6 +5,7 @@ import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ResolveEvaluables;
+import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 
 /**
@@ -33,6 +34,9 @@ public class LEMSSemanticAnalyser {
 
 		BuildNameToObjectMaps mapBuilder = new BuildNameToObjectMaps(lems);
 		lems.accept(mapBuilder);
+
+		ResolveUnitsDimensions unitResolver = new ResolveUnitsDimensions(lems);
+		lems.accept(unitResolver);
 
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);

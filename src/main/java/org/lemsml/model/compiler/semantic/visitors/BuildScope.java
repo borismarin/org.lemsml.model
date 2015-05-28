@@ -32,16 +32,6 @@ public class BuildScope extends TraversingVisitor<Boolean, Throwable> {
 	public Boolean visit(Component comp) throws Throwable {
 		ComponentType compType = comp.getComponentType();
 		compType.accept(new BuildScope(comp));
-//		for (Parameter parDef : compType.getParameters()) {
-//			comp.define(new Symbol<Parameter>(parDef.getName(), parDef));
-//		}
-//		for (DerivedParameter derPar : compType.getDerivedParameters()) {
-//			comp.define(new Symbol<DerivedParameter>(derPar.getName(), derPar));
-//		}
-//		for (Constant constant : compType.getConstants()) {
-//			comp.define(new Symbol<Constant>(constant.getName(), constant));
-//		}
-
 		return true;
 	}
 

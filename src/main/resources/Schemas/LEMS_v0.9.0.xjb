@@ -29,11 +29,12 @@
       <jxb:bindings node=".//xs:complexType[@name='Component']">
          <jxb:class implClass="org.lemsml.model.extended.Component"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:element[@type='Component']">
          <jxb:class ref="org.lemsml.model.extended.Component"/>
      </jxb:bindings>
-           <jxb:bindings node=".//xs:complexType[@name='ComponentType']">
+
+      <jxb:bindings node=".//xs:complexType[@name='ComponentType']">
          <jxb:class implClass="org.lemsml.model.extended.ComponentType"/>
       </jxb:bindings>
       

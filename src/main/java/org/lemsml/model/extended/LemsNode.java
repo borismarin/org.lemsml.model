@@ -4,11 +4,10 @@ import java.io.File;
 
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 
 @XmlTransient
-public class LemsNode implements IHasParentFile{
+public class LemsNode {
 	@XmlTransient
 	private LEMSCompilerError error;
 	//TODO: ugly.

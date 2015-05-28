@@ -1,6 +1,6 @@
 package org.lemsml.model.compiler;
 
-public interface ISymbol<T> extends INamedDimensionalEvaluable, IHasParentFile {
+public interface ISymbol<T> extends INamedDimensionalEvaluable {
 
 	public T getType();
 

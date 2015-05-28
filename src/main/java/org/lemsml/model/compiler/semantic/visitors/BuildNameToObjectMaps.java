@@ -1,13 +1,10 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.Constant;
-import org.lemsml.model.compiler.utils.UOMUtils;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
-import org.lemsml.model.extended.Dimension;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
-import org.lemsml.model.extended.Unit;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -34,6 +31,14 @@ public class BuildNameToObjectMaps extends
 		logger.debug(sb.toString());
 	}
 
+	private <K, V extends LemsNode> void warnMapOverwrite(K key, V oldval, V newval) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Overwriting symbol '%s'!\n", key));
+		sb.append(String.format("\t -> old: [defined in %s]: %s\n", oldval.getDefinedIn().getName(), oldval));
+		sb.append(String.format("\t -> new: [defined in %s]: %s\n", newval.getDefinedIn().getName(), newval));
+		logger.warn(sb.toString());
+	}
+
 	/**
 	 * @param lems
 	 */
@@ -46,47 +51,30 @@ public class BuildNameToObjectMaps extends
 	@Override
 	public Boolean visit(Component c) throws Throwable {
 		logRegistration(c.getId(), c);
-		this.lems.registerComponentId(c.getId(), c);
+		Component old = this.lems.registerComponentId(c.getId(), c);
+		if(null != old){
+			warnMapOverwrite(c.getId(), old, c);
+		};
 		return true;
 	}
 
 	@Override
 	public Boolean visit(ComponentType ct) throws Throwable {
 		logRegistration(ct.getName(), ct);
-		this.lems.registerComponentTypeName(ct.getName(), ct);
+		ComponentType old = this.lems.registerComponentTypeName(ct.getName(), ct);
+		if(null != old){
+			warnMapOverwrite(ct.getName(), old, ct);
+		};
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Constant ctt) throws Throwable {
 		logRegistration(ctt.getName(), ctt);
-		this.lems.registerConstantName(ctt.getName(), ctt);
-		return true;
-	}
-
-	@Override
-	public Boolean visit(Dimension dimension) throws Throwable {
-		dimension.setDimension(UOMUtils.LemsDimensionToUOM(dimension));
-		logRegistration(dimension.getName(), dimension);
-		lems.registerDimensionName(dimension.getName(),
-				dimension.getDimension());
-		return true;
-	}
-
-	@Override
-	public Boolean visit(Unit unit) throws Throwable {
-		javax.measure.Unit<?> dim = lems
-				.getDimensionByName(unit.getDimension());
-
-		// That's why we don't store a javax.measure.Dimension in nameToDim:
-		// dimensions can't be operated with
-		javax.measure.Unit<?> uomUnit = dim.multiply(Math.pow(10, unit
-				.getPower().intValue()));
-		uomUnit = uomUnit.shift(unit.getOffset());
-
-		unit.setUnit(uomUnit);
-		logRegistration(unit.getSymbol(), unit);
-		lems.registerUnitSymbol(unit.getSymbol(), uomUnit);
+		Constant old = this.lems.registerConstantName(ctt.getName(), ctt);
+		if(null != old){
+			warnMapOverwrite(ctt.getName(), old, ctt);
+		};
 		return true;
 	}
 

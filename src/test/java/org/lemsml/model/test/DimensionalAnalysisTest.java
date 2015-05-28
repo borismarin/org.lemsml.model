@@ -1,6 +1,7 @@
 package org.lemsml.model.test;
 
 import java.io.File;
+import java.math.BigInteger;
 
 import javax.xml.namespace.QName;
 
@@ -15,6 +16,7 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
+import org.lemsml.model.extended.Dimension;
 import org.lemsml.model.extended.Lems;
 
 
@@ -34,14 +36,17 @@ public class DimensionalAnalysisTest extends BaseTest {
 	
 	@Test
 	public void testPlainFile() throws Throwable{
-		LEMSCompilerFrontend.semanticAnalysis(compiler.generateLEMSDocument());
+		compiler.generateLEMSDocument();
 	}
 
 	@Test
 	public void testWrongParameter() throws Throwable {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
-		Lems fakeLems = compiler.generateLEMSDocument();
+
+		//Lems fakeLems = compiler.generateLEMSDocument();
+		Lems fakeLems = LEMSCompilerFrontend.parseLemsFile(lemsDoc, schema);
+
 		Component fakeHO = new Component();
 		fakeHO.setType("HarmonicOscillator");
 		//TODO: think about Component API (addParameter)?
@@ -56,29 +61,38 @@ public class DimensionalAnalysisTest extends BaseTest {
 	public void testDerivedParDimension() throws Throwable {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
-		Lems fakeLems = compiler.generateLEMSDocument();
-
-		ComponentType fakeType = new ComponentType();
-		fakeType.setName("Foo");
+		Lems fakeLems = new Lems(); 
 		
-		Parameter fakePar = new Parameter();
-		fakePar.setName("p");
-		fakePar.setDimension("length");
-		fakeType.getParameters().add(fakePar);
-
-		DerivedParameter fakeDerPar = new DerivedParameter();
-		fakeDerPar.setName("TwoP");
-		fakeDerPar.setValue("2*p");
-		fakeDerPar.setDimension("time"); //ooops!
-		fakeType.getDerivedParameters().add(fakeDerPar);
+		Dimension lenDim = new Dimension();
+		lenDim.setL( BigInteger.valueOf(1));
+		lenDim.setName("length");
+		Dimension timeDim = new Dimension();
+		lenDim.setT( BigInteger.valueOf(1));
+		lenDim.setName("time");
 		
-		Component fakeComp = new Component();
-		fakeComp.setName("foo");
-		fakeComp.setType("Foo");
-		fakeComp.getOtherAttributes().put(new QName("p"), "1m");
+		ComponentType type = new ComponentType();
+		type.setName("Foo");
+		
+		Parameter par = new Parameter();
+		par.setName("p");
+		par.setDimension("length");
+		type.getParameters().add(par);
 
-		fakeLems.getComponents().add(fakeComp);
-		fakeLems.getComponentTypes().add(fakeType);
+		DerivedParameter derPar = new DerivedParameter();
+		derPar.setName("TwoP");
+		derPar.setValue("2*p");
+		derPar.setDimension("time"); //ooops!
+		type.getDerivedParameters().add(derPar);
+		
+		Component comp = new Component();
+		comp.setName("foo");
+		comp.setType("Foo");
+		comp.getOtherAttributes().put(new QName("p"), "1m");
+
+		fakeLems.getDimensions().add(lenDim);
+		fakeLems.getDimensions().add(timeDim);
+		fakeLems.getComponents().add(comp);
+		fakeLems.getComponentTypes().add(type);
 
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
 	}

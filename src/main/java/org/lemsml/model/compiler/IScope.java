@@ -8,7 +8,7 @@ public interface IScope {
 	public String getScopeName();
 	public IScope getEnclosingScope();
 	public ISymbol<?> resolve(String name);
-	void define(ISymbol<?> sym);
+	ISymbol<?> define(ISymbol<?> sym);
 	public Set<String> getDefinedSymbols();
 
 }

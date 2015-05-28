@@ -7,15 +7,11 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Parameter;
-import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.compiler.INamed;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -25,9 +21,6 @@ import ch.qos.logback.classic.Logger;
 public class Component extends org.lemsml.model.Component implements IScope, INamed{
 	@XmlTransient
 	ComponentType _ComponentType;
-
-	@XmlTransient
-	private static final Logger logger = (Logger) LoggerFactory.getLogger(Component.class);
 
 	@XmlTransient
 	public Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
@@ -71,11 +64,8 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	}
 
 	@Override
-	public void define(ISymbol<?> sym) {
-		ISymbol<?> old = this.scope.put(sym.getName(), sym);
-		if (old != null){
-			this.warnMapOverwrite(sym.getName(), old, sym);
-		}
+	public ISymbol<?> define(ISymbol<?> sym) {
+		return this.scope.put(sym.getName(), sym);
 	}
 
 	@Override
@@ -101,11 +91,4 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 		return this.scope.keySet();
 	}
 
-	private <K, V extends IHasParentFile> void warnMapOverwrite(K key, V oldval, V newval) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Overwriting scoped symbol '%s'!\n", key));
-		sb.append(String.format("\t -> old: (%s): %s\n", ((ISymbol<?>) oldval).getType().getClass().getSimpleName(), ((ISymbol<?>) oldval).getDimensionalValue()));
-		sb.append(String.format("\t -> new: (%s): %s\n", ((ISymbol<?>) newval).getType().getClass().getSimpleName(), ((ISymbol<?>) newval).getDimensionalValue()));
-		logger.warn(sb.toString());
-	}
 }

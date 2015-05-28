@@ -6,15 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import javax.measure.Unit;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
-import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -50,9 +47,6 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	@XmlTransient
 	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
 
-	@XmlTransient
-	private static final Logger logger = (Logger) LoggerFactory.getLogger(Lems.class);
-
 
 	public Map<String, ISymbol<?>> getScope() {
 		return scope;
@@ -83,34 +77,24 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 		return nameToCompType;
 	}
 
-	public void registerComponentId(String id, Component c) {
-		Component old = this.idToComponent.put(id, c);
-		if (old != null){
-			this.warnMapOverwrite(id, old, c);
-		}
-
+	public Component registerComponentId(String id, Component c) {
+		return this.idToComponent.put(id, c);
 	}
 
-	public void registerComponentTypeName(String name, ComponentType ct) {
-		ComponentType old = this.nameToCompType.put(name, ct);
-		if (old != null){
-			this.warnMapOverwrite(name, old, ct);
-		}
+	public ComponentType registerComponentTypeName(String name, ComponentType ct) {
+		return this.nameToCompType.put(name, ct);
 	}
 
-	public void registerConstantName(String name, Constant ctt) {
-		Constant old = this.nameToConstant.put(name, ctt);
-		if (old != null){
-			this.warnMapOverwrite(name, old, ctt);
-		}
+	public Constant registerConstantName(String name, Constant ctt) {
+		return this.nameToConstant.put(name, ctt);
 	}
 
-	public void registerDimensionName(String name, javax.measure.Unit<?> dim) {
-		this.nameToDimension.put(name, dim);
+	public Unit<?> registerDimensionName(String name, javax.measure.Unit<?> dim) {
+		return this.nameToDimension.put(name, dim);
 	}
 
-	public void registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
-		this.symbolToUnit.put(name, unit);
+	public Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
+		return this.symbolToUnit.put(name, unit);
 	}
 
 	@Override
@@ -119,11 +103,8 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	}
 
 	@Override
-	public void define(ISymbol<?> sym) {
-		ISymbol<?> old = this.scope.put(sym.getName(), sym);
-		if (old != null){
-			this.warnMapOverwrite(sym.getName(), old, sym);
-		}
+	public ISymbol<?> define(ISymbol<?> sym) {
+		return this.scope.put(sym.getName(), sym);
 	}
 
 	@Override
@@ -141,12 +122,5 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 		return this.scope.keySet();
 	}
 	
-	private <K, V extends IHasParentFile> void warnMapOverwrite(K key, V oldval, V newval) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Overwriting symbol '%s'!\n", key));
-		sb.append(String.format("\t -> old: [defined in %s]: %s\n", oldval.getDefinedIn().getName(), oldval));
-		sb.append(String.format("\t -> new: [defined in %s]: %s\n", newval.getDefinedIn().getName(), newval));
-		logger.warn(sb.toString());
-	}
 
 }
