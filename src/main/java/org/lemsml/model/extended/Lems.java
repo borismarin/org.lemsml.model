@@ -1,8 +1,10 @@
 package org.lemsml.model.extended;
 
-import java.util.HashMap;
 import static tec.units.ri.AbstractUnit.ONE;
+
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -42,7 +44,11 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	    symbolToUnit.put("none", ONE);
 	}
 	@XmlTransient
-	private Map<String, ISymbol<?>> symbolTable = new HashMap<String, ISymbol<?>>();
+	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
+
+	public Map<String, ISymbol<?>> getScope() {
+		return scope;
+	}
 
 	public Component getComponentById(String id) {
 		return idToComponent.get(id);
@@ -97,17 +103,22 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 
 	@Override
 	public void define(ISymbol<?> sym) {
-		this.symbolTable.put(sym.getName(), sym);
+		this.scope.put(sym.getName(), sym);
 	}
 
 	@Override
 	public ISymbol<?> resolve(String name) {
-		return this.symbolTable.get(name);
+		return this.scope.get(name);
 	}
 
 	@Override
 	public String getScopeName() {
 		return "global";
+	}
+
+	@Override
+	public Set<String> getDefinedSymbols() {
+		return this.scope.keySet();
 	}
 
 }

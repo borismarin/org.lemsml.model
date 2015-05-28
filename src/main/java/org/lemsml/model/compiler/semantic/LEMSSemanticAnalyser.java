@@ -3,6 +3,7 @@ package org.lemsml.model.compiler.semantic;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
+import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ResolveEvaluables;
 import org.lemsml.model.extended.Lems;
 
@@ -41,6 +42,9 @@ public class LEMSSemanticAnalyser {
 
 		ResolveEvaluables evalResolver = new ResolveEvaluables(lems);
 		lems.accept(evalResolver);
+
+		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
+		lems.accept(dimensionAnalyzer);
 
 		//BuildEvaluationContext ctxtBuilder = new BuildEvaluationContext(lems);
 		//lems.accept(ctxtBuilder);

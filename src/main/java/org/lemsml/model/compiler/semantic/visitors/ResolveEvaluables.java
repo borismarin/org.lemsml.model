@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.measure.Dimension;
-import javax.measure.Unit;
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.ComponentType;
@@ -43,8 +41,6 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		this.lems = lems;
 		// TODO: recursively call this visitor over component types
 		// need to process:
-		// - parameters (comp/type)
-		// - deriv parameters (comp/type)
 		// - constants (lems)
 		// - derived variables -> build evaluable expression
 		// f({stateVar:value})->Double
@@ -77,48 +73,13 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 				PhysicalQuantity pq = new PhysicalQuantity(def);
 				pq.setUnit(this.lems.getUnitBySymbol(pq.getUnitSymbol()));
 				resolved.setDimensionalValue(pq);
-				// TODO: visitor-based dimensional checking?
-				checkUnits(resolved, comp);
 			} else {
 				// TODO : decorate ParameterInstance with error instead?
+				//        how to pass extra info to it then?
 				throw new LEMSCompilerException("Components of type "
 						+ comp.getType() + " must define parameter " + pName,
 						LEMSCompilerError.RequiredParameterUndefined);
 			}
-		}
-	}
-
-	private void checkUnits(ISymbol<?> resolved, IScope scope)
-			throws LEMSCompilerException {
-
-		Dimension dimFromValue = resolved.getUnit().getDimension();
-		String dimNameFromType = ((NamedDimensionalType) resolved.getType())
-				.getDimension();
-		Unit<?> uomUnitFromType = this.lems.getDimensionByName(dimNameFromType);
-		if (uomUnitFromType == null) {
-			String err = MessageFormat
-					.format("Dimension [{0}], used in [({1}) {2}] defined in [{3}] is undefined.",
-							dimNameFromType,
-							resolved.getType().getClass().getSimpleName(),
-							resolved.getName(),
-							scope.getScopeName());
-			throw new LEMSCompilerException(err,
-					LEMSCompilerError.UndefinedDimension);
-		}
-		Dimension dimFromType = uomUnitFromType.getDimension();
-		String unitString = resolved.getDimensionalValue().getUnit().toString();
-		if (!dimFromValue.equals(dimFromType)) {
-			String err = MessageFormat
-					.format("Unit mismatch for [({0}) {1}] defined in [{2}]:"
-							+ " Expecting  [{3}], but"
-							+ " dimension of [{4}] is [{5}].",
-							resolved.getType().getClass().getSimpleName(),
-							resolved.getName(), scope.getScopeName(),
-							dimFromType.toString(),
-							unitString,
-							dimFromValue.toString());
-			throw new LEMSCompilerException(err,
-					LEMSCompilerError.DimensionalAnalysis);
 		}
 	}
 
@@ -147,7 +108,7 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 					throw new LEMSCompilerException(err,
 							LEMSCompilerError.UndefinedSymbol);
 				}
-				Object depType = resolved.getType();
+				NamedDimensionalType depType = (NamedDimensionalType) resolved.getType();
 				// ugly handling of scoping rules!
 				if (depType instanceof Parameter) {
 					// der pars can depend only on parameters (which are already
@@ -163,18 +124,24 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			}
 		}
 		// need to evaluate according to dependencies
+		evalInterdependentExprs(comp, expressions, context, dependencies);
+	}
+
+	private <T> void evalInterdependentExprs(IScope scope,
+			Map<String, String> expressions, Map<String, Double> context,
+			DirectedGraph<String> dependencies) {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
-		for (String derParName : sorted) {
+		for (String depName : sorted) {
 			Double val = ExpressionParser.evaluateInContext(
-					expressions.get(derParName), context);
-			DerivedParameter dparDef = (DerivedParameter) comp.resolve(
-					derParName).getType();
-			PhysicalQuantity quant = new PhysicalQuantity(val,
-					dparDef.getDimension());
+					expressions.get(depName), context);
+			ISymbol<?> resolved = scope.resolve(depName);
+			NamedDimensionalType depType =  (NamedDimensionalType) resolved.getType();
+			// TODO: WRONG!! need to use Dimensional evaluator from expr_parser!
+			PhysicalQuantity quant = new PhysicalQuantity(val, depType.getDimension());
 			quant.setUnit(lems.getDimensionByName(quant.getUnitSymbol()));
-			comp.resolve(derParName).setDimensionalValue(quant);
-			context.put(derParName, val);
+			resolved.setDimensionalValue(quant);
+			context.put(depName, val);
 		}
 	}
 }

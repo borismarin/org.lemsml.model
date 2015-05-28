@@ -2,6 +2,7 @@ package org.lemsml.model.extended;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -87,6 +88,11 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	public void setName(String name) {
 		this.id = name;
+	}
+
+	@Override
+	public Set<String> getDefinedSymbols() {
+		return this.scope.keySet();
 	}
 
 }
