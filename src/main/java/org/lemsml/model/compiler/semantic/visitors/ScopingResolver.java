@@ -95,10 +95,8 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 			if (resolved == null) {
 				String err = MessageFormat
 						.format("Symbol[{0}] undefined in  expression [{1}], at [({2}) {3}]",
-								dep, defValue, typeDef.getClass()
-										.getSimpleName(), defName);
-				throw new LEMSCompilerException(err,
-						LEMSCompilerError.UndefinedSymbol);
+								dep, defValue, typeDef.getClass().getSimpleName(), defName);
+				throw new LEMSCompilerException(err, LEMSCompilerError.UndefinedSymbol);
 			}
 			buildContext(context, dep, resolved);
 			if (resolved.getType().getClass().equals(typeDef.getClass())) {
@@ -114,8 +112,7 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 	private void buildContext(Map<String, Double> context, String symbol,
 			ISymbol<?> resolved) {
 		// der pars can depend only on parameters
-		NamedDimensionalType depType = (NamedDimensionalType) resolved
-				.getType();
+		NamedDimensionalType depType = (NamedDimensionalType) resolved.getType();
 		if (depType instanceof Parameter) {
 			context.put(symbol, resolved.evaluate());
 		}

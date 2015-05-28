@@ -2,11 +2,17 @@ package org.lemsml.model.extended;
 
 import java.io.File;
 
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 
-public class LemsNode {
+@XmlTransient
+public class LemsNode implements IHasParentFile{
+	@XmlTransient
 	private LEMSCompilerError error;
 	//TODO: ugly.
+	@XmlTransient
 	private File definedIn = new File("");
 
 	public LEMSCompilerError getError() {

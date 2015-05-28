@@ -270,10 +270,9 @@
 	</xs:complexType>
 
 	<xs:complexType name="Component">
-		<xs:sequence>
-			<xs:element minOccurs="0" maxOccurs="unbounded" name="Component"
-				type="Component" />
-		</xs:sequence>
+		<xs:choice minOccurs="0" maxOccurs="unbounded">
+			<xs:element name="Component" type="Component" />
+		</xs:choice>
 		<xs:attribute name="type" type="xs:string" use="required" />
 		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:anyAttribute processContents="lax" />

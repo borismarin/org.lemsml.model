@@ -1,9 +1,12 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import java.io.File;
+
 import javax.measure.Unit;
 
 import org.lemsml.model.compiler.IDimensionalEvaluable;
 import org.lemsml.model.compiler.ISymbol;
+import org.lemsml.model.extended.LemsNode;
 
 public class Symbol<T> implements ISymbol<T> {
 
@@ -54,6 +57,11 @@ public class Symbol<T> implements ISymbol<T> {
 
 	public IDimensionalEvaluable getDimensionalValue() {
 		return this.dimensionalValue;
+	}
+
+	@Override
+	public File getDefinedIn() {
+		return ((LemsNode) this.getType()).getDefinedIn();
 	}
 
 }

@@ -7,11 +7,15 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Parameter;
+import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.compiler.INamed;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -23,11 +27,14 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	ComponentType _ComponentType;
 
 	@XmlTransient
-//	private Map<String, Instance<Parameter>> nameToParameterValue = new HashMap<String, Instance<Parameter>>();
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Component.class);
 
+	@XmlTransient
 	public Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
 
+	@XmlTransient
 	private IScope parent;
+
 
 	public ComponentType getComponentType() {
 		return _ComponentType;
@@ -36,10 +43,6 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	public void setComponentType(ComponentType _ComponentType) {
 		this._ComponentType = _ComponentType;
 	}
-
-	//public void registerParameter(Parameter pDef, Instance<Parameter> pVal) {
-		//this.nameToParameterValue.put(pDef.getName(), pVal);
-	//}
 
 	public ISymbol<Parameter> getParameterByName(String name)
 			throws LEMSCompilerException {
@@ -69,7 +72,10 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	@Override
 	public void define(ISymbol<?> sym) {
-		this.scope.put(sym.getName(), sym);
+		ISymbol<?> old = this.scope.put(sym.getName(), sym);
+		if (old != null){
+			this.warnMapOverwrite(sym.getName(), old, sym);
+		}
 	}
 
 	@Override
@@ -95,4 +101,11 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 		return this.scope.keySet();
 	}
 
+	private <K, V extends IHasParentFile> void warnMapOverwrite(K key, V oldval, V newval) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Overwriting scoped symbol '%s'!\n", key));
+		sb.append(String.format("\t -> old: (%s): %s\n", ((ISymbol<?>) oldval).getType().getClass().getSimpleName(), ((ISymbol<?>) oldval).getDimensionalValue()));
+		sb.append(String.format("\t -> new: (%s): %s\n", ((ISymbol<?>) newval).getType().getClass().getSimpleName(), ((ISymbol<?>) newval).getDimensionalValue()));
+		logger.warn(sb.toString());
+	}
 }

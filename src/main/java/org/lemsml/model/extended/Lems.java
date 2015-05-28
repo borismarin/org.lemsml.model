@@ -9,9 +9,12 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
+import org.lemsml.model.compiler.IHasParentFile;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
-import org.lemsml.model.compiler.utils.HashMapWarnOnOverwrite;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -21,11 +24,11 @@ import org.lemsml.model.compiler.utils.HashMapWarnOnOverwrite;
 public class Lems extends org.lemsml.model.Lems implements IScope {
 
 	@XmlTransient
-	private Map<String, Component> idToComponent = new HashMapWarnOnOverwrite<String, Component>();
+	private Map<String, Component> idToComponent = new HashMap<String, Component>();
 	@XmlTransient
-	private Map<String, ComponentType> nameToCompType = new HashMapWarnOnOverwrite<String, ComponentType>();
+	private Map<String, ComponentType> nameToCompType = new HashMap<String, ComponentType>();
 	@XmlTransient
-	private Map<String, Constant> nameToConstant = new HashMapWarnOnOverwrite<String, Constant>();
+	private Map<String, Constant> nameToConstant = new HashMap<String, Constant>();
 	/*
 	 * TODO: notice that there is a discrepancy between what LEMS calls
 	 * dimensions and what UOM calls dimensions. We'll thus confusingly use
@@ -46,6 +49,10 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	}
 	@XmlTransient
 	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
+
+	@XmlTransient
+	private static final Logger logger = (Logger) LoggerFactory.getLogger(Lems.class);
+
 
 	public Map<String, ISymbol<?>> getScope() {
 		return scope;
@@ -77,16 +84,25 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	}
 
 	public void registerComponentId(String id, Component c) {
-		this.idToComponent.put(id, c);
+		Component old = this.idToComponent.put(id, c);
+		if (old != null){
+			this.warnMapOverwrite(id, old, c);
+		}
 
 	}
 
 	public void registerComponentTypeName(String name, ComponentType ct) {
-		this.nameToCompType.put(name, ct);
+		ComponentType old = this.nameToCompType.put(name, ct);
+		if (old != null){
+			this.warnMapOverwrite(name, old, ct);
+		}
 	}
 
 	public void registerConstantName(String name, Constant ctt) {
-		this.nameToConstant.put(name, ctt);
+		Constant old = this.nameToConstant.put(name, ctt);
+		if (old != null){
+			this.warnMapOverwrite(name, old, ctt);
+		}
 	}
 
 	public void registerDimensionName(String name, javax.measure.Unit<?> dim) {
@@ -104,7 +120,10 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 
 	@Override
 	public void define(ISymbol<?> sym) {
-		this.scope.put(sym.getName(), sym);
+		ISymbol<?> old = this.scope.put(sym.getName(), sym);
+		if (old != null){
+			this.warnMapOverwrite(sym.getName(), old, sym);
+		}
 	}
 
 	@Override
@@ -120,6 +139,14 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	@Override
 	public Set<String> getDefinedSymbols() {
 		return this.scope.keySet();
+	}
+	
+	private <K, V extends IHasParentFile> void warnMapOverwrite(K key, V oldval, V newval) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Overwriting symbol '%s'!\n", key));
+		sb.append(String.format("\t -> old: [defined in %s]: %s\n", oldval.getDefinedIn().getName(), oldval));
+		sb.append(String.format("\t -> new: [defined in %s]: %s\n", newval.getDefinedIn().getName(), newval));
+		logger.warn(sb.toString());
 	}
 
 }
