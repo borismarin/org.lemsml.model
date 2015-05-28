@@ -42,6 +42,7 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	{
 		//TODO: ugly.
 	    symbolToUnit.put("none", ONE);
+	    symbolToUnit.put("", ONE);
 	}
 	@XmlTransient
 	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();

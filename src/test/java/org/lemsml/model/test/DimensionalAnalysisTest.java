@@ -54,8 +54,8 @@ public class DimensionalAnalysisTest extends BaseTest {
 
 	@Test
 	public void testDerivedParDimension() throws Throwable {
-		//exception.expect(LEMSCompilerException.class);
-		//exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
+		exception.expect(LEMSCompilerException.class);
+		exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
 		Lems fakeLems = compiler.generateLEMSDocument();
 
 		ComponentType fakeType = new ComponentType();
