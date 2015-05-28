@@ -57,6 +57,7 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 			String def = comp.getOtherAttributes().get(qualiPName);
 			addDimValToSymbol(pName, def);
 		} else {
+			// TODO: this probably should be done somewhere else.
 			// TODO : decorate ParameterInstance with error instead?
 			// how to pass extra info to it then?
 			throw new LEMSCompilerException("Components of type "
