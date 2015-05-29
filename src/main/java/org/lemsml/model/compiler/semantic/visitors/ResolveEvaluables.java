@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.measure.Unit;
+
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.NamedDimensionalType;
 import org.lemsml.model.compiler.IScope;
@@ -57,21 +59,23 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			ScopingResolver scopRes) {
 		Map<String, String> expressions = scopRes.getExpressions();
 		Map<String, Double> context = scopRes.getContext();
+		Map<String, Unit<?>> unitContext = scopRes.getUnitContext();
 		DirectedGraph<String> dependencies = scopRes.getDependencies();
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {
-			Double val = ExpressionParser.evaluateInContext(
-					expressions.get(depName), context);
+			Double val = ExpressionParser.evaluateInContext( expressions.get(depName), context);
+			Unit<?> unit = ExpressionParser.dimensionalAnalysis(expressions.get(depName), unitContext);
 			ISymbol<?> resolved = scope.resolve(depName);
 			NamedDimensionalType depType = (NamedDimensionalType) resolved
 					.getType();
 			// TODO: WRONG!! need to use Dimensional evaluator from expr_parser!
 			PhysicalQuantity quant = new PhysicalQuantity(val,
 					depType.getDimension());
-			quant.setUnit(lems.getDimensionByName(quant.getUnitSymbol()));
+			quant.setUnit(unit);
 			resolved.setDimensionalValue(quant);
 			context.put(depName, val);
+			unitContext.put(depName, quant.getUnit());
 		}
 	}
 }

@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.measure.Unit;
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.Constant;
@@ -30,6 +31,7 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 	private Lems lems;
 	private Map<String, String> expressions = new HashMap<String, String>();
 	private Map<String, Double> context = new HashMap<String, Double>();
+	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
 
 	public ScopingResolver(IScope scope, Lems lems) {
@@ -115,6 +117,7 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 		NamedDimensionalType depType = (NamedDimensionalType) resolved.getType();
 		if (depType instanceof Parameter) {
 			context.put(symbol, resolved.evaluate());
+			unitContext.put(symbol, resolved.getDimensionalValue().getUnit());
 		}
 	}
 
@@ -128,6 +131,11 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 
 	public DirectedGraph<String> getDependencies() {
 		return this.dependencies;
+	}
+
+	public Map<String, Unit<?>> getUnitContext() {
+		return this.unitContext;
+		
 	}
 
 }

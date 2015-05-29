@@ -18,6 +18,7 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Dimension;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Unit;
 
 
 public class DimensionalAnalysisTest extends BaseTest {
@@ -67,8 +68,12 @@ public class DimensionalAnalysisTest extends BaseTest {
 		lenDim.setL( BigInteger.valueOf(1));
 		lenDim.setName("length");
 		Dimension timeDim = new Dimension();
-		lenDim.setT( BigInteger.valueOf(1));
-		lenDim.setName("time");
+		timeDim.setT( BigInteger.valueOf(1));
+		timeDim.setName("time");
+		
+		Unit metre = new Unit();
+		metre.setDimension("length");
+		metre.setSymbol("m");
 		
 		ComponentType type = new ComponentType();
 		type.setName("Foo");
@@ -79,7 +84,7 @@ public class DimensionalAnalysisTest extends BaseTest {
 		type.getParameters().add(par);
 
 		DerivedParameter derPar = new DerivedParameter();
-		derPar.setName("TwoP");
+		derPar.setName("twoP");
 		derPar.setValue("2*p");
 		derPar.setDimension("time"); //ooops!
 		type.getDerivedParameters().add(derPar);
@@ -91,6 +96,7 @@ public class DimensionalAnalysisTest extends BaseTest {
 
 		fakeLems.getDimensions().add(lenDim);
 		fakeLems.getDimensions().add(timeDim);
+		fakeLems.getUnits().add(metre);
 		fakeLems.getComponents().add(comp);
 		fakeLems.getComponentTypes().add(type);
 
