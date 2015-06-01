@@ -55,6 +55,13 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 	}
 
 	@Override
+	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
+		Component comp = (Component) this.scope;
+		buildDependeciesAndContext(comp, typeDef);
+		return null;
+	}
+
+	@Override
 	public Void visit(Parameter parDef) throws LEMSCompilerException {
 		Component comp = (Component) this.scope;
 		String pName = parDef.getName();
@@ -82,16 +89,8 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 		resolved.setDimensionalValue(pq);
 	}
 
-	@Override
-	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
-		Component comp = (Component) this.scope;
-		buildDependeciesAndContext(comp, typeDef);
-		return null;
-	}
-
 	private void buildDependeciesAndContext(IScope scope,
 			NamedDimensionalValuedType typeDef) throws LEMSCompilerException {
-		// a derived parameter can depend on parameters and other derpars.
 		String defName = typeDef.getName();
 		String defValue = typeDef.getValue();
 		expressions.put(defName, defValue);

@@ -12,7 +12,9 @@
 
 		<Dynamics>
 			<StateVariable name="x" exposure="x" />
+			<StateVariable name="y" exposure="y" />
 			<TimeDerivative variable="x" value="const0*dp1/p0/p1*x" />
+			<TimeDerivative variable="y" value="-dv0 * y" />
 		</Dynamics>
 
 	</ComponentType>
