@@ -7,6 +7,7 @@ import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.LemsNode;
+import org.lemsml.model.extended.Symbol;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;

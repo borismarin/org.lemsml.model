@@ -1,4 +1,4 @@
-package org.lemsml.model.compiler.semantic.visitors;
+package org.lemsml.model.extended;
 
 import javax.measure.Unit;
 
