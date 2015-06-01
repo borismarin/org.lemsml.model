@@ -36,11 +36,6 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		ScopingResolver scopeRes = new ScopingResolver(this.lems, this.lems);
 		this.lems.accept(scopeRes);
 		evalInterdependentExprs(this.lems, scopeRes);
-		// need to process:
-		// - derived variables -> build evaluable expression
-		// f({stateVar:value})->Double
-		// - time derivatives -> build evaluable expression
-		// f({stateVar:value})->Double
 	}
 
 	@Override
@@ -67,11 +62,8 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 			Double val = ExpressionParser.evaluateInContext( expressions.get(depName), context);
 			Unit<?> unit = ExpressionParser.dimensionalAnalysis(expressions.get(depName), unitContext);
 			ISymbol<?> resolved = scope.resolve(depName);
-			NamedDimensionalType depType = (NamedDimensionalType) resolved
-					.getType();
-			// TODO: WRONG!! need to use Dimensional evaluator from expr_parser!
 			PhysicalQuantity quant = new PhysicalQuantity(val,
-					depType.getDimension());
+					((NamedDimensionalType) resolved.getType()).getDimension());
 			quant.setUnit(unit);
 			resolved.setDimensionalValue(quant);
 			context.put(depName, val);

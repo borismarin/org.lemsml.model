@@ -39,13 +39,18 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 				new BaseVisitor<Void, Throwable>());
 		this.scope = scope;
 		this.lems = lems;
+		// need to process:
+		// - derived variables -> build evaluable expression f({stateVar:value})->Double
+		// - time derivatives -> build evaluable expression f({stateVar:value})->Double
 	}
 
 	@Override
 	public Void visit(Constant ctt) throws Throwable {
-		addDimValToSymbol(ctt.getName(), ctt.getValue());
-		//TODO: this would handle Constants defined via expressions, as per the docs.
+		//TODO: Decide whether consts can be defined via expressions, in which case
+		//      we just have to uncomment below
 		//buildDependeciesAndContext(this.scope, ctt);
+		//       otherwise, we treat them as value + unit strings:	
+		addDimValToSymbol(ctt.getName(), ctt.getValue());
 		return null;
 	}
 
