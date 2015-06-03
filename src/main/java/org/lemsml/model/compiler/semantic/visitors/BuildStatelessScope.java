@@ -25,24 +25,25 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
+public class BuildStatelessScope extends TraversingVisitor<Void, Throwable> {
+	// applies to Parameters, Constants, DerivedParameters: independent of state
 
 	private Lems lems;
 
-	public ResolveEvaluables(Lems lems) throws Throwable {
-		super(new DepthFirstTraverserImpl<Throwable>(),
-				new BaseVisitor<Void, Throwable>());
+	public BuildStatelessScope(Lems lems) throws Throwable {
+		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
-		ScopingResolver scopeRes = new ScopingResolver(this.lems, this.lems);
+		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(this.lems, this.lems);
 		this.lems.accept(scopeRes);
 		evalInterdependentExprs(this.lems, scopeRes);
 	}
+
 
 	@Override
 	public Void visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
-		ScopingResolver scopeRes = new ScopingResolver(comp, this.lems);
+		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(comp, this.lems);
 		type.accept(scopeRes);
 		evalInterdependentExprs(comp, scopeRes);
 		// TODO: handle spurious attributes ie. those that don't correspond to
@@ -50,8 +51,7 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		return null;
 	}
 
-	private <T> void evalInterdependentExprs(IScope scope,
-			ScopingResolver scopRes) {
+	private void evalInterdependentExprs(IScope scope, BuildStatelessDependenciesContexts scopRes) {
 		Map<String, String> expressions = scopRes.getExpressions();
 		Map<String, Double> context = scopRes.getContext();
 		Map<String, Unit<?>> unitContext = scopRes.getUnitContext();
@@ -59,7 +59,7 @@ public class ResolveEvaluables extends TraversingVisitor<Void, Throwable> {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {
-			Double val = ExpressionParser.evaluateInContext( expressions.get(depName), context);
+			Double val = ExpressionParser.evaluateInContext(expressions.get(depName), context);
 			Unit<?> unit = ExpressionParser.dimensionalAnalysis(expressions.get(depName), unitContext);
 			ISymbol<?> resolved = scope.resolve(depName);
 			PhysicalQuantity quant = new PhysicalQuantity(val,

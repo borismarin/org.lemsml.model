@@ -23,22 +23,6 @@ public class BuildNameToObjectMaps extends
 	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(BuildNameToObjectMaps.class);
 
-	private void logRegistration(String identifier, LemsNode n) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Registering [%s '%s'] ", n.getClass()
-				.getSimpleName(), identifier));
-		sb.append(String.format("defined in " + n.getDefinedIn().getName()));
-		logger.debug(sb.toString());
-	}
-
-	private <K, V extends LemsNode> void warnMapOverwrite(K key, V oldval, V newval) {
-		StringBuilder sb = new StringBuilder();
-		sb.append(String.format("Overwriting symbol '%s'!\n", key));
-		sb.append(String.format("\t -> old: [defined in %s]: %s\n", oldval.getDefinedIn().getName(), oldval));
-		sb.append(String.format("\t -> new: [defined in %s]: %s\n", newval.getDefinedIn().getName(), newval));
-		logger.warn(sb.toString());
-	}
-
 	/**
 	 * @param lems
 	 */
@@ -76,6 +60,22 @@ public class BuildNameToObjectMaps extends
 			warnMapOverwrite(ctt.getName(), old, ctt);
 		};
 		return true;
+	}
+
+	private void logRegistration(String identifier, LemsNode n) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Registering [%s '%s'] ", n.getClass()
+				.getSimpleName(), identifier));
+		sb.append(String.format("defined in " + n.getDefinedIn().getName()));
+		logger.debug(sb.toString());
+	}
+
+	private <K, V extends LemsNode> void warnMapOverwrite(K key, V oldval, V newval) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(String.format("Overwriting symbol '%s'!\n", key));
+		sb.append(String.format("\t -> old: [defined in %s]: %s\n", oldval.getDefinedIn().getName(), oldval));
+		sb.append(String.format("\t -> new: [defined in %s]: %s\n", newval.getDefinedIn().getName(), newval));
+		logger.warn(sb.toString());
 	}
 
 }

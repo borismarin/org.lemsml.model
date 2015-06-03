@@ -2,6 +2,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
+import org.lemsml.model.Lems;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.extended.Component;
@@ -14,9 +15,10 @@ import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
+ * @param <R>
  *
  */
-public class BuildScope extends TraversingVisitor<Boolean, Throwable> {
+public class BuildScope extends BaseVisitor<Boolean, Throwable> {
 
 	private LemsNode context;
 
@@ -24,15 +26,25 @@ public class BuildScope extends TraversingVisitor<Boolean, Throwable> {
 	 * @param lems
 	 */
 	public BuildScope(LemsNode context) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
 		this.context = context;
 	}
 
 	@Override
-	public Boolean visit(Component comp) throws Throwable {
-		ComponentType compType = comp.getComponentType();
-		compType.accept(new BuildScope(comp));
+	public Boolean visit(Lems lems) throws Throwable {
+		for(Component comp : lems.getComponents()){
+			comp.accept(this);
+		}
+		for(Constant ctt : lems.getConstants()){
+			ctt.accept(this);
+		}
+		return true;
+	}
+
+	@Override
+	public Boolean visit(org.lemsml.model.Component comp) throws Throwable {
+		TraversingVisitor<Boolean, Throwable> scopeTraverser = new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserImpl<Throwable>(), new BuildScope(comp));
+		ComponentType compType = ((Component) comp).getComponentType();
+		compType.accept(scopeTraverser);
 		return true;
 	}
 
@@ -53,4 +65,26 @@ public class BuildScope extends TraversingVisitor<Boolean, Throwable> {
 		((IScope) this.context).define(new Symbol<Constant>(constant.getName(), constant));
 		return true;
 	}
+
+//	@Override
+//	public Boolean visit(DerivedVariable derVar) throws Throwable {
+//		((Component) this.context).define(new SymbolicExpression<DerivedVariable>(derVar.getName(), derVar));
+//		return true;
+//	}
+//
+//	@Override
+//	public Boolean visit(StateVariable x) throws Throwable {
+//		((Component) this.context).define(new Symbol<StateVariable>(x.getName(), x));
+//		return true;
+//	}
+
+//	@Override
+//	public Boolean visit(TimeDerivative dx) throws Throwable {
+//		((Component) this.context).define(new Symbol<TimeDerivative>(generateTimeDerivativeName(dx), dx));
+//		return true;
+//	}
+//
+//	public static String generateTimeDerivativeName(TimeDerivative dx) {
+//		return "d" + dx.getVariable() + "_dt";
+//	}
 }

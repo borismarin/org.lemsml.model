@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
+import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.NamedDimensionalType;
 import org.lemsml.model.NamedDimensionalValuedType;
 import org.lemsml.model.Parameter;
@@ -25,7 +26,7 @@ import org.lemsml.visitors.TraversingVisitor;
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 
-public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
+public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, Throwable> {
 
 	private IScope scope;
 	private Lems lems;
@@ -34,8 +35,8 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
 
-	public ScopingResolver(IScope scope, Lems lems) {
-		super(new ComponentScopeResolutionTraverser<Throwable>(),
+	public BuildStatelessDependenciesContexts(IScope scope, Lems lems) {
+		super(new StatelessVariablesTraverser<Throwable>(),
 				new BaseVisitor<Void, Throwable>());
 		this.scope = scope;
 		this.lems = lems;
@@ -80,6 +81,29 @@ public class ScopingResolver extends TraversingVisitor<Void, Throwable> {
 		}
 		return null;
 	}
+
+
+	@Override
+	public Void visit(DerivedVariable derVar) throws LEMSCompilerException {
+		Component comp = (Component) this.scope;
+		buildDependeciesAndContext(comp, derVar);
+//		ISymbol<?> resolved = this.scope.resolve(derVar.getName());
+//		PhysicalQuantity val = new PhysicalQuantity("1m");
+//		val.setUnit(this.lems.getUnitBySymbol("m"));
+//		resolved.setDimensionalValue(val);
+		return null;
+	}
+
+//	@Override
+//	public Void visit(TimeDerivative dx) throws LEMSCompilerException {
+////		Component comp = (Component) this.scope;
+////		buildDependeciesAndContext(comp, derVar);
+//		ISymbol<?> resolved = this.scope.resolve(BuildScope.generateTimeDerivativeName(dx));
+//		PhysicalQuantity val = new PhysicalQuantity("1m");
+//		val.setUnit(this.lems.getUnitBySymbol("m"));
+//		resolved.setDimensionalValue(val);
+//		return null;
+//	}
 
 	private void addDimValToSymbol(String symbolName, String symbolDef)
 			throws LEMSCompilerException {

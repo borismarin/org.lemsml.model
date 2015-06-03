@@ -170,18 +170,14 @@
 	</xs:complexType>
 
 	<xs:complexType name="DerivedVariable">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="exposure" type="xs:string" use="optional" />
-		<xs:attribute name="select" type="xs:string" use="optional" />
-		<!-- only one of these... -->
-		<xs:attribute name="value" type="xs:string" use="optional" />
-		<!-- only one of these... -->
-		<xs:attribute name="reduce" type="xs:string" use="optional" />
-		<!-- only if select present... -->
-		<xs:attribute name="required" type="xs:string" use="optional" />
-		<!-- only if reduce present... -->
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalValuedType">
+				<xs:attribute name="exposure" type="xs:string" use="optional" />
+				<xs:attribute name="select" type="xs:string" use="optional" /> <!-- only one of these... -->
+				<xs:attribute name="reduce" type="xs:string" use="optional" /> <!-- only if select present... -->
+				<xs:attribute name="required" type="xs:string" use="optional" /> <!-- only if reduce present... -->
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="ConditionalDerivedVariable">

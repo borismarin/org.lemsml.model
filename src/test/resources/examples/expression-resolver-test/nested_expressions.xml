@@ -11,10 +11,10 @@
 		<Requirement name="p0" dimension="none" />
 
 		<Dynamics>
-			<StateVariable name="x" exposure="x" />
-			<StateVariable name="y" exposure="y" />
-			<TimeDerivative variable="x" value="const0*dp1/p0/p1*x" />
-			<TimeDerivative variable="y" value="-dv0 * y" />
+			<StateVariable name="x1" exposure="x1" />
+			<StateVariable name="y1" exposure="y1" />
+			<TimeDerivative variable="x1" value="const0*dp1/p0/p1*x" />
+			<TimeDerivative variable="y1" value="-dv0 * y" />
 		</Dynamics>
 
 	</ComponentType>
@@ -28,7 +28,8 @@
 
 		<Exposure name="dv0" dimension="none" />
 		<Dynamics>
-			<DerivedVariable name="dv0" value="1e1*const0" exposure="dv0" />
+			<StateVariable name="x0" exposure="x0" />
+			<DerivedVariable name="dv0" value="1e1*const0*x0" exposure="dv0" />
 		</Dynamics>
 	</ComponentType>
 
