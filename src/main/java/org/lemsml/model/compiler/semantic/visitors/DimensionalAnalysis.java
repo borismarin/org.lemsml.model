@@ -12,6 +12,7 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -39,7 +40,9 @@ public class DimensionalAnalysis extends TraversingVisitor<Void, Throwable> {
 
 	private void checkScope(IScope scope) throws LEMSCompilerException{
 		for(String symb : scope.getDefinedSymbols()){
-			checkUnits(scope.resolve(symb), scope);
+			if(!(scope.resolve(symb) instanceof SymbolicExpression<?>)){
+				checkUnits(scope.resolve(symb), scope);
+			}
 		}
 	}
 

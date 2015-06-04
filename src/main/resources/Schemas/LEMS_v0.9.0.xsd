@@ -279,25 +279,25 @@
 		are currently specific to LEMS, e.g. Build/MultiInstantiate -->
 	<xs:complexType name="ComponentType">
 		<xs:choice maxOccurs="unbounded">
-			<xs:element name="Property" type="Property" />
 			<xs:element name="Parameter" type="Parameter" />
-			<xs:element name="DerivedParameter" type="DerivedParameter" />
-			<xs:element name="IndexParameter" type="IndexParameter" />
+			<xs:element name="Fixed" type="Fixed" />
 			<xs:element name="Constant" type="Constant" />
+			<xs:element name="DerivedParameter" type="DerivedParameter" />
+			<xs:element name="Requirement" type="Requirement" />
+			<xs:element name="Dynamics" type="Dynamics" />
+			<xs:element name="Property" type="Property" />
+			<xs:element name="IndexParameter" type="IndexParameter" />
 			<xs:element name="Child" type="Child" />
 			<xs:element name="Children" type="Children" />
-			<xs:element name="Fixed" type="Fixed" />
 			<xs:element name="Link" type="Link" />
 			<xs:element name="ComponentReference" type="ComponentReference" />
 			<xs:element name="Attachments" type="Attachments" />
 			<xs:element name="EventPort" type="EventPort" />
 			<xs:element name="Exposure" type="Exposure" />
-			<xs:element name="Requirement" type="Requirement" />
 			<xs:element name="ComponentRequirement" type="ComponentRequirement" />
 			<xs:element name="InstanceRequirement" type="InstanceRequirement" />
 			<xs:element name="Path" type="Path" />
 			<xs:element name="Text" type="Text" />
-			<xs:element name="Dynamics" type="Dynamics" />
 			<xs:element name="Structure" type="Structure" />
 			<xs:element name="Simulation" type="Simulation" />
 		</xs:choice>

@@ -2,13 +2,17 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
+import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Lems;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.StateVariable;
+import org.lemsml.model.TimeDerivative;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Symbol;
+import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
@@ -66,25 +70,25 @@ public class BuildScope extends BaseVisitor<Boolean, Throwable> {
 		return true;
 	}
 
-//	@Override
-//	public Boolean visit(DerivedVariable derVar) throws Throwable {
-//		((Component) this.context).define(new SymbolicExpression<DerivedVariable>(derVar.getName(), derVar));
-//		return true;
-//	}
-//
-//	@Override
-//	public Boolean visit(StateVariable x) throws Throwable {
-//		((Component) this.context).define(new Symbol<StateVariable>(x.getName(), x));
-//		return true;
-//	}
+	@Override
+	public Boolean visit(DerivedVariable derVar) throws Throwable {
+		((Component) this.context).define(new SymbolicExpression<DerivedVariable>(derVar.getName(), derVar));
+		return true;
+	}
 
-//	@Override
-//	public Boolean visit(TimeDerivative dx) throws Throwable {
-//		((Component) this.context).define(new Symbol<TimeDerivative>(generateTimeDerivativeName(dx), dx));
-//		return true;
-//	}
-//
-//	public static String generateTimeDerivativeName(TimeDerivative dx) {
-//		return "d" + dx.getVariable() + "_dt";
-//	}
+	@Override
+	public Boolean visit(StateVariable x) throws Throwable {
+		((Component) this.context).define(new SymbolicExpression<StateVariable>(x.getName(), x));
+		return true;
+	}
+
+	@Override
+	public Boolean visit(TimeDerivative dx) throws Throwable {
+		((Component) this.context).define(new SymbolicExpression<TimeDerivative>(generateTimeDerivativeName(dx), dx));
+		return true;
+	}
+
+	public static String generateTimeDerivativeName(TimeDerivative dx) {
+		return "d" + dx.getVariable() + "_dt";
+	}
 }
