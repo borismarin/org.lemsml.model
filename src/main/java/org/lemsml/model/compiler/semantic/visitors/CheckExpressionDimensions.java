@@ -1,5 +1,6 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import static tec.units.ri.AbstractUnit.ONE;
 import static tec.units.ri.util.SI.SECOND;
 
 import java.text.MessageFormat;
@@ -25,6 +26,9 @@ import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 
 import com.google.common.collect.Sets.SetView;
 
@@ -38,6 +42,9 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	private Map<String, String> expressions;
 	private Map<String, Unit<?>> unitContext;
 	private DirectedGraph<String> dependencies;
+
+	private static final Logger logger = (Logger) LoggerFactory
+			.getLogger(ProcessIncludes.class);
 
 	public CheckExpressionDimensions(Lems lems) {
 		this.lems = lems;
@@ -149,7 +156,14 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 					throw new LEMSCompilerException(err, LEMSCompilerError.UndefinedSymbol);
 				}
 				else{
-					Unit<?> unit = ExpressionParser.dimensionalAnalysis(expression, unitContext);
+					Unit<?> unit = ONE;
+					try {
+						unit = ExpressionParser.dimensionalAnalysis(expression, unitContext);
+					} catch (NumberFormatException e) {
+						logger.warn("Cannot perform unit checking for variable exponent. " + e.getLocalizedMessage());
+						logger.warn("Will tacitly assume that the base is adimensinal, which is reasonable given that there be dragons with fractional units.");
+					}
+
 					unitContext.put(depName, unit);
 				}
 			}
