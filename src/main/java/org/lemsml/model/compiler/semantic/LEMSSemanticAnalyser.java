@@ -6,6 +6,7 @@ import org.lemsml.model.compiler.semantic.visitors.BuildScope;
 import org.lemsml.model.compiler.semantic.visitors.BuildStatelessScope;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
+import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
 import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 
@@ -41,6 +42,9 @@ public class LEMSSemanticAnalyser {
 
 		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
 		lems.accept(addTypeToComponent);
+
+		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
+		lems.accept(typeExtender);
 		
 		BuildScope scopeBuilder = new BuildScope(lems);
 		lems.accept(scopeBuilder);
