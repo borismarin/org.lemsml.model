@@ -82,6 +82,22 @@ public class InheritanceTest extends BaseTest {
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 		
 	}
+
+	@Test
+	public void testWrongInheritance() throws Throwable {
+		
+		Lems lems = (Lems) new Lems()
+			.withComponentTypes(
+				(ComponentType)
+				new ComponentType()
+					.withName("Foo")
+					.withExtends("Bar"));
+		exception.expect(LEMSCompilerException.class);
+		exception.expectMessage(LEMSCompilerError.ComponentTypeNotDefined.toString());
+
+		LEMSCompilerFrontend.semanticAnalysis(lems);
+		
+	}
 	
 
 }

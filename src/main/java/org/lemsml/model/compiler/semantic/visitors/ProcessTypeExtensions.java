@@ -1,8 +1,11 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
@@ -35,9 +38,17 @@ public class ProcessTypeExtensions extends
 		String ext = compType.getExtends();
 		if (null != ext) {
 			ComponentType base = lems.getComponentTypeByName(ext);
-			dependencies.addNode(compType);
-			dependencies.addNode(base);
-			dependencies.addEdge(compType, base);
+			if (null == base) {
+				String err = MessageFormat
+						.format("(ComponentType) {0} trying to extend from of unknow (ComponentType) {1}",
+								compType.getName(), ext);
+				throw new LEMSCompilerException(err,
+						LEMSCompilerError.ComponentTypeNotDefined);
+			} else {
+				dependencies.addNode(compType);
+				dependencies.addNode(base);
+				dependencies.addEdge(compType, base);
+			}
 		}
 
 		return true;
