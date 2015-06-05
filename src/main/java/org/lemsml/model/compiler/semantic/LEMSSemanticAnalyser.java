@@ -45,6 +45,7 @@ public class LEMSSemanticAnalyser {
 
 		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
 		lems.accept(typeExtender);
+		typeExtender.visitToposortedTypes();
 		
 		BuildScope scopeBuilder = new BuildScope(lems);
 		lems.accept(scopeBuilder);

@@ -1,19 +1,26 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
+import expr_parser.utils.DirectedGraph;
+import expr_parser.utils.TopologicalSort;
 
 /**
  * @author borismarin
  *
  */
-public class ProcessTypeExtensions extends TraversingVisitor<Boolean, Throwable> {
+public class ProcessTypeExtensions extends
+		TraversingVisitor<Boolean, Throwable> {
 
 	private Lems lems;
+	private DirectedGraph<ComponentType> dependencies = new DirectedGraph<ComponentType>();
 
 	public ProcessTypeExtensions(Lems lems) {
 		super(new DepthFirstTraverserImpl<Throwable>(),
@@ -28,12 +35,25 @@ public class ProcessTypeExtensions extends TraversingVisitor<Boolean, Throwable>
 		String ext = compType.getExtends();
 		if (null != ext) {
 			ComponentType base = lems.getComponentTypeByName(ext);
-			CopyComponentTypeDef typeCopier = new CopyComponentTypeDef(compType);
-			//typeCopier.setTraverseFirst(true);
-			base.accept(typeCopier);
+			dependencies.addNode(compType);
+			dependencies.addNode(base);
+			dependencies.addEdge(compType, base);
 		}
 
 		return true;
+	}
+
+	public void visitToposortedTypes() throws Throwable {
+		List<ComponentType> sorted = TopologicalSort.sort(dependencies);
+		Collections.reverse(sorted);
+		for (ComponentType ct : sorted) {
+			ComponentType base = lems.getComponentTypeByName(ct.getExtends());
+			if (base != null) {
+				CopyComponentTypeDef typeCopier = new CopyComponentTypeDef(ct);
+				typeCopier.setTraverseFirst(true);
+				base.accept(typeCopier);
+			}
+		}
 	}
 
 }
