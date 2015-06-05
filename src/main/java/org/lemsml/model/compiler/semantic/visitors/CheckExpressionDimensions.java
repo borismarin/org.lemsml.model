@@ -84,9 +84,8 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	@Override
 	public Void visit(DerivedVariable derVar) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(derVar.getDimension());
-		//TODO: handle "Selected" dervars
+		//TODO: think about "Selected" dervars
 		if(derVar.getSelect() != null){
-			System.out.println("## TODO: handle 'select' statements unit properly'");
 			unitContext.put(derVar.getName(), dim);
 		}else{
 			buildDependenciesAndContext(derVar.getName(), derVar.getValue(), dim);
