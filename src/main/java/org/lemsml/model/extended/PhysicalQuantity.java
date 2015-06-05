@@ -87,7 +87,8 @@ public class PhysicalQuantity implements IDimensionalEvaluable
 		return "PhysicalQuantity [value=" + value + ", unit=" + unitSymbol + "]";
 	}
 
-	public Double getValueInSI()
+	@Override
+	public Double evaluateSI()
 	{
 		return new Double(NumberQuantity.of(value, unit).toSI().getValue().doubleValue());
 	}

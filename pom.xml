@@ -21,6 +21,11 @@
 			<version>0.12.3</version>
 		</dependency>
 		<dependency>
+			<groupId>org.jvnet.jaxb2_commons</groupId>
+			<artifactId>jaxb2-fluent-api</artifactId>
+			<version>3.0</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.1</version>
@@ -142,6 +147,7 @@
 								<arg>-Xsimplify-usePluralForm=true</arg>
 								<arg>-Xvisitor</arg>
 								<arg>-Xvisitor-package:org.lemsml.visitors</arg>
+								<arg>-Xfluent-api</arg>
 							</args>
 							<bindingDirectory>src/main/resources/Schemas</bindingDirectory>
 							<bindingIncludes>
@@ -158,13 +164,15 @@
 									<artifactId>jaxb-visitor</artifactId>
 									<version>2.2</version>
 								</plugin>
-								<!-- <plugin> <groupId>org.neuroml.model.injectingplugin</groupId> 
-									<artifactId>org.neuroml.model.injectingplugin</artifactId> <version>1.4.0</version> 
-									</plugin> -->
 								<plugin>
 									<groupId>org.jvnet.jaxb2_commons</groupId>
 									<artifactId>jaxb2-basics</artifactId>
 									<version>0.9.3</version>
+								</plugin>
+								<plugin>
+									<groupId>org.jvnet.jaxb2_commons</groupId>
+									<artifactId>jaxb2-fluent-api</artifactId>
+									<version>3.0</version>
 								</plugin>
 							</plugins>
 						</configuration>
