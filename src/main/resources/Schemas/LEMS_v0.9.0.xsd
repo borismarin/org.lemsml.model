@@ -62,21 +62,25 @@
 	</xs:complexType>
 
 	<xs:complexType name="Dimension">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="m" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="l" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="t" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="i" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="k" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="n" type="xs:integer" use="optional"
-			default="0" />
-		<xs:attribute name="j" type="xs:integer" use="optional"
-			default="0" />
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:attribute name="m" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="l" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="t" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="i" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="k" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="n" type="xs:integer" use="optional"
+					default="0" />
+				<xs:attribute name="j" type="xs:integer" use="optional"
+					default="0" />
+			</xs:extension>
+
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Unit">
@@ -109,27 +113,34 @@
 	</xs:complexType>
 
 	<xs:complexType name="ComponentReference">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="local" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedTyped">
+				<xs:attribute name="local" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Child">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="type" type="xs:string" use="required" />
+		<xs:complexContent>
+			<xs:extension base="NamedTyped">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Attachments">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedTyped">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="EventPort">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="direction" type="xs:string" use="required" />
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:attribute name="direction" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
 		<!-- Should be enumeration... -->
-		<xs:attribute name="description" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<xs:complexType name="Fixed">
@@ -139,34 +150,40 @@
 	</xs:complexType>
 
 	<xs:complexType name="Link">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="type" type="xs:string" use="required" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="Named">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Children">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="type" type="xs:string" use="optional" />
-		<xs:attribute name="min" type="xs:integer" use="optional" />
-		<xs:attribute name="max" type="xs:integer" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedTyped">
+				<xs:attribute name="min" type="xs:integer" use="optional" />
+				<xs:attribute name="max" type="xs:integer" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Path">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="Named">
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Text">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="Named"></xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="StateVariable">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="exposure" type="xs:string" use="optional" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalType">
+				<xs:attribute name="exposure" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="DerivedVariable">
@@ -181,14 +198,15 @@
 	</xs:complexType>
 
 	<xs:complexType name="ConditionalDerivedVariable">
-		<xs:sequence>
-			<xs:element name="Case" type="Case" minOccurs="1"
-				maxOccurs="unbounded" />
-		</xs:sequence>
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="exposure" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="NamedDimensionalType">
+				<xs:sequence>
+					<xs:element name="Case" type="Case" minOccurs="1"
+						maxOccurs="unbounded" />
+				</xs:sequence>
+				<xs:attribute name="exposure" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="Case">
@@ -267,50 +285,57 @@
 
 	<xs:complexType name="Component">
 		<xs:sequence minOccurs="0" maxOccurs="unbounded">
-			<xs:element name="Component" type="Component"/>
+			<xs:element name="Component" type="Component" />
 		</xs:sequence>
 		<xs:attribute name="type" type="xs:string" use="required" />
+		<xs:attribute name="name" type="xs:string" use="optional" />
 		<xs:attribute name="id" type="xs:string" use="required" />
 		<xs:anyAttribute processContents="lax" />
-
 	</xs:complexType>
 
-	<!-- ComponentType is used for component definitions containing parts which 
-		are currently specific to LEMS, e.g. Build/MultiInstantiate -->
 	<xs:complexType name="ComponentType">
-		<xs:choice maxOccurs="unbounded">
-			<xs:element name="Parameter" type="Parameter" />
-			<xs:element name="Fixed" type="Fixed" />
-			<xs:element name="Constant" type="Constant" />
-			<xs:element name="DerivedParameter" type="DerivedParameter" />
-			<xs:element name="Requirement" type="Requirement" />
-			<xs:element name="Dynamics" type="Dynamics" />
-			<xs:element name="Property" type="Property" />
-			<xs:element name="IndexParameter" type="IndexParameter" />
-			<xs:element name="Child" type="Child" />
-			<xs:element name="Children" type="Children" />
-			<xs:element name="Link" type="Link" />
-			<xs:element name="ComponentReference" type="ComponentReference" />
-			<xs:element name="Attachments" type="Attachments" />
-			<xs:element name="EventPort" type="EventPort" />
-			<xs:element name="Exposure" type="Exposure" />
-			<xs:element name="ComponentRequirement" type="ComponentRequirement" />
-			<xs:element name="InstanceRequirement" type="InstanceRequirement" />
-			<xs:element name="Path" type="Path" />
-			<xs:element name="Text" type="Text" />
-			<xs:element name="Structure" type="Structure" />
-			<xs:element name="Simulation" type="Simulation" />
-		</xs:choice>
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:choice maxOccurs="unbounded">
+					<xs:element name="Parameter" type="Parameter" />
+					<xs:element name="Fixed" type="Fixed" />
+					<xs:element name="Constant" type="Constant" />
+					<xs:element name="DerivedParameter" type="DerivedParameter" />
+					<xs:element name="Requirement" type="Requirement" />
+					<xs:element name="Dynamics" type="Dynamics" />
+					<xs:element name="Property" type="Property" />
+					<xs:element name="IndexParameter" type="IndexParameter" />
+					<xs:element name="Child" type="Child" />
+					<xs:element name="Children" type="Children" />
+					<xs:element name="Link" type="Link" />
+					<xs:element name="ComponentReference" type="ComponentReference" />
+					<xs:element name="Attachments" type="Attachments" />
+					<xs:element name="EventPort" type="EventPort" />
+					<xs:element name="Exposure" type="Exposure" />
+					<xs:element name="ComponentRequirement" type="ComponentRequirement" />
+					<xs:element name="InstanceRequirement" type="InstanceRequirement" />
+					<xs:element name="Path" type="Path" />
+					<xs:element name="Text" type="Text" />
+					<xs:element name="Structure" type="Structure" />
+					<xs:element name="Simulation" type="Simulation" />
+				</xs:choice>
+				<xs:attribute name="extends" type="xs:string" use="optional" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="Named" abstract="true">
 		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="extends" type="xs:string" use="optional" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+        <xs:attribute name="description" type="xs:string" use="optional" />
 	</xs:complexType>
 
 	<xs:complexType name="NamedDimensionalType" abstract="true">
-		<xs:attribute name="name" type="xs:string" use="required" />
-		<xs:attribute name="dimension" type="xs:string" use="optional"
-			default="none" />
-		<xs:attribute name="description" type="xs:string" use="optional" />
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:attribute name="dimension" type="xs:string" use="optional"
+					default="none" />
+			</xs:extension>
+		</xs:complexContent>
 	</xs:complexType>
 
 	<xs:complexType name="NamedDimensionalValuedType" abstract="true">
@@ -320,6 +345,23 @@
 			</xs:extension>
 		</xs:complexContent>
 	</xs:complexType>
+	
+	<xs:complexType name="NamedValued" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:attribute name="value" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
+	<xs:complexType name="NamedTyped" abstract="true">
+		<xs:complexContent>
+			<xs:extension base="Named">
+				<xs:attribute name="type" type="xs:string" use="required" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	
 
 	<xs:complexType name="Property">
 		<xs:complexContent>
