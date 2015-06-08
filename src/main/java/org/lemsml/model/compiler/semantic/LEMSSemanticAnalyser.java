@@ -1,5 +1,6 @@
 package org.lemsml.model.compiler.semantic;
 
+import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
@@ -46,6 +47,10 @@ public class LEMSSemanticAnalyser {
 		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
 		lems.accept(typeExtender);
 		typeExtender.visitToposortedTypes();
+
+		AddFamilyToComponents adoptionAgent = new AddFamilyToComponents(lems);
+		lems.accept(adoptionAgent);
+
 		
 		BuildScope scopeBuilder = new BuildScope(lems);
 		lems.accept(scopeBuilder);
