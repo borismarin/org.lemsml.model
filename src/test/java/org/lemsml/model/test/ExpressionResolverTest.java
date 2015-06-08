@@ -47,20 +47,17 @@ public class ExpressionResolverTest extends BaseTest {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.UndefinedSymbol.toString());
 
-		// Unfortunately, the fluent API jaxb plugin seems to be broken, so we
-		// have to live with verbosity...
-		Lems fakeLems = new Lems(); 
-		ComponentType compType = new ComponentType();
-		compType.setName("Foo");
-		Component fakeComp = new Component();
-		fakeComp.setType("Foo");
-		fakeLems.getComponents().add(fakeComp);
-
-		DerivedParameter fakeDp = new DerivedParameter();
-		fakeDp.setName("fake");
-		fakeDp.setValue("2 * undefined");
-		compType.getDerivedParameters().add(fakeDp);
-		fakeLems.getComponentTypes().add(compType);
+		Lems fakeLems = (Lems) new Lems()
+				.withComponentTypes(
+						(ComponentType)
+						new ComponentType()
+							.withName("Foo")
+							.withDerivedParameters(
+								new DerivedParameter()
+									.withName("fake")
+									.withValue("2 * undefined")))
+				.withComponents((Component)
+								new Component().withType("Foo"));
 
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
 	}
