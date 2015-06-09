@@ -25,12 +25,12 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class BuildStatelessScope extends TraversingVisitor<Void, Throwable> {
+public class ResolveStatelessVariables extends TraversingVisitor<Void, Throwable> {
 	// applies to Parameters, Constants, DerivedParameters: independent of state
 
 	private Lems lems;
 
-	public BuildStatelessScope(Lems lems) throws Throwable {
+	public ResolveStatelessVariables(Lems lems) throws Throwable {
 		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
 		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(this.lems, this.lems);

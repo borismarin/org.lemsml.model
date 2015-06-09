@@ -4,7 +4,7 @@ import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
-import org.lemsml.model.compiler.semantic.visitors.BuildStatelessScope;
+import org.lemsml.model.compiler.semantic.visitors.ResolveStatelessVariables;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
@@ -58,7 +58,7 @@ public class LEMSSemanticAnalyser {
 		CheckExpressionDimensions dimCalc = new CheckExpressionDimensions(lems);
 		lems.accept(dimCalc);
 
-		BuildStatelessScope evalResolver = new BuildStatelessScope(lems);
+		ResolveStatelessVariables evalResolver = new ResolveStatelessVariables(lems);
 		lems.accept(evalResolver);
 
 		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
