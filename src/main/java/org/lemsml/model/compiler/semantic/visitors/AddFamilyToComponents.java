@@ -39,6 +39,7 @@ public class AddFamilyToComponents extends TraversingVisitor<Boolean, Throwable>
 	}
 
 	//TODO: ambiguity when representing child / children
+	//TODO: inheritance
 	private void processChildrens(Component comp) throws LEMSCompilerException{
 		List<Component> subComps = new ArrayList<Component>();
 		for(Children expected : comp.getComponentType().getChildrens()){
@@ -55,6 +56,7 @@ public class AddFamilyToComponents extends TraversingVisitor<Boolean, Throwable>
 		List<Component> subComps = new ArrayList<Component>();
 		for(Child expected : comp.getComponentType().getChildren()){
 			//TODO: child (only one..., how does it work for multiple?) logic
+			//TODO: is child/children only a syntactic constraint?
 			subComps.addAll(getSubComponentsOfType(comp, expected.getType()));
 			if (subComps.size() == 0) {
 				missingChilds(comp, expected);
