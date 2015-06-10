@@ -8,6 +8,7 @@ import org.lemsml.model.compiler.semantic.visitors.ResolveStatelessVariables;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
+import org.lemsml.model.compiler.semantic.visitors.ResolveSymbolicExpressions;
 import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 
@@ -64,8 +65,8 @@ public class LEMSSemanticAnalyser {
 		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
 		lems.accept(dimensionAnalyzer);
 
-		//BuildEvaluationContext ctxtBuilder = new BuildEvaluationContext(lems);
-		//lems.accept(ctxtBuilder);
+		ResolveSymbolicExpressions symExprResolver = new ResolveSymbolicExpressions(lems);
+		lems.accept(symExprResolver);
 
 		// ERROR CHECKING
 		// TODO

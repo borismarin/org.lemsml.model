@@ -2,6 +2,7 @@ package org.lemsml.model.extended;
 
 import static tec.units.ri.AbstractUnit.ONE;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -66,7 +67,7 @@ public class PhysicalQuantity implements IDimensionalEvaluable
 	}
 
 	@Override
-	public Double evaluate()
+	public Double evaluate(Map<String, Double> context)
 	{
 		return this.value;
 	}

@@ -1,5 +1,7 @@
 package org.lemsml.model.extended;
 
+import java.util.Map;
+
 import javax.measure.Unit;
 
 import org.lemsml.model.compiler.IDimensionalEvaluable;
@@ -18,7 +20,7 @@ public class Symbol<T> implements ISymbol<T> {
 	}
 
 	@Override
-	public Double evaluate() {
+	public Double evaluate(Map<String, Double> context) {
 		return this.value;
 	}
 
@@ -49,7 +51,7 @@ public class Symbol<T> implements ISymbol<T> {
 
 	public void setDimensionalValue(IDimensionalEvaluable quant) {
 		this.dimensionalValue = quant;
-		this.value = quant.evaluate();
+		this.value = quant.evaluate(null);
 	}
 
 	public IDimensionalEvaluable getDimensionalValue() {
