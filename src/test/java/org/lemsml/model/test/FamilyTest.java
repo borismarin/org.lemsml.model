@@ -1,5 +1,6 @@
 package org.lemsml.model.test;
 
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -16,25 +17,34 @@ public class FamilyTest extends BaseTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
-	ComponentType Bar = (ComponentType)
-			new ComponentType().withName("Bar");
-	Component bar0 = (Component)
-			new Component().withType("Bar").withName("bar0");
-	Component bar1 = (Component) 
-			new Component().withType("Bar").withName("bar1");
-	ComponentType Foo = (ComponentType)
-			new ComponentType()
-	.withName("Foo")
-	.withChildren(new Child().withType("Bar"));
+	ComponentType Bar = (ComponentType) new ComponentType()
+			.withName("Bar");
+
+
+	ComponentType Foo = (ComponentType) new ComponentType()
+				.withName("Foo")
+				.withChildren(new Child().withType("Bar"));
+
 	@Test
 	public void testTooManyChilds() throws Throwable {
 
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.TooManyChildren.toString());
 
-		Component foo = (Component) new Component().withType("Foo")
+		Component bar0 = (Component) new Component()
+				.withType("Bar")
+				.withName("bar0");
+
+		Component bar1 = (Component) new Component()
+				.withType("Bar")
+				.withName("bar1");
+
+		Component foo = (Component) new Component()
+				.withType("Foo")
 				.withComponent(bar0, bar1);
-		Lems lems = (Lems) new Lems().withComponentTypes(Bar, Foo)
+
+		Lems lems = (Lems) new Lems()
+				.withComponentTypes(Bar, Foo)
 				.withComponents(foo);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
@@ -50,6 +60,27 @@ public class FamilyTest extends BaseTest {
 				.withComponents((Component) new Component().withType("Foo"));
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
+	}
+
+	@Test
+	public void testFamilty() throws Throwable {
+
+		Component bar0 = (Component) new Component()
+				.withType("Bar")
+				.withName("bar0");
+
+		Component foo0 = (Component) new Component()
+					.withId("foo0")
+					.withType("Foo")
+					.withComponent(bar0);
+
+		Lems lems = (Lems) new Lems()
+				.withComponentTypes(Bar, Foo)
+				.withComponents(foo0);
+
+		LEMSCompilerFrontend.semanticAnalysis(lems);
+		
+		Assert.assertEquals(foo0, bar0.getParent());
 	}
 
 }
