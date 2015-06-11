@@ -9,7 +9,6 @@ import javax.xml.namespace.QName;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
-import org.lemsml.model.NamedDimensionalType;
 import org.lemsml.model.NamedDimensionalValuedType;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.compiler.IScope;
@@ -101,7 +100,7 @@ public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, 
 								dep, defValue, typeDef.getClass().getSimpleName(), defName);
 				throw new LEMSCompilerException(err, LEMSCompilerError.UndefinedSymbol);
 			}
-			buildContext(context, dep, resolved);
+			addToContext(dep, resolved);
 			if (resolved.getType().getClass().equals(typeDef.getClass())) {
 				// we need to build a dependency graph in order to evaluate
 				// things in the proper order
@@ -112,14 +111,15 @@ public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, 
 	}
 
 	// builds context from resolved symbols, according to scoping rules
-	private void buildContext(Map<String, Double> context, String symbol,
-			ISymbol<?> resolved) {
-		// der pars can depend only on parameters
-		NamedDimensionalType depType = (NamedDimensionalType) resolved.getType();
-		if (depType instanceof Parameter) {
-			context.put(symbol, resolved.evaluate(null));
+	private void addToContext(String symbol, ISymbol<?> resolved) {
+		Double resolvedVal = resolved.evaluate(null);
+		if (null != resolvedVal) {
+			context.put(symbol, resolvedVal);
 			unitContext.put(symbol, resolved.getDimensionalValue().getUnit());
+		}else{
+			// TODO: scoping rules...
 		}
+
 	}
 
 	public Map<String, String> getExpressions() {
