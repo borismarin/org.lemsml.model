@@ -81,6 +81,7 @@ public class FamilyTest extends BaseTest {
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 		
 		Assert.assertEquals(foo0, bar0.getParent());
+		Assert.assertEquals(lems, foo0.getParent());
 	}
 
 }

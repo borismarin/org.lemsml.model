@@ -42,11 +42,14 @@ public class ExpressionResolverTest extends BaseTest {
 		Lems compiledLems = compiler.generateLEMSDocument();
 
 		assertEquals("-0.1", compiledLems.getConstantByName("const0").getValue());
-		Double p0 = new Double(2.0);
-		Double dp0 = compiledLems.getComponentById("comp0").resolve("dp0").evaluate(null);
-		Double dp1 = compiledLems.getComponentById("comp0").resolve("dp1").evaluate(null);
+		Component comp0 = compiledLems.getComponentById("comp0");
+		Double p0 = comp0.resolve("p0").evaluate(null);
+		Double dp0 = comp0.resolve("dp0").evaluate(null);
+		Double dp1 = comp0.resolve("dp1").evaluate(null);
+//		Double dp2 = comp0.resolve("dp2").evaluate(null);
 		assertEquals(p0 * p0, dp0, 1e-12);
-		assertEquals(p0 * p0 * dp0, dp1, 1e-12);
+		assertEquals((p0 * p0) / dp0, dp1, 1e-12);
+//		assertEquals(dp0 * dp1, dp2, 1e-12);
 	}
 	
 	@Test

@@ -110,14 +110,15 @@ public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, 
 		}
 	}
 
-	// builds context from resolved symbols, according to scoping rules
+	// builds context from resolved symbols
 	private void addToContext(String symbol, ISymbol<?> resolved) {
 		Double resolvedVal = resolved.evaluate(null);
 		if (null != resolvedVal) {
 			context.put(symbol, resolvedVal);
 			unitContext.put(symbol, resolved.getDimensionalValue().getUnit());
 		}else{
-			// TODO: scoping rules...
+			// TODO: actually, this has nothing to do with scoping, my bad. 
+			//       it has to do with symbol resolution order.
 		}
 
 	}
