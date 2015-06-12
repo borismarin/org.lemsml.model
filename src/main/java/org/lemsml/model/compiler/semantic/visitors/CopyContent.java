@@ -5,7 +5,6 @@ import org.lemsml.model.Target;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 /**
@@ -18,7 +17,7 @@ public class CopyContent extends TraversingVisitor<Boolean, Throwable> {
 	private Lems resolvedLems;
 
 	public CopyContent(org.lemsml.model.extended.Lems lems) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		resolvedLems = lems;
 	}

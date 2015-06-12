@@ -24,7 +24,6 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 			compType.accept(this);
 			CheckExpressionDimensions exprCalc = new CheckExpressionDimensions(this.lems);
 			TraversingVisitor<Void, Throwable> trav = new TraversingVisitor<Void, Throwable>(
-					new DepthFirstTraverserImpl<Throwable>(),
+					new DepthFirstTraverserExt<Throwable>(),
 					exprCalc);
 			compType.accept(trav);
 			exprCalc.evalInterdependentExprs(compType);

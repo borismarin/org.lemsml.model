@@ -14,7 +14,6 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 /**
@@ -26,7 +25,7 @@ public class DimensionalAnalysis extends TraversingVisitor<Void, Throwable> {
 	private Lems lems;
 
 	public DimensionalAnalysis(Lems lems) throws LEMSCompilerException {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
 		checkScope(lems);

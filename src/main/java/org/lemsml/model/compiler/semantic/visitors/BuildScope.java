@@ -14,7 +14,6 @@ import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Symbol;
 import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 /**
@@ -46,7 +45,7 @@ public class BuildScope extends BaseVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(org.lemsml.model.Component comp) throws Throwable {
-		TraversingVisitor<Boolean, Throwable> scopeTraverser = new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserImpl<Throwable>(), new BuildScope(comp));
+		TraversingVisitor<Boolean, Throwable> scopeTraverser = new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserExt<Throwable>(), new BuildScope(comp));
 		ComponentType compType = ((Component) comp).getComponentType();
 		compType.accept(scopeTraverser);
 		return true;

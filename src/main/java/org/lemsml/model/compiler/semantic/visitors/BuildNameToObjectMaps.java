@@ -6,7 +6,6 @@ import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,7 @@ public class BuildNameToObjectMaps extends
 	 * @param lems
 	 */
 	public BuildNameToObjectMaps(Lems lems) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
 	}

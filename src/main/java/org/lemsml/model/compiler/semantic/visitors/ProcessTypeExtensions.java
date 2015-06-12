@@ -9,7 +9,6 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 import expr_parser.utils.DirectedGraph;
@@ -26,7 +25,7 @@ public class ProcessTypeExtensions extends
 	private DirectedGraph<ComponentType> dependencies = new DirectedGraph<ComponentType>();
 
 	public ProcessTypeExtensions(Lems lems) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
 	}

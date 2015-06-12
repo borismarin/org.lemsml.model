@@ -14,7 +14,6 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.PhysicalQuantity;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 
 import expr_parser.utils.DirectedGraph;
@@ -31,7 +30,7 @@ public class ResolveSymbolicExpressions extends TraversingVisitor<Void, Throwabl
 	private Lems lems;
 
 	public ResolveSymbolicExpressions(Lems lems) throws Throwable {
-		super(new DepthFirstTraverserImpl<Throwable>(), new BaseVisitor<Void, Throwable>());
+		super(new DepthFirstTraverserExt<Throwable>(), new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
 		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(this.lems, this.lems);
 		this.lems.accept(scopeRes);

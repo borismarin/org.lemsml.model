@@ -9,7 +9,6 @@ import org.lemsml.model.Include;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
 
 	public ProcessIncludes(Lems lems, File schema, File cwd,
 			Set<HashCode> includedFiles) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		this.inputLems = lems;
 		this.cwd = cwd;

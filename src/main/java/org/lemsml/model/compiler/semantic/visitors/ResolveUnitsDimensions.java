@@ -6,7 +6,6 @@ import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Unit;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.DepthFirstTraverserImpl;
 import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +42,7 @@ public class ResolveUnitsDimensions extends
 	 * @param lems
 	 */
 	public ResolveUnitsDimensions(Lems lems) {
-		super(new DepthFirstTraverserImpl<Throwable>(),
+		super(new DepthFirstTraverserExt<Throwable>(),
 				new BaseVisitor<Boolean, Throwable>());
 		this.lems = lems;
 	}
