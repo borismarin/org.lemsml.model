@@ -96,7 +96,7 @@ public class DepthFirstTraverserExt<E extends Throwable> extends DepthFirstTrave
         throws E
     {
         for (org.lemsml.model.extended.Component bean: aBean.getComponent()) {
-            aVisitor.visit(bean);
+        	bean.accept(aVisitor);
         }
     }
 
@@ -336,19 +336,19 @@ public class DepthFirstTraverserExt<E extends Throwable> extends DepthFirstTrave
             bean.accept(aVisitor);
         }
         for (org.lemsml.model.extended.Dimension bean: aBean.getDimensions()) {
-            aVisitor.visit(bean);
+            bean.accept(aVisitor);
         }
         for (org.lemsml.model.extended.Unit bean: aBean.getUnits()) {
-            aVisitor.visit(bean);
+            bean.accept(aVisitor);
         }
         for (Constant bean: aBean.getConstants()) {
             bean.accept(aVisitor);
         }
         for (org.lemsml.model.extended.ComponentType bean: aBean.getComponentTypes()) {
-            aVisitor.visit(bean);
+            bean.accept(aVisitor);
         }
         for (org.lemsml.model.extended.Component bean: aBean.getComponents()) {
-            aVisitor.visit(bean);
+            bean.accept(aVisitor);
         }
     }
 
@@ -556,32 +556,97 @@ public class DepthFirstTraverserExt<E extends Throwable> extends DepthFirstTrave
     {
     }
 
+    
+   // method body manually created for extended classes (basically c&p from the nonextended) 
+    
     @Override
     public void traverse(org.lemsml.model.extended.Component aBean, Visitor<?, E> aVisitor)
         throws E
     {
-    	traverse((org.lemsml.model.Component) aBean, aVisitor);
+    	for (org.lemsml.model.extended.Component bean: aBean.getComponent()) {
+        	bean.accept(aVisitor);
+        }
     }
 
     @Override
     public void traverse(org.lemsml.model.extended.Dimension aBean, Visitor<?, E> aVisitor)
         throws E
     {
-    	traverse((org.lemsml.model.Dimension) aBean, aVisitor);
     }
 
     @Override
     public void traverse(org.lemsml.model.extended.Unit aBean, Visitor<?, E> aVisitor)
         throws E
     {
-    	traverse((org.lemsml.model.Unit) aBean, aVisitor);
     }
 
     @Override
     public void traverse(org.lemsml.model.extended.ComponentType aBean, Visitor<?, E> aVisitor)
         throws E
     {
-    	traverse((org.lemsml.model.ComponentType) aBean, aVisitor);
+    	for (Parameter bean: aBean.getParameters()) {
+            bean.accept(aVisitor);
+        }
+        for (Fixed bean: aBean.getFixeds()) {
+            bean.accept(aVisitor);
+        }
+        for (Constant bean: aBean.getConstants()) {
+            bean.accept(aVisitor);
+        }
+        for (DerivedParameter bean: aBean.getDerivedParameters()) {
+            bean.accept(aVisitor);
+        }
+        for (Requirement bean: aBean.getRequirements()) {
+            bean.accept(aVisitor);
+        }
+        for (Dynamics bean: aBean.getDynamics()) {
+            bean.accept(aVisitor);
+        }
+        for (Property bean: aBean.getProperties()) {
+            bean.accept(aVisitor);
+        }
+        for (IndexParameter bean: aBean.getIndexParameters()) {
+            bean.accept(aVisitor);
+        }
+        for (Child bean: aBean.getChildren()) {
+            bean.accept(aVisitor);
+        }
+        for (Children bean: aBean.getChildrens()) {
+            bean.accept(aVisitor);
+        }
+        for (Link bean: aBean.getLinks()) {
+            bean.accept(aVisitor);
+        }
+        for (ComponentReference bean: aBean.getComponentReferences()) {
+            bean.accept(aVisitor);
+        }
+        for (Attachments bean: aBean.getAttachments()) {
+            bean.accept(aVisitor);
+        }
+        for (EventPort bean: aBean.getEventPorts()) {
+            bean.accept(aVisitor);
+        }
+        for (Exposure bean: aBean.getExposures()) {
+            bean.accept(aVisitor);
+        }
+        for (ComponentRequirement bean: aBean.getComponentRequirements()) {
+            bean.accept(aVisitor);
+        }
+        for (InstanceRequirement bean: aBean.getInstanceRequirements()) {
+            bean.accept(aVisitor);
+        }
+        for (Path bean: aBean.getPaths()) {
+            bean.accept(aVisitor);
+        }
+        for (Text bean: aBean.getTexts()) {
+            bean.accept(aVisitor);
+        }
+        for (Structure bean: aBean.getStructures()) {
+            bean.accept(aVisitor);
+        }
+        for (Simulation bean: aBean.getSimulations()) {
+            bean.accept(aVisitor);
+        }
     }
 
 }

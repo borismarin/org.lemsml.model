@@ -17,12 +17,11 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 
-public class BuildSymbolicExpressionDependenciesContexts extends TraversingVisitor<Void, Throwable> {
+public class BuildSymbolicExpressionDependenciesContexts extends BaseVisitor<Boolean, Throwable> {
 
 	private IScope scope;
 	private Map<String, String> expressions = new HashMap<String, String>();
@@ -30,9 +29,7 @@ public class BuildSymbolicExpressionDependenciesContexts extends TraversingVisit
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
 
-	public BuildSymbolicExpressionDependenciesContexts(IScope scope) {
-		super(new SymbolicExpressionTraverser<Throwable>(),
-				new BaseVisitor<Void, Throwable>());
+	public BuildSymbolicExpressionDependenciesContexts(IScope scope) throws Throwable {
 		this.scope = scope;
 		// need to process:
 		// - derived variables -> build evaluable expression f({stateVar:value})->Double
@@ -40,14 +37,14 @@ public class BuildSymbolicExpressionDependenciesContexts extends TraversingVisit
 	}
 
 	@Override
-	public Void visit(DerivedVariable derVar) throws LEMSCompilerException {
+	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, derVar, derVar.getName(), derVar.getValue());
 		return null;
 	}
 
 	@Override
-	public Void visit(TimeDerivative dx) throws LEMSCompilerException {
+	public Boolean visit(TimeDerivative dx) throws LEMSCompilerException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, dx, BuildScope.generateTimeDerivativeName(dx), dx.getValue());
 		return null;

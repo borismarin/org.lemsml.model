@@ -71,7 +71,6 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 		return null;
 	}
 
-
 	@Override
 	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
 
@@ -159,7 +158,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 						unit = ExpressionParser.dimensionalAnalysis(expression, unitContext);
 					} catch (NumberFormatException e) {
 						logger.warn("Cannot perform unit checking for variable exponent. " + e.getLocalizedMessage());
-						logger.warn("Will tacitly assume that the base is adimensinal, which is reasonable given that there be dragons with fractional units.");
+						logger.warn("Will tacitly assume that the base is adimensional, which is reasonable given that there be dragons with fractional units.");
 					}
 
 					unitContext.put(depName, unit);

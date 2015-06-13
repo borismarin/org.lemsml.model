@@ -4,6 +4,7 @@ import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
+import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.ResolveStatelessVariables;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
@@ -11,6 +12,8 @@ import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
 import org.lemsml.model.compiler.semantic.visitors.ResolveSymbolicExpressions;
 import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.visitors.TraversingVisitor;
+import org.lemsml.visitors.Visitor;
 
 /**
  * @author borismarin
@@ -36,37 +39,28 @@ public class LEMSSemanticAnalyser {
 
 		// DECORATION
 
-		BuildNameToObjectMaps mapBuilder = new BuildNameToObjectMaps(lems);
-		lems.accept(mapBuilder);
+		depthFirstWith(new BuildNameToObjectMaps(lems));
 
-		ResolveUnitsDimensions unitResolver = new ResolveUnitsDimensions(lems);
-		lems.accept(unitResolver);
+		depthFirstWith(new ResolveUnitsDimensions(lems));
 
-		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
-		lems.accept(addTypeToComponent);
+		depthFirstWith(new AddTypeToComponent(lems));
 
 		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
-		lems.accept(typeExtender);
+		depthFirstWith(typeExtender);
 		typeExtender.visitToposortedTypes();
 
-		AddFamilyToComponents adoptionAgent = new AddFamilyToComponents(lems);
-		lems.accept(adoptionAgent);
+		depthFirstWith(new AddFamilyToComponents(lems));
 
-		
-		BuildScope scopeBuilder = new BuildScope(lems);
-		lems.accept(scopeBuilder);
+		lems.accept(new BuildScope(lems));
 
-		CheckExpressionDimensions dimCalc = new CheckExpressionDimensions(lems);
-		lems.accept(dimCalc);
+		lems.accept(new CheckExpressionDimensions(lems));
 
-		ResolveStatelessVariables evalResolver = new ResolveStatelessVariables(lems);
-		lems.accept(evalResolver);
+		lems.accept(new ResolveStatelessVariables(lems));
 
 		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
 		lems.accept(dimensionAnalyzer);
 
-		ResolveSymbolicExpressions symExprResolver = new ResolveSymbolicExpressions(lems);
-		lems.accept(symExprResolver);
+		depthFirstWith(new ResolveSymbolicExpressions(lems));
 
 		// ERROR CHECKING
 		// TODO
@@ -79,6 +73,13 @@ public class LEMSSemanticAnalyser {
 
 		return lems;
 
+	}
+
+	private void depthFirstWith(Visitor<Boolean, Throwable> visitor) throws Throwable {
+		TraversingVisitor<Boolean, Throwable> mapBuilder = new TraversingVisitor<Boolean, Throwable>(
+				new DepthFirstTraverserExt<Throwable>(),
+				visitor);
+		lems.accept(mapBuilder);
 	}
 
 }

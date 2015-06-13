@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.lemsml.model.Constant;
 import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
+import org.lemsml.visitors.Visitor;
 
 /**
  * @author borismarin
@@ -121,6 +122,10 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	public Set<String> getDefinedSymbols() {
 		return this.scope.keySet();
 	}
-	
+
+	@Override
+	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
+		return aVisitor.visit(this);
+	}
 
 }

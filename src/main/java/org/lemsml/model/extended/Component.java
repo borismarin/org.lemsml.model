@@ -13,6 +13,7 @@ import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.visitors.Visitor;
 
 /**
  * @author borismarin
@@ -73,7 +74,12 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	@Override
 	public ISymbol<?> resolve(String name) {
-		return this.scope.get(name);
+		ISymbol<?> symb = this.scope.get(name);
+		if(null != symb) return symb;
+		if(null != getParent()){
+			return getParent().resolve(name);
+		}
+		return null;
 	}
 
 	public Map<String, ISymbol<?>> getScope() {
@@ -108,6 +114,11 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	public void setChildren(List<Component> c) {
 		this.children = c;
+	}
+
+	@Override
+	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
+		return aVisitor.visit(this);
 	}
 	
 }

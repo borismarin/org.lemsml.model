@@ -22,7 +22,7 @@ import com.google.common.io.Files;
  * @author borismarin
  *
  */
-public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
+public class ProcessIncludes extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems inputLems;
 	private File cwd;
@@ -32,13 +32,15 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
 	private Set<HashCode> includedFiles = new HashSet<HashCode>();
 
 	public ProcessIncludes(Lems lems, File schema, File cwd,
-			Set<HashCode> includedFiles) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
+			Set<HashCode> includedFiles) throws Throwable {
 		this.inputLems = lems;
 		this.cwd = cwd;
 		this.schema = schema;
 		this.includedFiles = includedFiles;
+	}
+
+	public ProcessIncludes(Lems lems, File schema, File cwd) throws Throwable {
+		this(lems, schema, cwd, new HashSet<HashCode>());
 	}
 
 	@Override
@@ -52,21 +54,19 @@ public class ProcessIncludes extends TraversingVisitor<Boolean, Throwable> {
 			includedLems.setDefinedIn(includedFile);
 
 			// decorate elements to be added with source file
-			DecorateWithSourceFile addFile = new DecorateWithSourceFile(
-					includedFile);
-			addFile.setTraverseFirst(true);
+			TraversingVisitor<Boolean, Throwable> addFile = new TraversingVisitor<Boolean, Throwable>(
+					new DepthFirstTraverserExt<Throwable>(),
+					new DecorateWithSourceFile(includedFile));
 			includedLems.accept(addFile);
 
 			// recursively process inputs
-			ProcessIncludes incProcVisitor = new ProcessIncludes(includedLems,
-					schema, cwd, this.includedFiles);
-			incProcVisitor.setTraverseFirst(true);
-			includedLems.accept(incProcVisitor);
+			includedLems.accept(new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserExt<Throwable>(), new ProcessIncludes(includedLems, schema, cwd,
+					this.includedFiles)));
 
 			// will copy the content of the visited LEMS document to inputLems
-			CopyContent extractContentVisitor = new CopyContent(inputLems);
-			extractContentVisitor.setTraverseFirst(true);
-			includedLems.accept(extractContentVisitor);
+			TraversingVisitor<Boolean, Throwable> copyContent = new TraversingVisitor<Boolean, Throwable>(
+					new DepthFirstTraverserExt<Throwable>(), new CopyContent(inputLems));
+			includedLems.accept(copyContent);
 		} else {
 			logger.warn("Skipping double inclusion of file {}",
 					includedFile.getName());

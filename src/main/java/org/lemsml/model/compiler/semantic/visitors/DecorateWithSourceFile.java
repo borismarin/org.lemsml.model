@@ -5,19 +5,16 @@ import java.io.File;
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
  *
  */
-public class DecorateWithSourceFile extends TraversingVisitor<Boolean, Throwable> {
+public class DecorateWithSourceFile extends BaseVisitor<Boolean, Throwable> {
 
 	private File sourceFile;
 
 	public DecorateWithSourceFile(File sourceDoc) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
 		sourceFile = sourceDoc;
 	}
 

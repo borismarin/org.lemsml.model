@@ -6,7 +6,6 @@ import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Unit;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -15,8 +14,7 @@ import ch.qos.logback.classic.Logger;
  * @author borismarin
  *
  */
-public class ResolveUnitsDimensions extends
-		TraversingVisitor<Boolean, Throwable> {
+public class ResolveUnitsDimensions extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private static final Logger logger = (Logger) LoggerFactory
@@ -40,10 +38,9 @@ public class ResolveUnitsDimensions extends
 
 	/**
 	 * @param lems
+	 * @throws Throwable 
 	 */
-	public ResolveUnitsDimensions(Lems lems) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
+	public ResolveUnitsDimensions(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 

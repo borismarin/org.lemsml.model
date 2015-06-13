@@ -19,12 +19,11 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.PhysicalQuantity;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 
-public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, Throwable> {
+public class BuildStatelessDependenciesContexts extends BaseVisitor<Boolean, Throwable> {
 
 	private IScope scope;
 	private Lems lems;
@@ -33,15 +32,13 @@ public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, 
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
 
-	public BuildStatelessDependenciesContexts(IScope scope, Lems lems) {
-		super(new StatelessVariablesTraverser<Throwable>(),
-				new BaseVisitor<Void, Throwable>());
+	public BuildStatelessDependenciesContexts(IScope scope, Lems lems) throws Throwable {
 		this.scope = scope;
 		this.lems = lems;
 	}
 
 	@Override
-	public Void visit(Constant ctt) throws Throwable {
+	public Boolean visit(Constant ctt) throws Throwable {
 		//TODO: Decide whether consts can be defined via expressions, in which case
 		//      we just have to uncomment below
 		//buildDependeciesAndContext(this.scope, ctt);
@@ -51,14 +48,14 @@ public class BuildStatelessDependenciesContexts extends TraversingVisitor<Void, 
 	}
 
 	@Override
-	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
+	public Boolean visit(DerivedParameter typeDef) throws LEMSCompilerException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, typeDef);
 		return null;
 	}
 
 	@Override
-	public Void visit(Parameter parDef) throws LEMSCompilerException {
+	public Boolean visit(Parameter parDef) throws LEMSCompilerException {
 		Component comp = (Component) this.scope;
 		String pName = parDef.getName();
 		QName qualiPName = new QName(pName);

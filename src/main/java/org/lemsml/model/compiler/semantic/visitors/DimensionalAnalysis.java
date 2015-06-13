@@ -14,25 +14,30 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
  *
  */
-public class DimensionalAnalysis extends TraversingVisitor<Void, Throwable> {
+public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
-	public DimensionalAnalysis(Lems lems) throws LEMSCompilerException {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Void, Throwable>());
+	public DimensionalAnalysis(Lems lems) throws Throwable {
 		this.lems = lems;
-		checkScope(lems);
 	}
 	
 	@Override
-	public Void visit(Component comp) throws Throwable {
+	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
+		checkScope(this.lems);
+		for(Component comp : lems.getComponents()){
+			comp.accept(this);
+		}
+		return null;
+	}
+	
+	@Override
+	public Boolean visit(Component comp) throws Throwable {
 		checkScope(comp);
 		return null;
 	}
@@ -63,8 +68,8 @@ public class DimensionalAnalysis extends TraversingVisitor<Void, Throwable> {
 					LEMSCompilerError.UndefinedDimension);
 		}
 		Dimension dimFromType = uomUnitFromType.getDimension();
-		String unitString = resolved.getDimensionalValue().getUnit().toString();
 		if (!dimFromValue.equals(dimFromType)) {
+			String unitString = resolved.getDimensionalValue().getUnit().toString();
 			String err = MessageFormat
 					.format("Unit mismatch for [({0}) {1}] defined in [{2}]:"
 							+ " Expecting  [{3}], but"

@@ -24,33 +24,47 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class ResolveStatelessVariables extends TraversingVisitor<Void, Throwable> {
+public class ResolveStatelessVariables extends BaseVisitor<Boolean, Throwable> {
 	// applies to Parameters, Constants, DerivedParameters: independent of state
 
 	private Lems lems;
 
 	public ResolveStatelessVariables(Lems lems) throws Throwable {
-		super(new DepthFirstTraverserExt<Throwable>(), new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
-		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(this.lems, this.lems);
-		this.lems.accept(scopeRes);
-		evalInterdependentExprs(this.lems, scopeRes);
 	}
 
+	@Override
+	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
+		BuildStatelessDependenciesContexts depCtxt = new BuildStatelessDependenciesContexts(
+				this.lems, this.lems);
+		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
+				new StatelessVariablesTraverser<Throwable>(), depCtxt);
+		lems.accept(scopeRes);
+		for(Component comp : this.lems.getComponents()){
+			comp.accept(this);
+		}
+		evalInterdependentExprs(this.lems, depCtxt);
+
+		return null;
+	}
 
 	@Override
-	public Void visit(Component comp) throws Throwable {
+	public Boolean visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
-		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(comp, this.lems);
+		BuildStatelessDependenciesContexts depCtxt = new BuildStatelessDependenciesContexts(
+				comp, this.lems);
+		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
+				new StatelessVariablesTraverser<Throwable>(), depCtxt);
 		type.accept(scopeRes);
-		evalInterdependentExprs(comp, scopeRes);
+		evalInterdependentExprs(comp, depCtxt);
 		// TODO: handle spurious attributes ie. those that don't correspond to
 		// anything in the ComponentType definition
 		return null;
 	}
 
-	private void evalInterdependentExprs(IScope scope, BuildStatelessDependenciesContexts scopRes) {
+	private void evalInterdependentExprs(IScope scope,
+			BuildStatelessDependenciesContexts scopRes) {
 		Map<String, String> expressions = scopRes.getExpressions();
 		Map<String, Double> context = scopRes.getContext();
 		Map<String, Unit<?>> unitContext = scopRes.getUnitContext();
@@ -58,9 +72,12 @@ public class ResolveStatelessVariables extends TraversingVisitor<Void, Throwable
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {
-			Double val = ExpressionParser.evaluateInContext(expressions.get(depName), context);
-			//TODO: is this duplicated work? (we already check comp defs for correct dims)
-			Unit<?> unit = ExpressionParser.dimensionalAnalysis(expressions.get(depName), unitContext);
+			Double val = ExpressionParser.evaluateInContext(
+					expressions.get(depName), context);
+			// TODO: is this duplicated work? (we already check comp defs for
+			// correct dims)
+			Unit<?> unit = ExpressionParser.dimensionalAnalysis(
+					expressions.get(depName), unitContext);
 			ISymbol<?> resolved = scope.resolve(depName);
 			PhysicalQuantity quant = new PhysicalQuantity(val,
 					((NamedDimensionalType) resolved.getType()).getDimension());

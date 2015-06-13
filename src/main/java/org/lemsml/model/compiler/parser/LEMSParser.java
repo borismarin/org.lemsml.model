@@ -2,13 +2,12 @@ package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.net.URL;
-import java.util.HashSet;
 
 import org.lemsml.model.compiler.semantic.visitors.DecorateWithSourceFile;
+import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.ProcessIncludes;
 import org.lemsml.model.extended.Lems;
-
-import com.google.common.hash.HashCode;
+import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
@@ -58,12 +57,15 @@ public class LEMSParser {
 	private void processIncludes() throws Throwable {
 
 		// decorate elements to be added with source file
-		DecorateWithSourceFile addFile = new DecorateWithSourceFile(sourceDoc);
-		addFile.setTraverseFirst(true);
+		TraversingVisitor<Boolean, Throwable> addFile = new TraversingVisitor<Boolean, Throwable>(
+				new DepthFirstTraverserExt<Throwable>(),
+				new DecorateWithSourceFile(sourceDoc));
 		lems.accept(addFile);
 
-		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd, new HashSet<HashCode>());
-		lems.accept(processIncludes);
+		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd);
+		TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
+				new DepthFirstTraverserExt<Throwable>(), processIncludes);
+		lems.accept(trav);
 		lems = processIncludes.getInputLems();
 	}
 

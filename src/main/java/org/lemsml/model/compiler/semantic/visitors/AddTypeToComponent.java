@@ -6,22 +6,20 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
  *
  */
-public class AddTypeToComponent extends TraversingVisitor<Boolean, Throwable> {
+public class AddTypeToComponent extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
 	/**
 	 * @param lems
+	 * @throws Throwable 
 	 */
-	public AddTypeToComponent(Lems lems) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
+	public AddTypeToComponent(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 

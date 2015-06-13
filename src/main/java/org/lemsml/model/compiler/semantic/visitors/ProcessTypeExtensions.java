@@ -18,15 +18,12 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class ProcessTypeExtensions extends
-		TraversingVisitor<Boolean, Throwable> {
+public class ProcessTypeExtensions extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private DirectedGraph<ComponentType> dependencies = new DirectedGraph<ComponentType>();
 
-	public ProcessTypeExtensions(Lems lems) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
+	public ProcessTypeExtensions(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 
@@ -60,8 +57,9 @@ public class ProcessTypeExtensions extends
 			ComponentType base = lems.getComponentTypeByName(ct.getExtends());
 			if (base != null) {
 				CopyComponentTypeDef typeCopier = new CopyComponentTypeDef(ct);
-				typeCopier.setTraverseFirst(true);
-				base.accept(typeCopier);
+				TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserExt<Throwable>(), typeCopier);
+				trav.setTraverseFirst(true);
+				base.accept(trav);
 			}
 		}
 	}

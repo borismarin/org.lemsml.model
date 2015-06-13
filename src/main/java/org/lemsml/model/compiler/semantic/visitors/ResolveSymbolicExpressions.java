@@ -24,37 +24,49 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class ResolveSymbolicExpressions extends TraversingVisitor<Void, Throwable> {
+public class ResolveSymbolicExpressions extends BaseVisitor<Boolean, Throwable> {
 	// applies to Parameters, Constants, DerivedParameters: independent of state
 
 	private Lems lems;
 
 	public ResolveSymbolicExpressions(Lems lems) throws Throwable {
-		super(new DepthFirstTraverserExt<Throwable>(), new BaseVisitor<Void, Throwable>());
 		this.lems = lems;
-		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(this.lems, this.lems);
-		this.lems.accept(scopeRes);
-		evalInterdependentExprs(this.lems, scopeRes);
+	}
+	
+	@Override
+	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
+		BuildSymbolicExpressionDependenciesContexts depCtxt = new BuildSymbolicExpressionDependenciesContexts(
+				this.lems);
+		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
+				new StatelessVariablesTraverser<Throwable>(), depCtxt);
+		lems.accept(scopeRes);
+		for(Component comp : this.lems.getComponents()){
+			comp.accept(this);
+		}
+		evalInterdependentExprs(this.lems, depCtxt);
+
+		return null;
 	}
 
-
 	@Override
-	public Void visit(Component comp) throws Throwable {
+	public Boolean visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
-		BuildStatelessDependenciesContexts scopeRes = new BuildStatelessDependenciesContexts(comp, this.lems);
+		BuildSymbolicExpressionDependenciesContexts depCtxt = new BuildSymbolicExpressionDependenciesContexts(comp);
+		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
+				new StatelessVariablesTraverser<Throwable>(), depCtxt);
 		type.accept(scopeRes);
-		evalInterdependentExprs(comp, scopeRes);
+		evalInterdependentExprs(comp, depCtxt);
 		// TODO: handle spurious attributes ie. those that don't correspond to
 		// anything in the ComponentType definition
 		return null;
 	}
 
-	private void evalInterdependentExprs(IScope scope, BuildStatelessDependenciesContexts scopRes) {
-		Map<String, String> expressions = scopRes.getExpressions();
-		Map<String, Double> context = scopRes.getContext();
-		Map<String, Unit<?>> unitContext = scopRes.getUnitContext();
-		DirectedGraph<String> dependencies = scopRes.getDependencies();
+	private void evalInterdependentExprs(IScope scope, BuildSymbolicExpressionDependenciesContexts depCtxt) {
+		Map<String, String> expressions = depCtxt.getExpressions();
+		Map<String, Double> context = depCtxt.getContext();
+		Map<String, Unit<?>> unitContext = depCtxt.getUnitContext();
+		DirectedGraph<String> dependencies = depCtxt.getDependencies();
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {

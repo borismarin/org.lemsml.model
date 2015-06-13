@@ -4,6 +4,7 @@
 
 
 	<ComponentType name="DependsOn_dv0_p0">
+ 		<Child name="child1" type="Foo" /> 
 		<Parameter name="p1" dimension="none" />
 		<DerivedParameter name="dp1" dimension="none" value="p0 * p1" />
 
@@ -24,7 +25,7 @@
 	<ComponentType name="Exposes_dv0_p0">
 		<Child name="child0" type="DependsOn_dv0_p0" />
 		<Parameter name="p0" dimension="none" />
-<!-- 		<DerivedParameter name="dp2" dimension="none" value="dp0 * dp1 * const0" /> -->
+		<DerivedParameter name="dp2" dimension="none" value="dp0 * dp1 * const0" />
 		<DerivedParameter name="dp0" dimension="none" value="p0 * p0" />
 		<DerivedParameter name="dp1" dimension="none" value="(p0 * p0) / dp0" />
 		<Requirement name="const0" dimension="none" />
@@ -36,8 +37,14 @@
 		</Dynamics>
 	</ComponentType>
 
+	<ComponentType name="Foo">
+		<Parameter name="p2" dimension="none"/>
+	</ComponentType>
+
 	<Component type="Exposes_dv0_p0" p0="2" id="comp0">
-		<Component type="DependsOn_dv0_p0" p1="10" id="comp1" />
+		<Component type="DependsOn_dv0_p0" p1="10" id="comp1">
+ 			<Component type="Foo" p2="100" id="veryNested" /> 
+		</Component>
 	</Component>
 
 

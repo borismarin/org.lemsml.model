@@ -1,12 +1,10 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
-import org.lemsml.model.Constant;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -14,9 +12,7 @@ import ch.qos.logback.classic.Logger;
 /**
  * @author borismarin
  *
- */
-public class BuildNameToObjectMaps extends
-		TraversingVisitor<Boolean, Throwable> {
+ */ public class BuildNameToObjectMaps extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private static final Logger logger = (Logger) LoggerFactory
@@ -24,10 +20,9 @@ public class BuildNameToObjectMaps extends
 
 	/**
 	 * @param lems
+	 * @throws Throwable 
 	 */
-	public BuildNameToObjectMaps(Lems lems) {
-		super(new DepthFirstTraverserExt<Throwable>(),
-				new BaseVisitor<Boolean, Throwable>());
+	public BuildNameToObjectMaps(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 
@@ -51,15 +46,15 @@ public class BuildNameToObjectMaps extends
 		return true;
 	}
 
-	@Override
-	public Boolean visit(Constant ctt) throws Throwable {
-		logRegistration(ctt.getName(), ctt);
-		Constant old = this.lems.registerConstantName(ctt.getName(), ctt);
-		if(null != old){
-			warnMapOverwrite(ctt.getName(), old, ctt);
-		};
-		return true;
-	}
+//	@Override
+//	public Boolean visit(Constant ctt) throws Throwable {
+//		logRegistration(ctt.getName(), ctt);
+//		Constant old = this.lems.registerConstantName(ctt.getName(), ctt);
+//		if(null != old){
+//			warnMapOverwrite(ctt.getName(), old, ctt);
+//		};
+//		return true;
+//	}
 
 	private void logRegistration(String identifier, LemsNode n) {
 		StringBuilder sb = new StringBuilder();

@@ -6,18 +6,16 @@ import org.lemsml.model.Parameter;
 import org.lemsml.model.Requirement;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 /**
  * @author borismarin
  *
  */
-public class CopyComponentTypeDef extends TraversingVisitor<Boolean, Throwable> {
+public class CopyComponentTypeDef extends BaseVisitor<Boolean, Throwable> {
 
 	private ComponentType targetType;
 
 	public CopyComponentTypeDef(ComponentType compType) {
-		super(new DepthFirstTraverserExt<Throwable>(), new BaseVisitor<Boolean, Throwable>());
 		targetType = compType;
 	}
 

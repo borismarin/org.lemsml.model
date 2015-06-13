@@ -3,6 +3,8 @@ package org.lemsml.model.extended;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import org.lemsml.visitors.Visitor;
+
 /**
  * @author borismarin
  *
@@ -18,6 +20,11 @@ public class Unit extends org.lemsml.model.Unit {
 
 	public void setUnit(javax.measure.Unit<?> unit) {
 		this.unit = unit;
+	}
+	
+	@Override
+	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
+		return aVisitor.visit(this);
 	}
 
 }

@@ -12,7 +12,6 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -22,17 +21,16 @@ import com.google.common.collect.Lists;
  * @author borismarin
  *
  */
-public class AddFamilyToComponents extends TraversingVisitor<Boolean, Throwable> {
+public class AddFamilyToComponents extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
-	public AddFamilyToComponents(Lems lems) {
-		super(new TopLevelComponentVisitor<Throwable>(), new BaseVisitor<Boolean, Throwable>());
+	public AddFamilyToComponents(Lems lems) throws Throwable {
 		this.lems = lems;	
 	}
 
 	@Override
-	public Boolean visit(Component comp) throws LEMSCompilerException, Throwable {
+	public Boolean visit(Component comp) throws LEMSCompilerException {
 		comp.setParent(lems);
 		processChildrens(comp);
 		processChilds(comp);

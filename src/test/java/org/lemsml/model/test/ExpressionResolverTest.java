@@ -1,9 +1,9 @@
 package org.lemsml.model.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Set;
 
 import org.junit.Before;
@@ -12,7 +12,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
-import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
@@ -41,15 +40,16 @@ public class ExpressionResolverTest extends BaseTest {
 				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		assertEquals("-0.1", compiledLems.getConstantByName("const0").getValue());
+		Double const0 = compiledLems.resolve("const0").evaluate(null);
 		Component comp0 = compiledLems.getComponentById("comp0");
 		Double p0 = comp0.resolve("p0").evaluate(null);
 		Double dp0 = comp0.resolve("dp0").evaluate(null);
 		Double dp1 = comp0.resolve("dp1").evaluate(null);
-//		Double dp2 = comp0.resolve("dp2").evaluate(null);
+		Double dp2 = comp0.resolve("dp2").evaluate(null);
+		assertEquals(-0.1, const0, 1e-12);
 		assertEquals(p0 * p0, dp0, 1e-12);
 		assertEquals((p0 * p0) / dp0, dp1, 1e-12);
-//		assertEquals(dp0 * dp1, dp2, 1e-12);
+		assertEquals(dp0 * dp1 * const0, dp2, 1e-12);
 	}
 	
 	@Test
@@ -79,11 +79,10 @@ public class ExpressionResolverTest extends BaseTest {
 
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsDoc, schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
+		Component comp0 = compiledLems.getComponentById("comp0");
 		@SuppressWarnings("unchecked")
 		SymbolicExpression<DerivedVariable> dv0 = (SymbolicExpression<DerivedVariable>)
-				compiledLems
-				.getComponentById("comp0")
-				.resolve("dv0");
+			comp0.resolve("dv0");
 		Set<String> independentVariables = dv0.getIndependentVariables();
 		assertTrue(independentVariables.contains("x0"));
 		assertTrue(independentVariables.contains("const0"));
