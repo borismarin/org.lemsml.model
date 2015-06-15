@@ -346,14 +346,6 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
-	<xs:complexType name="NamedValued" abstract="true">
-		<xs:complexContent>
-			<xs:extension base="Named">
-				<xs:attribute name="value" type="xs:string" use="required" />
-			</xs:extension>
-		</xs:complexContent>
-	</xs:complexType>
-	
 	<xs:complexType name="NamedTyped" abstract="true">
 		<xs:complexContent>
 			<xs:extension base="Named">

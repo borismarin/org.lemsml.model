@@ -5,12 +5,12 @@ import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.StateVariable;
-import org.lemsml.model.TimeDerivative;
-import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
+import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Symbol;
+import org.lemsml.model.extended.TimeDerivative;
 import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.TraversingVisitor;
@@ -63,7 +63,7 @@ public class BuildScope extends BaseVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(DerivedParameter par) throws Throwable {
-		((Component) this.context).define(new Symbol<DerivedParameter>(par
+		((Component) this.context).define(new SymbolicExpression<DerivedParameter>(par
 				.getName(), par));
 		return true;
 	}
@@ -86,19 +86,16 @@ public class BuildScope extends BaseVisitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(StateVariable x) throws Throwable {
 		((Component) this.context)
-				.define(new SymbolicExpression<StateVariable>(x.getName(), x));
+				.define(new Symbol<StateVariable>(x.getName(), x));
 		return true;
 	}
 
 	@Override
 	public Boolean visit(TimeDerivative dx) throws Throwable {
 		((Component) this.context)
-				.define(new SymbolicExpression<TimeDerivative>(
-						generateTimeDerivativeName(dx), dx));
+				.define(new SymbolicExpression<TimeDerivative>(dx.getName(), dx));
 		return true;
 	}
 
-	public static String generateTimeDerivativeName(TimeDerivative dx) {
-		return "d" + dx.getVariable() + "_dt";
-	}
+
 }

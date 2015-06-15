@@ -19,10 +19,10 @@ import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.Requirement;
 import org.lemsml.model.StateVariable;
-import org.lemsml.model.TimeDerivative;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.TimeDerivative;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
@@ -75,7 +75,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
 
 		Unit<?> dim = this.lems.getDimensionByName(typeDef.getDimension());
-		buildDependenciesAndContext(typeDef.getName(), typeDef.getValue(), dim);
+		buildDependenciesAndContext(typeDef.getName(), typeDef.getValueDefinition(), dim);
 		return null;
 	}
 
@@ -86,7 +86,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 		if(derVar.getSelect() != null){
 			unitContext.put(derVar.getName(), dim);
 		}else{
-			buildDependenciesAndContext(derVar.getName(), derVar.getValue(), dim);
+			buildDependenciesAndContext(derVar.getName(), derVar.getValueDefinition(), dim);
 		}
 		return null;
 	}
@@ -122,7 +122,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 
 	@Override
 	public Void visit(TimeDerivative dx) throws LEMSCompilerException {
-		buildDependenciesAndContext(generateTimeDerivativeName(dx), dx.getValue(), unitContext.get(dx.getVariable()).divide(SECOND));
+		buildDependenciesAndContext(dx.getName(), dx.getValueDefinition(), unitContext.get(dx.getVariable()).divide(SECOND));
 		return null;
 	}
 

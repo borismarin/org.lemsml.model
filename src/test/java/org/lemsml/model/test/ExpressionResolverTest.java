@@ -40,12 +40,12 @@ public class ExpressionResolverTest extends BaseTest {
 				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		Double const0 = compiledLems.resolve("const0").evaluate(null);
+		Double const0 = compiledLems.resolve("const0").evaluate();
 		Component comp0 = compiledLems.getComponentById("comp0");
-		Double p0 = comp0.resolve("p0").evaluate(null);
-		Double dp0 = comp0.resolve("dp0").evaluate(null);
-		Double dp1 = comp0.resolve("dp1").evaluate(null);
-		Double dp2 = comp0.resolve("dp2").evaluate(null);
+		Double p0 = comp0.resolve("p0").evaluate();
+		Double dp0 = comp0.resolve("dp0").evaluate();
+		Double dp1 = comp0.resolve("dp1").evaluate();
+		Double dp2 = comp0.resolve("dp2").evaluate();
 		assertEquals(-0.1, const0, 1e-12);
 		assertEquals(p0 * p0, dp0, 1e-12);
 		assertEquals((p0 * p0) / dp0, dp1, 1e-12);
@@ -65,7 +65,7 @@ public class ExpressionResolverTest extends BaseTest {
 							.withDerivedParameters(
 								new DerivedParameter()
 									.withName("fake")
-									.withValue("2 * undefined")))
+									.withValueDefinition("2 * undefined")))
 				.withComponents((Component)
 								new Component().withType("Foo"));
 
@@ -85,10 +85,8 @@ public class ExpressionResolverTest extends BaseTest {
 			comp0.resolve("dv0");
 		Set<String> independentVariables = dv0.getIndependentVariables();
 		assertTrue(independentVariables.contains("x0"));
-		assertTrue(independentVariables.contains("const0"));
 		Double x = dv0.evaluate(new ImmutableMap.Builder<String, Double>()
 								.put("x0", 0.)
-								.put("const0", 0.)
 								.build());
 		assertEquals(x, 0, 1e-10);
 

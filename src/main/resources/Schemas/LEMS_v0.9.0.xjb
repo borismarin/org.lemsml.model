@@ -58,6 +58,26 @@
          <jxb:class ref="org.lemsml.model.extended.Unit"/>
       </jxb:bindings>
 
+      <jxb:bindings node=".//xs:complexType[@name='TimeDerivative']">
+         <jxb:class implClass="org.lemsml.model.extended.TimeDerivative"/>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:element[@type='TimeDerivative']">
+         <jxb:class ref="org.lemsml.model.extended.TimeDerivative"/>
+      </jxb:bindings>
+
+       <jxb:bindings node=".//xs:complexType[@name='Named']">
+         <inheritance:implements>org.lemsml.model.extended.INamed</inheritance:implements>
+      </jxb:bindings>
+
+       <jxb:bindings node=".//xs:complexType[@name='NamedDimensionalValuedType']">
+         <inheritance:implements>org.lemsml.model.extended.IValueDefinition</inheritance:implements>
+      </jxb:bindings>
+      
+      <jxb:bindings multiple="true" node=".//xs:attribute[@name='value']">
+      	<jxb:property name="valueDefinition"/>
+      </jxb:bindings>
+
 
    </jxb:bindings>
    

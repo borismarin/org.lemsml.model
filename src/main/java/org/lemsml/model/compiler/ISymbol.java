@@ -1,9 +1,10 @@
 package org.lemsml.model.compiler;
 
-public interface ISymbol<T> extends INamedDimensionalEvaluable {
+import org.lemsml.model.extended.INamedDimensionalEvaluable;
+import org.lemsml.model.extended.ITyped;
+import org.lemsml.model.extended.IValueDefinition;
 
-	public T getType();
-
-	public void setType(T type);
-
+public interface ISymbol<T> extends INamedDimensionalEvaluable, ITyped<T>, IValueDefinition {
+	public Double getValue();
+	public void setValue(Double val);
 }

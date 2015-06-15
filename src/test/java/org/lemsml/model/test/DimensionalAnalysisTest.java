@@ -85,7 +85,7 @@ public class DimensionalAnalysisTest extends BaseTest {
 
 		DerivedParameter derPar = new DerivedParameter();
 		derPar.setName("twoP");
-		derPar.setValue("2*p");
+		derPar.setValueDefinition("2*p");
 		derPar.setDimension("time"); //ooops!
 		type.getDerivedParameters().add(derPar);
 		

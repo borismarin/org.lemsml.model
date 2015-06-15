@@ -50,7 +50,6 @@ public class InheritanceTest extends BaseTest {
 		assertEquals(1, lems
 					.getComponentById("comp0")
 					.getParameterByName("p0")
-					.getDimensionalValue()
 					.evaluateSI(), 1e-12);
 	}
 

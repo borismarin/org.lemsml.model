@@ -10,6 +10,11 @@ import org.lemsml.model.ObjectFactory;
  */
 @XmlRegistry
 public class ExtObjectFactory extends ObjectFactory {
+	
+	@Override
+	public TimeDerivative createTimeDerivative() {
+		return new TimeDerivative();
+	}
 
 	@Override
 	public Component createComponent() {

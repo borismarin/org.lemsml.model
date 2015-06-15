@@ -4,12 +4,11 @@ import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
-import org.lemsml.model.compiler.semantic.visitors.ResolveStatelessVariables;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
+import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
-import org.lemsml.model.compiler.semantic.visitors.ResolveSymbolicExpressions;
+import org.lemsml.model.compiler.semantic.visitors.ResolveSymbols;
 import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
@@ -55,12 +54,12 @@ public class LEMSSemanticAnalyser {
 
 		lems.accept(new CheckExpressionDimensions(lems));
 
-		lems.accept(new ResolveStatelessVariables(lems));
+		lems.accept(new ResolveSymbols(lems));
 
 		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
 		lems.accept(dimensionAnalyzer);
 
-		depthFirstWith(new ResolveSymbolicExpressions(lems));
+//		depthFirstWith(new ResolveSymbolicExpressions(lems));
 
 		// ERROR CHECKING
 		// TODO

@@ -1,8 +1,9 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
+
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.lemsml.model.compiler.INamed;
 import org.lemsml.visitors.Visitor;
 
 /**
@@ -10,7 +11,7 @@ import org.lemsml.visitors.Visitor;
  *
  */
 @XmlTransient
-public class ComponentType extends org.lemsml.model.ComponentType implements INamed {
+public class ComponentType extends org.lemsml.model.ComponentType {
 	
 	ComponentType parent;
 
@@ -25,5 +26,9 @@ public class ComponentType extends org.lemsml.model.ComponentType implements INa
 	@Override
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
+	}
+	
+	public String toString(){
+		return MessageFormat.format("[{0}]", this.getName());
 	}
 }

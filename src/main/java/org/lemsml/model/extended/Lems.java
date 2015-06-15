@@ -10,7 +10,6 @@ import javax.measure.Unit;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
-import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.visitors.Visitor;
 

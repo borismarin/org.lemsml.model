@@ -7,38 +7,38 @@ import java.util.Map;
 import javax.measure.Unit;
 
 import org.lemsml.model.ComponentType;
-import org.lemsml.model.NamedDimensionalType;
-import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.extended.Component;
+import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.PhysicalQuantity;
+import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.TraversingVisitor;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.TopologicalSort;
+import expr_parser.utils.UndefinedParameterException;
 
 /**
  * @author borismarin
  *
  */
-public class ResolveStatelessVariables extends BaseVisitor<Boolean, Throwable> {
+public class ResolveSymbols extends BaseVisitor<Boolean, Throwable> {
 	// applies to Parameters, Constants, DerivedParameters: independent of state
 
 	private Lems lems;
 
-	public ResolveStatelessVariables(Lems lems) throws Throwable {
+	public ResolveSymbols(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
-		BuildStatelessDependenciesContexts depCtxt = new BuildStatelessDependenciesContexts(
+		BuildSymbolDependenciesContexts depCtxt = new BuildSymbolDependenciesContexts(
 				this.lems, this.lems);
 		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
-				new StatelessVariablesTraverser<Throwable>(), depCtxt);
+				new SymbolPrecedenceTraverser<Throwable>(), depCtxt);
 		lems.accept(scopeRes);
 		for(Component comp : this.lems.getComponents()){
 			comp.accept(this);
@@ -52,10 +52,10 @@ public class ResolveStatelessVariables extends BaseVisitor<Boolean, Throwable> {
 	public Boolean visit(Component comp) throws Throwable {
 
 		ComponentType type = lems.getComponentTypeByName(comp.getType());
-		BuildStatelessDependenciesContexts depCtxt = new BuildStatelessDependenciesContexts(
+		BuildSymbolDependenciesContexts depCtxt = new BuildSymbolDependenciesContexts(
 				comp, this.lems);
 		TraversingVisitor<Boolean, Throwable> scopeRes = new TraversingVisitor<Boolean, Throwable>(
-				new StatelessVariablesTraverser<Throwable>(), depCtxt);
+				new SymbolPrecedenceTraverser<Throwable>(), depCtxt);
 		type.accept(scopeRes);
 		evalInterdependentExprs(comp, depCtxt);
 		// TODO: handle spurious attributes ie. those that don't correspond to
@@ -64,27 +64,35 @@ public class ResolveStatelessVariables extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	private void evalInterdependentExprs(IScope scope,
-			BuildStatelessDependenciesContexts scopRes) {
+			BuildSymbolDependenciesContexts scopRes)
+			throws UndefinedParameterException {
+
 		Map<String, String> expressions = scopRes.getExpressions();
 		Map<String, Double> context = scopRes.getContext();
 		Map<String, Unit<?>> unitContext = scopRes.getUnitContext();
+
 		DirectedGraph<String> dependencies = scopRes.getDependencies();
-		List<String> sorted = TopologicalSort.sort(dependencies);
-		Collections.reverse(sorted);
-		for (String depName : sorted) {
-			Double val = ExpressionParser.evaluateInContext(
-					expressions.get(depName), context);
-			// TODO: is this duplicated work? (we already check comp defs for
-			// correct dims)
-			Unit<?> unit = ExpressionParser.dimensionalAnalysis(
-					expressions.get(depName), unitContext);
+		List<String> sortedDeps = TopologicalSort.sort(dependencies);
+		Collections.reverse(sortedDeps);
+
+		for (String depName : sortedDeps) {
 			ISymbol<?> resolved = scope.resolve(depName);
-			PhysicalQuantity quant = new PhysicalQuantity(val,
-					((NamedDimensionalType) resolved.getType()).getDimension());
-			quant.setUnit(unit);
-			resolved.setDimensionalValue(quant);
-			context.put(depName, val);
-			unitContext.put(depName, quant.getUnit());
+			Double val = null;
+			Unit<?> unit = null;
+			try {
+				val = ExpressionParser.evaluateInContext(expressions.get(depName), context);
+				// TODO: is this duplicated work? (we already check comp defs
+				// for correct dims)
+				unit = ExpressionParser.dimensionalAnalysis(expressions.get(depName), unitContext);
+				resolved.setValue(val);
+				resolved.setUnit(unit);
+				context.put(depName, val);
+				unitContext.put(depName, unit);
+			} catch (UndefinedParameterException e) {
+				// OK, those are symbolic expressions
+				((SymbolicExpression<?>) resolved).getContext().putAll(context);
+				((SymbolicExpression<?>) resolved).getUnitContext().putAll(unitContext);
+			}
 		}
 	}
 }

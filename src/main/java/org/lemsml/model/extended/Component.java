@@ -1,5 +1,6 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,8 +9,6 @@ import java.util.Set;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Parameter;
-import org.lemsml.model.compiler.INamed;
-import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
@@ -119,6 +118,10 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	@Override
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
+	}
+	
+	public String toString(){
+		return MessageFormat.format("[{0}] {1}", this.getType(), this.getId());
 	}
 	
 }

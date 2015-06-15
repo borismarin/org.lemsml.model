@@ -56,7 +56,7 @@ import org.lemsml.model.With;
 import org.lemsml.visitors.Traverser;
 import org.lemsml.visitors.Visitor;
 
-public class StatelessVariablesTraverser<E extends Throwable> implements Traverser<E> {
+public class SymbolPrecedenceTraverser<E extends Throwable> implements Traverser<E> {
 
 	@Override
 	public void traverse(Lems aBean, Visitor<?, E> aVisitor) throws E {
@@ -198,6 +198,37 @@ public class StatelessVariablesTraverser<E extends Throwable> implements Travers
 
 	@Override
 	public void traverse(Dynamics aBean, Visitor<?, E> aVisitor) throws E {
+		{
+			for (StateVariable bean : aBean.getStateVariables()) {
+				bean.accept(aVisitor);
+			}
+			for (DerivedVariable bean : aBean.getDerivedVariables()) {
+				bean.accept(aVisitor);
+			}
+			for (ConditionalDerivedVariable bean : aBean
+					.getConditionalDerivedVariables()) {
+				bean.accept(aVisitor);
+			}
+			for (TimeDerivative bean : aBean.getTimeDerivatives()) {
+				bean.accept(aVisitor);
+			}
+			for (OnStart bean : aBean.getOnStarts()) {
+				bean.accept(aVisitor);
+			}
+			for (OnEvent bean : aBean.getOnEvents()) {
+				bean.accept(aVisitor);
+			}
+			for (OnCondition bean : aBean.getOnConditions()) {
+				bean.accept(aVisitor);
+			}
+			for (Regime bean : aBean.getRegimes()) {
+				bean.accept(aVisitor);
+			}
+			for (KineticScheme bean : aBean.getKineticSchemes()) {
+				bean.accept(aVisitor);
+			}
+		}
+
 	}
 
 
@@ -378,6 +409,11 @@ public class StatelessVariablesTraverser<E extends Throwable> implements Travers
 
 	@Override
 	public void traverse(With aBean, Visitor<?, E> aVisitor) throws E {
+	}
+
+	@Override
+	public void traverse(org.lemsml.model.extended.TimeDerivative aBean,
+			Visitor<?, E> aVisitor) throws E {
 	}
 
 

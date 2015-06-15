@@ -1,18 +1,18 @@
 package org.lemsml.model.extended;
 
-import java.util.Map;
-
 import javax.measure.Unit;
 
-import org.lemsml.model.compiler.IDimensionalEvaluable;
 import org.lemsml.model.compiler.ISymbol;
+
+import tec.units.ri.quantity.NumberQuantity;
+import expr_parser.utils.UndefinedParameterException;
 
 public class Symbol<T> implements ISymbol<T> {
 
 	private Double value;
 	private String name;
 	private T type;
-	private IDimensionalEvaluable dimensionalValue;
+	private Unit<?> unit;
 
 	public Symbol(String name, T instance) {
 		this.name = name;
@@ -20,7 +20,7 @@ public class Symbol<T> implements ISymbol<T> {
 	}
 
 	@Override
-	public Double evaluate(Map<String, Double> context) {
+	public Double evaluate() throws UndefinedParameterException {
 		return this.value;
 	}
 
@@ -35,7 +35,7 @@ public class Symbol<T> implements ISymbol<T> {
 
 	@Override
 	public Unit<?> getUnit() {
-		return this.dimensionalValue.getUnit();
+		return this.unit;
 	}
 
 	@Override
@@ -45,17 +45,32 @@ public class Symbol<T> implements ISymbol<T> {
 
 	@Override
 	public void setType(T type) {
-		// TODO Auto-generated method stub
-
+		this.type = type;
 	}
 
-	public void setDimensionalValue(IDimensionalEvaluable quant) {
-		this.dimensionalValue = quant;
-		this.value = quant.evaluate(null);
+
+	@Override
+	public Double evaluateSI() {
+		return new Double(NumberQuantity.of(value, getUnit()).toSI().getValue().doubleValue());
 	}
 
-	public IDimensionalEvaluable getDimensionalValue() {
-		return this.dimensionalValue;
+	public void setUnit(Unit <?> unit) {
+		this.unit = unit;
+	}
+
+	public Double getValue() {
+		return this.value;
+	}
+
+	@Override
+	public void setValue(Double val) {
+		this.value = val;
+		
+	}
+
+	@Override
+	public String getValueDefinition() {
+		return ((IValueDefinition) this.getType()).getValueDefinition();
 	}
 
 }

@@ -6,14 +6,15 @@ import javax.measure.Dimension;
 import javax.measure.Unit;
 
 import org.lemsml.model.NamedDimensionalType;
-import org.lemsml.model.compiler.IScope;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
+import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.model.extended.SymbolicExpression;
 import org.lemsml.visitors.BaseVisitor;
+
+import expr_parser.utils.UndefinedParameterException;
 
 /**
  * @author borismarin
@@ -44,8 +45,14 @@ public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
 
 	private void checkScope(IScope scope) throws LEMSCompilerException{
 		for(String symb : scope.getDefinedSymbols()){
-			if(!(scope.resolve(symb) instanceof SymbolicExpression<?>)){
-				checkUnits(scope.resolve(symb), scope);
+			try{
+				ISymbol<?> resolved = scope.resolve(symb);
+				if(null != resolved.evaluate()){//UGLY: guard for StateVariable
+					checkUnits(resolved, scope);
+				}
+			}
+			catch(UndefinedParameterException e){
+				//OK, since symbolic expressions can't be analysed until fully specified
 			}
 		}
 	}
@@ -69,7 +76,7 @@ public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
 		}
 		Dimension dimFromType = uomUnitFromType.getDimension();
 		if (!dimFromValue.equals(dimFromType)) {
-			String unitString = resolved.getDimensionalValue().getUnit().toString();
+			String unitString = resolved.getUnit().toString();
 			String err = MessageFormat
 					.format("Unit mismatch for [({0}) {1}] defined in [{2}]:"
 							+ " Expecting  [{3}], but"

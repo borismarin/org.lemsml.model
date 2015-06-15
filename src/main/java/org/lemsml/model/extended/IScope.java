@@ -1,7 +1,8 @@
-package org.lemsml.model.compiler;
+package org.lemsml.model.extended;
 
 import java.util.Set;
 
+import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.visitors.Visitable;
 
 
