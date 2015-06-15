@@ -20,7 +20,7 @@ public class JaxbXMLReader {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T unmarshall(File document, File schema, Object objFactory) {
+	static <T> T unmarshall(File document, File schema, Object objFactory) {
 
 		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(objFactory);
@@ -42,7 +42,7 @@ public class JaxbXMLReader {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T unmarshall(URL document, File schema, Object objFactory) {
+	static <T> T unmarshall(URL document, File schema, Object objFactory) {
 
 		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(objFactory);

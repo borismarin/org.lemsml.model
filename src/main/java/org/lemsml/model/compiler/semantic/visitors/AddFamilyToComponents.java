@@ -81,7 +81,7 @@ public class AddFamilyToComponents extends BaseVisitor<Boolean, Throwable> {
 		
 	}
 
-	public void missingChilds(Component comp, NamedTyped expected)
+	private void missingChilds(Component comp, NamedTyped expected)
 			throws LEMSCompilerException {
 		String err = MessageFormat
 				.format("Component {0} of type [{1}] expects {2} of type {3}",
@@ -92,7 +92,7 @@ public class AddFamilyToComponents extends BaseVisitor<Boolean, Throwable> {
 		throw new LEMSCompilerException(err, LEMSCompilerError.MissingChildren);
 	}
 
-	public List<Component> getSubComponentsOfType(Component comp, String type) {
+	private List<Component> getSubComponentsOfType(Component comp, String type) {
 		return Lists.newArrayList(Iterables.filter(comp.getComponent(), hasType(type)));
 	}
 

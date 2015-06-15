@@ -13,8 +13,8 @@ import org.lemsml.model.extended.Lems;
  */
 public class LEMSCompilerFrontend {
 
-	File lemsFile;
-	File cwd;
+	private File lemsFile;
+	private File cwd;
 	File schema;
 
 	/**

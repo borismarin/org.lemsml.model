@@ -30,7 +30,7 @@ import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.UndefinedParameterException;
 
-public class BuildSymbolDependenciesContexts extends
+class BuildSymbolDependenciesContexts extends
 		BaseVisitor<Boolean, Throwable> {
 
 	private IScope scope;
@@ -40,7 +40,7 @@ public class BuildSymbolDependenciesContexts extends
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
 
-	public BuildSymbolDependenciesContexts(IScope scope, Lems lems)
+	BuildSymbolDependenciesContexts(IScope scope, Lems lems)
 			throws Throwable {
 		this.scope = scope;
 		this.lems = lems;

@@ -137,7 +137,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 		}
 	}
 	
-	public void evalInterdependentExprs(ComponentType compType) throws LEMSCompilerException {
+	private void evalInterdependentExprs(ComponentType compType) throws LEMSCompilerException {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {
@@ -166,10 +166,5 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 			}
 		}
 	}	
-	
-	public static String generateTimeDerivativeName(TimeDerivative dx) {
-		return "d" + dx.getVariable() + "_dt";
-	}
-	
 
 }

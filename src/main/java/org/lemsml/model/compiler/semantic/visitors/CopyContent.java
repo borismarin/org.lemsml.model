@@ -11,11 +11,11 @@ import org.lemsml.visitors.BaseVisitor;
  * @author borismarin
  *
  */
-public class CopyContent extends BaseVisitor<Boolean, Throwable> {
+class CopyContent extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems resolvedLems;
 
-	public CopyContent(org.lemsml.model.extended.Lems lems) throws Throwable {
+	CopyContent(org.lemsml.model.extended.Lems lems) throws Throwable {
 		resolvedLems = lems;
 	}
 

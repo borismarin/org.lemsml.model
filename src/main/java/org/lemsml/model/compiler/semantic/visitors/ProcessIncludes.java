@@ -75,7 +75,7 @@ public class ProcessIncludes extends BaseVisitor<Boolean, Throwable> {
 		return true;
 	}
 
-	public Boolean registerIncludedFile(File incFile) throws IOException {
+	private Boolean registerIncludedFile(File incFile) throws IOException {
 		HashCode hc = Files.hash(incFile, Hashing.md5());
 		return this.includedFiles.add(hc);
 	}

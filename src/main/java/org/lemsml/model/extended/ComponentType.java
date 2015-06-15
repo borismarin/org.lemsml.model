@@ -13,7 +13,7 @@ import org.lemsml.visitors.Visitor;
 @XmlTransient
 public class ComponentType extends org.lemsml.model.ComponentType {
 	
-	ComponentType parent;
+	private ComponentType parent;
 
 	public ComponentType getParent() {
 		return parent;

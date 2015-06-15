@@ -11,11 +11,11 @@ import org.lemsml.visitors.BaseVisitor;
  * @author borismarin
  *
  */
-public class CopyComponentTypeDef extends BaseVisitor<Boolean, Throwable> {
+class CopyComponentTypeDef extends BaseVisitor<Boolean, Throwable> {
 
 	private ComponentType targetType;
 
-	public CopyComponentTypeDef(ComponentType compType) {
+	CopyComponentTypeDef(ComponentType compType) {
 		targetType = compType;
 	}
 

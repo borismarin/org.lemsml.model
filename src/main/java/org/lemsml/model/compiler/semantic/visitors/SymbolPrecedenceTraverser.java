@@ -56,7 +56,7 @@ import org.lemsml.model.With;
 import org.lemsml.visitors.Traverser;
 import org.lemsml.visitors.Visitor;
 
-public class SymbolPrecedenceTraverser<E extends Throwable> implements Traverser<E> {
+class SymbolPrecedenceTraverser<E extends Throwable> implements Traverser<E> {
 
 	@Override
 	public void traverse(Lems aBean, Visitor<?, E> aVisitor) throws E {

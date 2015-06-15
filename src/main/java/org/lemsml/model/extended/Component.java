@@ -21,10 +21,10 @@ import org.lemsml.visitors.Visitor;
 @XmlTransient
 public class Component extends org.lemsml.model.Component implements IScope, INamed{
 	@XmlTransient
-	ComponentType _ComponentType;
+	private ComponentType _ComponentType;
 
 	@XmlTransient
-	public Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
+	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
 	
 	@XmlTransient
 	private IScope parent;

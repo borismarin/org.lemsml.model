@@ -86,7 +86,7 @@ public class XMLUtils {
 	 * @param schema
 	 * @return
 	 */
-	public static Schema parseSchema(File schema) {
+	private static Schema parseSchema(File schema) {
 		Schema parsedSchema = null;
 		SchemaFactory sf = SchemaFactory
 				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
