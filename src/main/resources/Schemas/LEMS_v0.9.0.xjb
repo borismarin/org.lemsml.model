@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jxb:bindings 
+<jxb:bindings
     version="2.0"
     xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
     xmlns:simplify="http://jaxb2-commons.dev.java.net/basic/simplify"
@@ -9,23 +9,23 @@
     extensionBindingPrefixes="simplify inheritance">
 
    <jxb:bindings schemaLocation="LEMS_v0.9.0.xsd" node="/xs:schema">
-   
+
    	  <jxb:globalBindings>
         <xjc:superClass name="org.lemsml.model.extended.LemsNode"/>
       </jxb:globalBindings>
-     
+
       <jxb:schemaBindings>
          <jxb:package name="org.lemsml.model" />
       </jxb:schemaBindings>
-      
+
       <jxb:bindings node="//xs:element[@name='Lems']">
          <jxb:class implClass="org.lemsml.model.extended.Lems"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:choice[@maxOccurs='unbounded']">
          <simplify:as-element-property/>
       </jxb:bindings>
-      
+
       <jxb:bindings node=".//xs:complexType[@name='Component']">
          <jxb:class implClass="org.lemsml.model.extended.Component"/>
       </jxb:bindings>
@@ -37,7 +37,7 @@
       <jxb:bindings node=".//xs:complexType[@name='ComponentType']">
          <jxb:class implClass="org.lemsml.model.extended.ComponentType"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:element[@type='ComponentType']">
          <jxb:class ref="org.lemsml.model.extended.ComponentType"/>
       </jxb:bindings>
@@ -45,7 +45,7 @@
       <jxb:bindings node=".//xs:complexType[@name='Dimension']">
          <jxb:class implClass="org.lemsml.model.extended.Dimension"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:element[@type='Dimension']">
          <jxb:class ref="org.lemsml.model.extended.Dimension"/>
       </jxb:bindings>
@@ -53,7 +53,7 @@
       <jxb:bindings node=".//xs:complexType[@name='Unit']">
          <jxb:class implClass="org.lemsml.model.extended.Unit"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:element[@type='Unit']">
          <jxb:class ref="org.lemsml.model.extended.Unit"/>
       </jxb:bindings>
@@ -61,7 +61,7 @@
       <jxb:bindings node=".//xs:complexType[@name='TimeDerivative']">
          <jxb:class implClass="org.lemsml.model.extended.TimeDerivative"/>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:element[@type='TimeDerivative']">
          <jxb:class ref="org.lemsml.model.extended.TimeDerivative"/>
       </jxb:bindings>
@@ -73,12 +73,12 @@
        <jxb:bindings node=".//xs:complexType[@name='NamedDimensionalValuedType']">
          <inheritance:implements>org.lemsml.model.extended.IValueDefinition</inheritance:implements>
       </jxb:bindings>
-      
+
       <jxb:bindings multiple="true" node=".//xs:attribute[@name='value']">
       	<jxb:property name="valueDefinition"/>
       </jxb:bindings>
 
 
    </jxb:bindings>
-   
+
 </jxb:bindings>

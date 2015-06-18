@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.Target;
+import org.lemsml.model.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
 /**
@@ -16,6 +17,13 @@ public class DecorateWithSourceFile extends BaseVisitor<Boolean, Throwable> {
 
 	public DecorateWithSourceFile(File sourceDoc) {
 		sourceFile = sourceDoc;
+	}
+
+	@Override
+	public Boolean visit(Lems lems) {
+		lems.setDefinedIn(sourceFile);
+		return true;
+
 	}
 
 	@Override

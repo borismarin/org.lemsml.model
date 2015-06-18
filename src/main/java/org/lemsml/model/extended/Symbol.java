@@ -5,7 +5,7 @@ import javax.measure.Unit;
 import org.lemsml.model.compiler.ISymbol;
 
 import tec.units.ri.quantity.NumberQuantity;
-import expr_parser.utils.UndefinedParameterException;
+import expr_parser.utils.UndefinedSymbolException;
 
 public class Symbol<T> implements ISymbol<T> {
 
@@ -20,7 +20,7 @@ public class Symbol<T> implements ISymbol<T> {
 	}
 
 	@Override
-	public Double evaluate() throws UndefinedParameterException {
+	public Double evaluate() throws UndefinedSymbolException {
 		return this.value;
 	}
 

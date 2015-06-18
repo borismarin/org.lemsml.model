@@ -14,7 +14,7 @@ import tec.units.ri.quantity.NumberQuantity;
 import com.google.common.collect.ImmutableMap;
 
 import expr_parser.utils.ExpressionParser;
-import expr_parser.utils.UndefinedParameterException;
+import expr_parser.utils.UndefinedSymbolException;
 
 public class SymbolicExpression<T extends IValueDefinition> implements ISymbol<T> {
 
@@ -31,7 +31,7 @@ public class SymbolicExpression<T extends IValueDefinition> implements ISymbol<T
 	}
 
 	@Override
-	public Double evaluate() throws UndefinedParameterException {
+	public Double evaluate() throws UndefinedSymbolException {
 		if(null != this.value){
 			return this.value;
 		}
@@ -39,7 +39,7 @@ public class SymbolicExpression<T extends IValueDefinition> implements ISymbol<T
 	}
 	
 	public Double evaluate(Map<String, Double> indepVars)
-			throws UndefinedParameterException {
+			throws UndefinedSymbolException {
 		Double ret = this.value;
 		if (null == ret) {
 			ImmutableMap<String, Double> context = new ImmutableMap.Builder<String, Double>()
@@ -100,7 +100,7 @@ public class SymbolicExpression<T extends IValueDefinition> implements ISymbol<T
 	}
 
 	@Override
-	public Double evaluateSI() throws UndefinedParameterException {
+	public Double evaluateSI() throws UndefinedSymbolException {
 		// TODO Auto-generated method stub
 		return new Double(NumberQuantity.of(evaluate(), getUnit()).toSI().getValue()
 				.doubleValue());
