@@ -6,53 +6,53 @@ import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
-/**
- * @author matteocantarelli
- * @author borismarin
- *
- */
-public class CopyContent extends BaseVisitor<Boolean, Throwable> {
+public class RemoveIncludes extends BaseVisitor<Boolean, Throwable> implements ILemsProcessor {
 
-	private Lems resolvedLems;
+	private Lems processedLems;
 
-	CopyContent(org.lemsml.model.extended.Lems lems) throws Throwable {
-		resolvedLems = lems;
+	public RemoveIncludes() throws Throwable {
+		processedLems = new Lems();
 	}
 
 	@Override
 	public Boolean visit(Constant constant) {
-		resolvedLems.getConstants().add(constant);
+		processedLems.getConstants().add(constant);
 		return true;
 
 	}
 
 	@Override
 	public Boolean visit(ComponentType componentType) {
-		resolvedLems.getComponentTypes().add(componentType);
+		processedLems.getComponentTypes().add(componentType);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Component component) {
-		resolvedLems.getComponents().add(component);
+		processedLems.getComponents().add(component);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(Target target) {
-		resolvedLems.getTargets().add(target);
+		processedLems.getTargets().add(target);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Dimension dimension) {
-		resolvedLems.getDimensions().add(dimension);
+		processedLems.getDimensions().add(dimension);
 		return true;
 	}
 
 	@Override
 	public Boolean visit(org.lemsml.model.extended.Unit unit) {
-		resolvedLems.getUnits().add((org.lemsml.model.extended.Unit) unit);
+		processedLems.getUnits().add((org.lemsml.model.extended.Unit) unit);
 		return true;
+	}
+
+	@Override
+	public Lems getLems() {
+		return processedLems;
 	}
 }

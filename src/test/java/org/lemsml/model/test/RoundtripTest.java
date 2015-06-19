@@ -7,7 +7,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
-import org.lemsml.model.compiler.parser.LEMSXMLWriter;
+import org.lemsml.model.compiler.backend.LemsBackend;
 import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Lems;
 
@@ -38,13 +38,15 @@ public class RoundtripTest extends BaseTest {
 		assertTrue(XMLUtils.validate(pendLemsFile, schema));
 	}
 
-	@Test
+@Test
 	public void testRoundTrip() throws Throwable {
 		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(pendLemsFile,
 				schema);
 		compiledLems = compiler.generateLEMSDocument();
 		File tmpFile = File.createTempFile("pend", ".xml");
-		LEMSXMLWriter.marshall(compiledLems, tmpFile);
+		LemsBackend backend = new LemsBackend(compiledLems);
+		backend.generate(tmpFile);
+		//TODO: reload and compare
 		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
 
 	}
