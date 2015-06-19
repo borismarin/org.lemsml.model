@@ -1,6 +1,7 @@
 package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -15,6 +16,9 @@ import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.slf4j.LoggerFactory;
+import org.xmlunit.builder.DiffBuilder;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.Diff;
 
 import ch.qos.logback.classic.Logger;
 
@@ -72,6 +76,10 @@ public class ProcessIncludesTest extends BaseTest {
 		backend.generate(tmpFile);
 		// TODO: assert
 		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
+
+		Diff d = DiffBuilder.compare(Input.fromFile(include0))
+	             .withTest(tmpFile).build();
+		assertFalse(d.hasDifferences());
 
 		backend.setKeepIncludes(false);
 		backend.generate(tmpFile);
