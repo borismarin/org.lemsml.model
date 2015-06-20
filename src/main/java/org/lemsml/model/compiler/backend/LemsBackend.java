@@ -7,9 +7,9 @@ import javax.xml.bind.JAXBException;
 
 import org.lemsml.model.compiler.parser.LEMSXMLWriter;
 import org.lemsml.model.compiler.semantic.visitors.CopyIfNotIncluded;
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.ILemsProcessor;
 import org.lemsml.model.compiler.semantic.visitors.RemoveIncludes;
+import org.lemsml.model.compiler.semantic.visitors.TopLevelTraverser;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
 
@@ -36,7 +36,7 @@ public class LemsBackend {
 			preprocessor = new RemoveIncludes();
 		}
 			TraversingVisitor<Boolean, Throwable> includeCleanup = new TraversingVisitor<Boolean, Throwable>(
-					new DepthFirstTraverserExt<Throwable>(), preprocessor);
+					new TopLevelTraverser<Throwable>(), preprocessor);
 			lemsDoc.accept(includeCleanup);
 			lems = preprocessor.getLems();
 

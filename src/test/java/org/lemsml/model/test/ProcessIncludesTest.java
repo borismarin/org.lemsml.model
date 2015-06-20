@@ -74,7 +74,6 @@ public class ProcessIncludesTest extends BaseTest {
 		LemsBackend backend = new LemsBackend(lemsDoc);
 		backend.setKeepIncludes(true);
 		backend.generate(tmpFile);
-		// TODO: assert
 		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
 
 		Diff d = DiffBuilder.compare(Input.fromFile(include0))
