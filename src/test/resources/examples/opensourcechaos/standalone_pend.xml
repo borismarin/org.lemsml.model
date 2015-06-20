@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Lems xmlns="http://www.neuroml.org/lems/0.9.0">
 
   <!--
@@ -9,7 +10,7 @@
 
   <ComponentType name="SimplePendulum"
 				 description="Equations of motion for a simple pendulum with mass _m_ and length _l_ ">
-    
+
     <Parameter name="m" dimension="mass" description="Mass of the bob"/>
     <Parameter name="l" dimension="length" description="Length of the limb"/>
     <Parameter name="g" dimension="acceleration" description="Gravitational acceleration"/>
@@ -20,22 +21,22 @@
 
     <Exposure name="theta" dimension="none"/>
     <Exposure name="p" dimension="angular_momentum"/>
-    
+
     <Dynamics>
-      
+
       <StateVariable name="theta" dimension="none" exposure="theta"/>
       <StateVariable name="p" dimension="angular_momentum" exposure="p"/>
-	  
+
       <TimeDerivative variable="theta" value="p / (2*m*l*l)"/>
       <TimeDerivative variable="p" value="-m*g*l*sin(theta)"/>
-      
+
       <OnStart>
         <StateAssignment variable="theta" value="theta_0"/>
         <StateAssignment variable="p" value="p_0"/>
       </OnStart>
-      
+
     </Dynamics>
-    
+
   </ComponentType>
 
 
@@ -45,8 +46,7 @@
   <!-- Specify which component to run -->
   <Target component="sim1"/>
 
-  <!-- parameter set for chaotic attractor -->
-  <Component type="SimplePendulum" id="pend" l="1m" m="1kg" g="1m_per_s2"
+  <Component type="SimplePendulum" id="pend" l="1e-3km" m="1kg" g="1m_per_s2"
 			 theta_0="1.0"  p_0="0kg_m2_per_s"/>
 
   <Component type="Simulation" id="sim1" length="100s" step="0.001s" target="pend" method="rk4">
@@ -55,7 +55,7 @@
 			   timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
       <Component type="Line" id ="th" quantity="theta" scale="1" color="#ff0000" timeScale="1s"/>
     </Component>
-    
+
     <Component type="Display" id="d2" title="p timeseries"
 			   timeScale="1s" xmin="0" xmax="100" ymin="-10" ymax="10">
       <Component type="Line" id ="p" quantity="p" scale="1" color="#0000ff" timeScale="1s"/>
@@ -83,6 +83,7 @@
   <Unit symbol="s" dimension="time"/>
   <Unit symbol="per_s" dimension="per_time"/>
   <Unit symbol="m" dimension="length"/>
+  <Unit symbol="km" dimension="length" power="3"/>
   <Unit symbol="kg" dimension="mass"/>
   <Unit symbol="m_per_s2" dimension="acceleration"/>
   <Unit symbol="kg_m2_per_s" dimension="angular_momentum"/>
@@ -92,7 +93,7 @@
 
 
   <ComponentType name="Display">
-    <Text name="title"/>   
+    <Text name="title"/>
 	<Parameter name="xmin" dimension="none"/>
 	<Parameter name="xmax" dimension="none"/>
 	<Parameter name="ymin" dimension="none"/>
@@ -121,9 +122,9 @@
   <ComponentType name="OutputFile">
 	<Text name="path"/>
 	<Text name="fileName"/>
-	
+
 	<Children name="outputColumn" type="OutputColumn"/>
-	
+
 	<Simulation>
 	  <DataWriter path="path" fileName="fileName"/>
 	</Simulation>
@@ -143,18 +144,18 @@
   <ComponentType name="Simulation">
     <Parameter name="length" dimension="time"/>
     <Parameter name="step" dimension="time"/>
-    
+
     <ComponentReference name="target" type="Component"/>
 
 
     <Children name="displays" type="Display"/>
-    
+
     <Children name="outputs" type="OutputFile"/>
-	
+
     <Dynamics>
       <StateVariable name="t" dimension="time"/>
     </Dynamics>
-    
+
     <Simulation>
       <Run component="target" variable="t" increment="step" total="length"/>
     </Simulation>

@@ -11,27 +11,24 @@ import javax.xml.bind.Unmarshaller;
  * @author borismarin
  *
  */
-public class JaxbXMLReader 
-{
+public class JaxbXMLReader {
 
 	/**
 	 * @param document
 	 * @param schema
-	 * @return 
+	 * @return
 	 * @return
 	 */
-	public static <T> T unmarshall(File document, File schema, Object objFactory)
-	{
+	@SuppressWarnings("unchecked")
+	static <T> T unmarshall(File document, File schema, Object objFactory) {
 
 		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(objFactory);
-		try
-		{
+		try {
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
-		}
-		catch(JAXBException e)
-		{
-			System.out.println("Problems unmarshalling document " + document.getName());
+		} catch (JAXBException e) {
+			System.out.println("Problems unmarshalling document "
+					+ document.getName());
 			e.printStackTrace();
 		}
 
@@ -41,20 +38,17 @@ public class JaxbXMLReader
 	/**
 	 * @param document
 	 * @param schema
-	 * @return 
+	 * @return
 	 * @return
 	 */
-	public static <T> T unmarshall(URL document, File schema, Object objFactory)
-	{
+	@SuppressWarnings("unchecked")
+	static <T> T unmarshall(URL document, File schema, Object objFactory) {
 
 		T unmarshalledDoc = null;
 		Unmarshaller unmarshaller = getUnmarshaller(objFactory);
-		try
-		{
+		try {
 			unmarshalledDoc = (T) unmarshaller.unmarshal(document);
-		}
-		catch(JAXBException e)
-		{
+		} catch (JAXBException e) {
 			System.out.println("Problems unmarshalling url " + document);
 			e.printStackTrace();
 		}
@@ -62,19 +56,15 @@ public class JaxbXMLReader
 		return unmarshalledDoc;
 	}
 
-
-	public static Unmarshaller getUnmarshaller(Object objFactory)
-	{
+	public static Unmarshaller getUnmarshaller(Object objFactory) {
 		Unmarshaller unmarshaller = null;
-		try
-		{
+		try {
 			JAXBContext jc = JAXBContext.newInstance(objFactory.getClass());
 			unmarshaller = jc.createUnmarshaller();
-			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", objFactory);
-		}
-		catch(JAXBException e)
-		{
-//			 TODO Auto-generated catch block
+			unmarshaller.setProperty("com.sun.xml.bind.ObjectFactory",
+					objFactory);
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

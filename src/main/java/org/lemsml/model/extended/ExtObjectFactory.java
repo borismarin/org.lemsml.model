@@ -9,30 +9,30 @@ import org.lemsml.model.ObjectFactory;
  *
  */
 @XmlRegistry
-public class ExtObjectFactory extends ObjectFactory
-{
+public class ExtObjectFactory extends ObjectFactory {
+	
+	@Override
+	public TimeDerivative createTimeDerivative() {
+		return new TimeDerivative();
+	}
 
 	@Override
-	public Component createComponent()
-	{
+	public Component createComponent() {
 		return new Component();
 	}
 
 	@Override
-	public Dimension createDimension()
-	{
+	public Dimension createDimension() {
 		return new Dimension();
 	}
 
 	@Override
-	public Unit createUnit()
-	{
+	public Unit createUnit() {
 		return new Unit();
 	}
 
 	@Override
-	public Lems createLems()
-	{
+	public Lems createLems() {
 		return new Lems();
 	}
 }

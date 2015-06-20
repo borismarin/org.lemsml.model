@@ -1,0 +1,38 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+
+	<Dimension name="time" t="1" />
+	<Dimension name="length" l="1" />
+	<Dimension name="mass" m="1" />
+	<Dimension name="acceleration" l="1" t="-2" />
+	<Dimension name="angular_momentum" l="2" t="-1" m="1" />
+	<Dimension name="angular_mass" l="2" m="1" />
+	<Dimension name="per_time" t="-1" />
+	<Dimension name="per_time_sq" t="-2" />
+	<Dimension name="spring_constant" m="1" t="-2" />
+
+	<Unit symbol="s" dimension="time" />
+	<Unit symbol="per_s" dimension="per_time" />
+	<Unit symbol="m" dimension="length" />
+	<Unit symbol="km" dimension="length" power="3" />
+	<Unit symbol="kg" dimension="mass" />
+	<Unit symbol="g" dimension="mass" power="-3" />
+	<Unit symbol="m_per_s2" dimension="acceleration" />
+	<Unit symbol="N_per_m" dimension="spring_constant" />
+
+	<ComponentType name="HarmonicOscillator">
+		<Parameter name="k" dimension="spring_constant" />
+		<Parameter name="m" dimension="mass" />
+		<DerivedParameter name="omega2" dimension="per_time_sq" value="k/m" />
+		<Dynamics>
+			<StateVariable name="x" exposure="x" />
+			<StateVariable name="v" exposure="x" />
+			<TimeDerivative variable="x" value="v" />
+			<TimeDerivative variable="v" value="-omega2 * x" />
+		</Dynamics>
+	</ComponentType>
+
+	<Component type="HarmonicOscillator" id="ho" m="1 kg" k="1 N_per_m" />
+
+
+</Lems>
+

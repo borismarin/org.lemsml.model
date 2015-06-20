@@ -14,40 +14,39 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
+
+import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
  *
  */
-public class XMLUtils
-{
+public class XMLUtils {
+	private static final Logger logger = (Logger) LoggerFactory
+			.getLogger(XMLUtils.class);
 
 	/**
 	 * @param document
 	 * @param schema
 	 * @return
 	 */
-	public static boolean validate(File document, File schema)
-	{
+	public static boolean validate(File document, File schema) {
 		boolean ret = false;
-		try
-		{
-			System.out.print("Validating file " + document.getName() + " against schema " + schema.getName() + "... ");
+		try {
+			logger.info("Validating file {} against schema {} ...",
+					document.getName(), schema.getName());
 			StreamSource src = new StreamSource(document);
 			XMLUtils.parseSchema(schema).newValidator().validate(src);
 			ret = true;
-			System.out.println("Valid!!");
-		}
-		catch(SAXException e)
-		{
+			logger.info("\t Valid!!");
+		} catch (SAXException e) {
 			// e.printStackTrace();
-			System.out.println("Invalid!!");
-		}
-		catch(IOException e)
-		{
+			logger.error("\t Invalid!!, cause:\n\t" + e.getMessage());
+		} catch (IOException e) {
 			// e.printStackTrace();
-			System.out.println("Can't open schema file!!!");
+			logger.error("Can't open schema file!!!");
 		}
 
 		return ret;
@@ -58,28 +57,24 @@ public class XMLUtils
 	 * @param transformation
 	 * @return
 	 */
-	public static File transform(File document, File transformation)
-	{
-		System.out.println("Applying XSLT " + transformation.getName() + " to file " + document.getName() + "... ");
+	public static File transform(File document, File transformation) {
+		logger.info("Applying XSLT " + transformation.getName() + " to file "
+				+ document.getName() + "... ");
 		String orig_name = document.getPath();
-		String transf_name = orig_name.substring(0, orig_name.lastIndexOf('.')) + "_transformed.xml";
+		String transf_name = orig_name.substring(0, orig_name.lastIndexOf('.'))
+				+ "_transformed.xml";
 		File outputFile = new File(transf_name);
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Source xslt = new StreamSource(transformation);
 		Transformer transformer;
-		try
-		{
+		try {
 			transformer = factory.newTransformer(xslt);
 			Source text = new StreamSource(document);
 			transformer.transform(text, new StreamResult(outputFile));
-		}
-		catch(TransformerConfigurationException e)
-		{
+		} catch (TransformerConfigurationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch(TransformerException e)
-		{
+		} catch (TransformerException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -91,16 +86,13 @@ public class XMLUtils
 	 * @param schema
 	 * @return
 	 */
-	public static Schema parseSchema(File schema)
-	{
+	private static Schema parseSchema(File schema) {
 		Schema parsedSchema = null;
-		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		try
-		{
+		SchemaFactory sf = SchemaFactory
+				.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+		try {
 			parsedSchema = sf.newSchema(schema);
-		}
-		catch(SAXException e)
-		{
+		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Problems parsing schema " + schema.getName());
 			e.printStackTrace();

@@ -1,0 +1,52 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+
+	<Constant name="const0" value="-0.1" dimension="none" />
+
+
+	<ComponentType name="DependsOn_dv0_p0">
+ 		<Child name="child1" type="Foo" /> 
+		<Parameter name="p1" dimension="none" />
+		<DerivedParameter name="dp1" dimension="none" value="p0 * p1" />
+
+		<Requirement name="dv0" dimension="none" />
+		<Requirement name="p0" dimension="none" />
+		<Requirement name="const0" dimension="none" />
+
+		<Dynamics>
+			<StateVariable name="x1" exposure="x1" />
+			<StateVariable name="y1" exposure="y1" />
+			<TimeDerivative variable="x1" value="const0*dp1/p0/p1*x1" />
+			<TimeDerivative variable="y1" value="-dv0 * y1" />
+		</Dynamics>
+
+	</ComponentType>
+
+
+	<ComponentType name="Exposes_dv0_p0">
+		<Child name="child0" type="DependsOn_dv0_p0" />
+		<Parameter name="p0" dimension="none" />
+		<DerivedParameter name="dp2" dimension="none" value="dp0 * dp1 * const0" />
+		<DerivedParameter name="dp0" dimension="none" value="p0 * p0" />
+		<DerivedParameter name="dp1" dimension="none" value="(p0 * p0) / dp0" />
+		<Requirement name="const0" dimension="none" />
+
+		<Exposure name="dv0" dimension="none" />
+		<Dynamics>
+			<StateVariable name="x0" exposure="x0" />
+			<DerivedVariable name="dv0" value="1e1*const0*x0" exposure="dv0" />
+		</Dynamics>
+	</ComponentType>
+
+	<ComponentType name="Foo">
+		<Parameter name="p2" dimension="none"/>
+	</ComponentType>
+
+	<Component type="Exposes_dv0_p0" p0="2" id="comp0">
+		<Component type="DependsOn_dv0_p0" p1="10" id="comp1">
+ 			<Component type="Foo" p2="100" id="veryNested" /> 
+		</Component>
+	</Component>
+
+
+</Lems>
+

@@ -1,25 +1,31 @@
 package org.lemsml.model.compiler.semantic;
 
+import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToComponentTypeMap;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToDimensionMap;
-import org.lemsml.model.compiler.semantic.visitors.BuildSymbolToUnitMap;
+import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
+import org.lemsml.model.compiler.semantic.visitors.BuildScope;
+import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
+import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
+import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
+import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
+import org.lemsml.model.compiler.semantic.visitors.ResolveSymbols;
+import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.visitors.TraversingVisitor;
+import org.lemsml.visitors.Visitor;
 
 /**
  * @author borismarin
  *
  */
-public class LEMSSemanticAnalyser
-{
+public class LEMSSemanticAnalyser {
 
 	private Lems lems;
 
 	/**
 	 * @param lems
 	 */
-	public LEMSSemanticAnalyser(Lems lems)
-	{
+	public LEMSSemanticAnalyser(Lems lems) {
 		super();
 		this.lems = lems;
 	}
@@ -28,21 +34,32 @@ public class LEMSSemanticAnalyser
 	 * @throws Throwable
 	 * 
 	 */
-	public void analyse() throws Throwable
-	{
+	public Lems analyse() throws Throwable {
 
 		// DECORATION
-		BuildNameToComponentTypeMap buildComponentTypeMapVisitor = new BuildNameToComponentTypeMap(lems);
-		lems.accept(buildComponentTypeMapVisitor);
 
-		AddTypeToComponent addTypeToComponent = new AddTypeToComponent(lems);
-		lems.accept(addTypeToComponent);
+		depthFirstWith(new BuildNameToObjectMaps(lems));
 
-		BuildNameToDimensionMap buildNameToDimensionMap = new BuildNameToDimensionMap(lems);
-		lems.accept(buildNameToDimensionMap);
+		depthFirstWith(new ResolveUnitsDimensions(lems));
 
-		BuildSymbolToUnitMap buildSymbolToUnitMap = new BuildSymbolToUnitMap(lems);
-		lems.accept(buildSymbolToUnitMap);
+		depthFirstWith(new AddTypeToComponent(lems));
+
+		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
+		depthFirstWith(typeExtender);
+		typeExtender.visitToposortedTypes();
+
+		depthFirstWith(new AddFamilyToComponents(lems));
+
+		lems.accept(new BuildScope(lems));
+
+		lems.accept(new CheckExpressionDimensions(lems));
+
+		lems.accept(new ResolveSymbols(lems));
+
+		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
+		lems.accept(dimensionAnalyzer);
+
+//		depthFirstWith(new ResolveSymbolicExpressions(lems));
 
 		// ERROR CHECKING
 		// TODO
@@ -53,6 +70,15 @@ public class LEMSSemanticAnalyser
 		// Accessing an out of scope variable
 		// Actual and formal parameter mismatch
 
+		return lems;
+
+	}
+
+	private void depthFirstWith(Visitor<Boolean, Throwable> visitor) throws Throwable {
+		TraversingVisitor<Boolean, Throwable> mapBuilder = new TraversingVisitor<Boolean, Throwable>(
+				new DepthFirstTraverserExt<Throwable>(),
+				visitor);
+		lems.accept(mapBuilder);
 	}
 
 }

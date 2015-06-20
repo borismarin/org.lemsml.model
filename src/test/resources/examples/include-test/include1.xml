@@ -1,5 +1,5 @@
 <Lems xmlns="http://www.neuroml.org/lems/0.9.0">
-    <Include file="include2.xml"/>
+    <Include file="someOther/include2.xml"/>
     <ComponentType name="CompType1"/>
     <Component id="Comp1" type="CompType1"/>
     <Constant name="constant1" value="1m"/>
