@@ -85,7 +85,7 @@ public class FamilyTest extends BaseTest {
 				.withComponents(foo0);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		
+
 		Assert.assertEquals(foo0, bar0.getParent());
 		Assert.assertEquals(lems, foo0.getParent());
 	}
@@ -125,15 +125,15 @@ public class FamilyTest extends BaseTest {
 				.withComponents(foo0, baz0);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		
+
 		File tmpFile = File.createTempFile("family", ".xml");
 		LEMSXMLWriter.marshall(lems, tmpFile);
 		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
-		
+
 		Assert.assertEquals(foo0, bar0.getParent());
 		Assert.assertEquals(foo1, bar1.getParent());
 		Assert.assertEquals(baz0, foo1.getParent());
-		
+
 	}
 
 }

@@ -28,7 +28,7 @@ import org.lemsml.visitors.BaseVisitor;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
-import expr_parser.utils.UndefinedParameterException;
+import expr_parser.utils.UndefinedSymbolException;
 
 class BuildSymbolDependenciesContexts extends
 		BaseVisitor<Boolean, Throwable> {
@@ -59,7 +59,7 @@ class BuildSymbolDependenciesContexts extends
 
 	@Override
 	public Boolean visit(Parameter parDef) throws LEMSCompilerException,
-			UndefinedParameterException {
+			UndefinedSymbolException {
 		Component comp = (Component) this.scope;
 		String pName = parDef.getName();
 		QName qualiPName = new QName(pName);
@@ -80,21 +80,21 @@ class BuildSymbolDependenciesContexts extends
 
 	@Override
 	public Boolean visit(DerivedParameter typeDef)
-			throws LEMSCompilerException, UndefinedParameterException {
+			throws LEMSCompilerException, UndefinedSymbolException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, typeDef);
 		return null;
 	}
 	
 	@Override
-	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException, UndefinedParameterException {
+	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException, UndefinedSymbolException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, derVar);
 		return null;
 	}
 
 	@Override
-	public Boolean visit(TimeDerivative dx) throws LEMSCompilerException, UndefinedParameterException {
+	public Boolean visit(TimeDerivative dx) throws LEMSCompilerException, UndefinedSymbolException {
 		Component comp = (Component) this.scope;
 		buildDependeciesAndContext(comp, dx);
 		return null;
@@ -102,7 +102,7 @@ class BuildSymbolDependenciesContexts extends
 	
 	
 	private void addDimValToSymbol(String symbolName, String symbolDef)
-			throws LEMSCompilerException, UndefinedParameterException {
+			throws LEMSCompilerException, UndefinedSymbolException {
 		Symbol<?> resolved = (Symbol<?>) this.scope.resolve(symbolName);
 
 		String valUnitRegEx = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
@@ -120,7 +120,7 @@ class BuildSymbolDependenciesContexts extends
 	}
 
 	private void buildDependeciesAndContext(IScope scope, LemsNode typeDef) throws LEMSCompilerException,
-			UndefinedParameterException {
+			UndefinedSymbolException {
 
 		String defName = ((Named) typeDef).getName();
 		String defValue = ((IValueDefinition) typeDef).getValueDefinition();
@@ -146,7 +146,7 @@ class BuildSymbolDependenciesContexts extends
 					context.put(dep, val);
 					unitContext.put(dep, resolved.getUnit());
 				}
-			}catch(UndefinedParameterException e){ // will resolve later, in order 
+			}catch(UndefinedSymbolException e){ // will resolve later, in order 
 				dependencies.addNode(dep);
 				dependencies.addEdge(defName, dep);
 			} 

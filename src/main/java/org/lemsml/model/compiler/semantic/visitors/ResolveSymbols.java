@@ -18,7 +18,7 @@ import org.lemsml.visitors.TraversingVisitor;
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.TopologicalSort;
-import expr_parser.utils.UndefinedParameterException;
+import expr_parser.utils.UndefinedSymbolException;
 
 /**
  * @author borismarin
@@ -65,7 +65,7 @@ public class ResolveSymbols extends BaseVisitor<Boolean, Throwable> {
 
 	private void evalInterdependentExprs(IScope scope,
 			BuildSymbolDependenciesContexts scopRes)
-			throws UndefinedParameterException {
+			throws UndefinedSymbolException {
 
 		Map<String, String> expressions = scopRes.getExpressions();
 		Map<String, Double> context = scopRes.getContext();
@@ -88,7 +88,7 @@ public class ResolveSymbols extends BaseVisitor<Boolean, Throwable> {
 				resolved.setUnit(unit);
 				context.put(depName, val);
 				unitContext.put(depName, unit);
-			} catch (UndefinedParameterException e) {
+			} catch (UndefinedSymbolException e) {
 				// OK, those are symbolic expressions
 				((SymbolicExpression<?>) resolved).getContext().putAll(context);
 				((SymbolicExpression<?>) resolved).getUnitContext().putAll(unitContext);

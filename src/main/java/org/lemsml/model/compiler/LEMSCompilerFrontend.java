@@ -9,12 +9,11 @@ import org.lemsml.model.extended.Lems;
 /**
  * @author matteocantarelli
  * @author borismarin
- * 
+ *
  */
 public class LEMSCompilerFrontend {
 
 	private File lemsFile;
-	private File cwd;
 	File schema;
 
 	/**
@@ -43,7 +42,7 @@ public class LEMSCompilerFrontend {
 
 	/**
 	 * @throws Throwable
-	 * 
+	 *
 	 */
 	public Lems generateLEMSDocument() throws Throwable {
 		// First step: parse the LEMS file

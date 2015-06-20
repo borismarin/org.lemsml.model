@@ -14,7 +14,7 @@ import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
-import expr_parser.utils.UndefinedParameterException;
+import expr_parser.utils.UndefinedSymbolException;
 
 /**
  * @author borismarin
@@ -51,7 +51,7 @@ public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
 					checkUnits(resolved, scope);
 				}
 			}
-			catch(UndefinedParameterException e){
+			catch(UndefinedSymbolException e){
 				//OK, since symbolic expressions can't be analysed until fully specified
 			}
 		}

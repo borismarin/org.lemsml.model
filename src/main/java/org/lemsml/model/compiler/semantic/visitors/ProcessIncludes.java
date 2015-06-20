@@ -65,7 +65,7 @@ public class ProcessIncludes extends BaseVisitor<Boolean, Throwable> {
 
 			// will copy the content of the visited LEMS document to inputLems
 			TraversingVisitor<Boolean, Throwable> copyContent = new TraversingVisitor<Boolean, Throwable>(
-					new DepthFirstTraverserExt<Throwable>(), new CopyContent(inputLems));
+					new TopLevelTraverser<Throwable>(), new CopyContent(inputLems));
 			includedLems.accept(copyContent);
 		} else {
 			logger.warn("Skipping double inclusion of file {}",
