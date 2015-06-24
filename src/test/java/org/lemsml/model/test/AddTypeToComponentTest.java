@@ -7,7 +7,7 @@ import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.compiler.parser.LEMSParser;
-import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
+import org.lemsml.model.compiler.semantic.visitors.TypeToComponentVisitor;
 import org.lemsml.model.compiler.semantic.visitors.NameObjMapVisitor;
 import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.extended.Lems;
@@ -45,7 +45,7 @@ public class AddTypeToComponentTest extends BaseTest {
 		// Adds the corresponding ComponentType to each Component
 		TraversingVisitor<Boolean, Throwable> addTypeToComponent = new TraversingVisitor<Boolean, Throwable>(
 				new DepthFirstTraverserExt<Throwable>(),
-				new AddTypeToComponent(lemsDocument));
+				new TypeToComponentVisitor(lemsDocument));
 		lemsDocument.accept(addTypeToComponent);
 		// The first component in standalone_pend is <Component type =
 		// "SimplePendulum" id="pend" ...

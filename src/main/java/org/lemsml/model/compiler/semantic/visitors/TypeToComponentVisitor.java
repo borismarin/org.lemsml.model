@@ -11,15 +11,15 @@ import org.lemsml.visitors.BaseVisitor;
  * @author borismarin
  *
  */
-public class AddTypeToComponent extends BaseVisitor<Boolean, Throwable> {
+public class TypeToComponentVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
 	/**
 	 * @param lems
-	 * @throws Throwable 
+	 * @throws Throwable
 	 */
-	public AddTypeToComponent(Lems lems) throws Throwable {
+	public TypeToComponentVisitor(Lems lems) {
 		this.lems = lems;
 	}
 

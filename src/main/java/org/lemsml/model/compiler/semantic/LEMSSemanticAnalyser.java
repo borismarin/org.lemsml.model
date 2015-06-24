@@ -1,7 +1,6 @@
 package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
-import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
@@ -21,6 +20,7 @@ public class LEMSSemanticAnalyser {
 	private Lems lems;
 	private BuildNameToObjMaps mapBuilder;
 	private ResolveUnitsDimensions dimensionResolver;
+	private DecorateComponentsWithType typeDecorator;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
@@ -28,15 +28,14 @@ public class LEMSSemanticAnalyser {
 
 		mapBuilder = new BuildNameToObjMaps(lems);
 		dimensionResolver = new ResolveUnitsDimensions(lems);
+		typeDecorator = new DecorateComponentsWithType(lems);
 	}
 
 	public Lems analyse() throws Throwable {
 
-		//TODO: classes with visitor + traverser + post visit actions
 		mapBuilder.apply();
 		dimensionResolver.apply();
-
-		depthFirstWith(new AddTypeToComponent(lems));
+		typeDecorator.apply();
 
 		ProcessTypeExtensions typeExtender = new ProcessTypeExtensions(lems);
 		depthFirstWith(typeExtender);
