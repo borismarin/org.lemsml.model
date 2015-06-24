@@ -12,13 +12,13 @@ import ch.qos.logback.classic.Logger;
 /**
  * @author borismarin
  *
- */ public class BuildNameToObjectMaps extends BaseVisitor<Boolean, Throwable> {
+ */ public class NameObjMapVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private static final Logger logger = (Logger) LoggerFactory
-			.getLogger(BuildNameToObjectMaps.class);
+			.getLogger(NameObjMapVisitor.class);
 
-	public BuildNameToObjectMaps(Lems lems) {
+	public NameObjMapVisitor(Lems lems) {
 		this.lems = lems;
 	}
 

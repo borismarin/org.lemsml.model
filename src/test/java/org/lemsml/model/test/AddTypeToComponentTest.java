@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
+import org.lemsml.model.compiler.semantic.visitors.NameObjMapVisitor;
 import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
@@ -37,7 +37,7 @@ public class AddTypeToComponentTest extends BaseTest {
 		// Creates the {String name : ComponentType type} HM used during parsing
 		TraversingVisitor<Boolean, Throwable> mapBuilder = new TraversingVisitor<Boolean, Throwable>(
 				new DepthFirstTraverserExt<Throwable>(),
-				new BuildNameToObjectMaps(lemsDocument));
+				new NameObjMapVisitor(lemsDocument));
 		lemsDocument.accept(mapBuilder);
 		// There are 6 ComponentTypes in standalone_pend
 		assertEquals(6, lemsDocument.getNameToCompTypeMap().size());

@@ -8,7 +8,6 @@ import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ProcessTypeExtensions;
 import org.lemsml.model.compiler.semantic.visitors.ResolveSymbols;
-import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
 import org.lemsml.visitors.Visitor;
@@ -20,15 +19,15 @@ import org.lemsml.visitors.Visitor;
 public class LEMSSemanticAnalyser {
 
 	private Lems lems;
-	private MapBuilder mapBuilder;
-	private UnitDimensionResolver dimensionResolver;
+	private BuildNameToObjMaps mapBuilder;
+	private ResolveUnitsDimensions dimensionResolver;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
 		this.lems = lems;
 
-		mapBuilder = new MapBuilder(lems);
-		dimensionResolver = new UnitDimensionResolver(lems);
+		mapBuilder = new BuildNameToObjMaps(lems);
+		dimensionResolver = new ResolveUnitsDimensions(lems);
 	}
 
 	public Lems analyse() throws Throwable {
