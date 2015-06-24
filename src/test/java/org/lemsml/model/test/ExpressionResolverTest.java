@@ -50,8 +50,18 @@ public class ExpressionResolverTest extends BaseTest {
 		assertEquals(p0 * p0, dp0, 1e-12);
 		assertEquals((p0 * p0) / dp0, dp1, 1e-12);
 		assertEquals(dp0 * dp1 * const0, dp2, 1e-12);
+
+		Component comp1 = compiledLems.getComponentById("comp1");
+		Double p1 = comp1.resolve("p1").evaluate();
+		Double dp1_1 = comp1.resolve("dp1").evaluate();
+		assertEquals(10., p1, 1e-12);
+		assertEquals((p0 * p1) , dp1_1, 1e-12);
+
+		//TODO error if Requirement is not set
+		// (we find symbols upscope even if they are not required, set IScope.resolve)
+		//TODO test for Requirements involving derived variables/pars
 	}
-	
+
 	@Test
 	public void testUndefinedSymbol() throws Throwable {
 		exception.expect(LEMSCompilerException.class);
@@ -71,7 +81,7 @@ public class ExpressionResolverTest extends BaseTest {
 
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
 	}
-	
+
 	@Test
 	public void testSymbolicExpression() throws Throwable {
 

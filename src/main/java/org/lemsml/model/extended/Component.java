@@ -25,7 +25,7 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	@XmlTransient
 	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
-	
+
 	@XmlTransient
 	private IScope parent;
 
@@ -62,7 +62,6 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	@Override
 	public IScope getEnclosingScope() {
-		//TODO: add family to components...
 		return this.parent;
 	}
 
@@ -119,9 +118,9 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
 	}
-	
+
 	public String toString(){
 		return MessageFormat.format("[{0}] {1}", this.getType(), this.getId());
 	}
-	
+
 }

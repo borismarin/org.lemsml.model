@@ -22,21 +22,14 @@ public class LEMSSemanticAnalyser {
 
 	private Lems lems;
 
-	/**
-	 * @param lems
-	 */
 	public LEMSSemanticAnalyser(Lems lems) {
 		super();
 		this.lems = lems;
 	}
 
-	/**
-	 * @throws Throwable
-	 * 
-	 */
 	public Lems analyse() throws Throwable {
 
-		// DECORATION
+		//TODO: classes with visitor + traverser + post visit actions
 
 		depthFirstWith(new BuildNameToObjectMaps(lems));
 
@@ -59,10 +52,9 @@ public class LEMSSemanticAnalyser {
 		DimensionalAnalysis dimensionAnalyzer = new DimensionalAnalysis(lems);
 		lems.accept(dimensionAnalyzer);
 
-//		depthFirstWith(new ResolveSymbolicExpressions(lems));
 
+		// TODO move error checking to dedicated visitors
 		// ERROR CHECKING
-		// TODO
 		// Type mismatch
 		// Undeclared variable
 		// Reserved identifier misuse
@@ -75,10 +67,9 @@ public class LEMSSemanticAnalyser {
 	}
 
 	private void depthFirstWith(Visitor<Boolean, Throwable> visitor) throws Throwable {
-		TraversingVisitor<Boolean, Throwable> mapBuilder = new TraversingVisitor<Boolean, Throwable>(
-				new DepthFirstTraverserExt<Throwable>(),
-				visitor);
-		lems.accept(mapBuilder);
+		TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
+				new DepthFirstTraverserExt<Throwable>(), visitor);
+		lems.accept(trav);
 	}
 
 }

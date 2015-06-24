@@ -85,7 +85,7 @@ class BuildSymbolDependenciesContexts extends
 		buildDependeciesAndContext(comp, typeDef);
 		return null;
 	}
-	
+
 	@Override
 	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException, UndefinedSymbolException {
 		Component comp = (Component) this.scope;
@@ -99,8 +99,8 @@ class BuildSymbolDependenciesContexts extends
 		buildDependeciesAndContext(comp, dx);
 		return null;
 	}
-	
-	
+
+
 	private void addDimValToSymbol(String symbolName, String symbolDef)
 			throws LEMSCompilerException, UndefinedSymbolException {
 		Symbol<?> resolved = (Symbol<?>) this.scope.resolve(symbolName);
@@ -138,18 +138,17 @@ class BuildSymbolDependenciesContexts extends
 				throw new LEMSCompilerException(err,
 						LEMSCompilerError.UndefinedSymbol);
 			}
-//			if(resolved instanceof Symbol && resolved.getType().getClass().equals(StateVariable.class)){ //resolve now
-				//TODO. UGLY!!!
 			try{
+				// StateVariables and Requirements are in scope but evaluate to Null
 				Double val = resolved.evaluate();
-				if(null != val){ // UGLY: guard for StateVariable 
+				if(null != val){ // UGLY: guard for StateVariable
 					context.put(dep, val);
 					unitContext.put(dep, resolved.getUnit());
 				}
-			}catch(UndefinedSymbolException e){ // will resolve later, in order 
+			}catch(UndefinedSymbolException e){ // will resolve later, in order
 				dependencies.addNode(dep);
 				dependencies.addEdge(defName, dep);
-			} 
+			}
 		}
 	}
 
