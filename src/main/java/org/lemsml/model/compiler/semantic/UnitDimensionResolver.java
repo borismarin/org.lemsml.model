@@ -1,15 +1,15 @@
 package org.lemsml.model.compiler.semantic;
 
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
+import org.lemsml.model.compiler.semantic.visitors.ResolveUnitsDimensions;
 import org.lemsml.model.extended.Lems;
 
-public class MapBuilder extends ASemanticPass {
+public class UnitDimensionResolver extends ASemanticPass {
 
-	MapBuilder(Lems lems) {
+	UnitDimensionResolver(Lems lems) throws Throwable{
 		super.setLems(lems);
 		super.setTraverser(new DepthFirstTraverserExt<Throwable>());
-		super.setVisitor(new BuildNameToObjectMaps(lems));
+		super.setVisitor(new ResolveUnitsDimensions(lems));
 	}
 
 }

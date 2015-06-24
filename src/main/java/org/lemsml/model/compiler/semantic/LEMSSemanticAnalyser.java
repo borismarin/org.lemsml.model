@@ -21,21 +21,21 @@ public class LEMSSemanticAnalyser {
 
 	private Lems lems;
 	private MapBuilder mapBuilder;
+	private UnitDimensionResolver dimensionResolver;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
 		this.lems = lems;
 
 		mapBuilder = new MapBuilder(lems);
+		dimensionResolver = new UnitDimensionResolver(lems);
 	}
 
 	public Lems analyse() throws Throwable {
 
 		//TODO: classes with visitor + traverser + post visit actions
-
 		mapBuilder.apply();
-
-		depthFirstWith(new ResolveUnitsDimensions(lems));
+		dimensionResolver.apply();
 
 		depthFirstWith(new AddTypeToComponent(lems));
 
