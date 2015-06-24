@@ -2,7 +2,6 @@ package org.lemsml.model.compiler.semantic;
 
 import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.AddTypeToComponent;
-import org.lemsml.model.compiler.semantic.visitors.BuildNameToObjectMaps;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
@@ -21,17 +20,20 @@ import org.lemsml.visitors.Visitor;
 public class LEMSSemanticAnalyser {
 
 	private Lems lems;
+	private MapBuilder mapBuilder;
 
-	public LEMSSemanticAnalyser(Lems lems) {
+	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
 		this.lems = lems;
+
+		mapBuilder = new MapBuilder(lems);
 	}
 
 	public Lems analyse() throws Throwable {
 
 		//TODO: classes with visitor + traverser + post visit actions
 
-		depthFirstWith(new BuildNameToObjectMaps(lems));
+		mapBuilder.apply();
 
 		depthFirstWith(new ResolveUnitsDimensions(lems));
 

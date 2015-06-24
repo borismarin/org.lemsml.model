@@ -18,11 +18,7 @@ import ch.qos.logback.classic.Logger;
 	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(BuildNameToObjectMaps.class);
 
-	/**
-	 * @param lems
-	 * @throws Throwable 
-	 */
-	public BuildNameToObjectMaps(Lems lems) throws Throwable {
+	public BuildNameToObjectMaps(Lems lems) {
 		this.lems = lems;
 	}
 
