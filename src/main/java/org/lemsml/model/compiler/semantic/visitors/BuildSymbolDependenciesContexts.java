@@ -12,18 +12,18 @@ import javax.xml.namespace.QName;
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
-import org.lemsml.model.Named;
 import org.lemsml.model.Parameter;
-import org.lemsml.model.TimeDerivative;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
+import org.lemsml.model.extended.INamed;
 import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.IValueDefinition;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Symbol;
+import org.lemsml.model.extended.TimeDerivative;
 import org.lemsml.visitors.BaseVisitor;
 
 import expr_parser.utils.DirectedGraph;
@@ -122,7 +122,7 @@ class BuildSymbolDependenciesContexts extends
 	private void buildDependeciesAndContext(IScope scope, LemsNode typeDef) throws LEMSCompilerException,
 			UndefinedSymbolException {
 
-		String defName = ((Named) typeDef).getName();
+		String defName = ((INamed) typeDef).getName();
 		String defValue = ((IValueDefinition) typeDef).getValueDefinition();
 		expressions.put(defName, defValue);
 		dependencies.addNode(defName);

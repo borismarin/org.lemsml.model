@@ -59,7 +59,9 @@ public class ExpressionResolverTest extends BaseTest {
 
 		//TODO error if Requirement is not set
 		// (we find symbols upscope even if they are not required, set IScope.resolve)
-		//TODO test for Requirements involving derived variables/pars
+
+		//TODO test for Requirements involving derived variables/pars;
+		//     this is probably not working
 	}
 
 	@Test
@@ -87,8 +89,7 @@ public class ExpressionResolverTest extends BaseTest {
 
 		File lemsDoc = getLocalFile("/examples/expression-resolver-test/nested_expressions.xml");
 
-		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(lemsDoc, schema);
-		Lems compiledLems = compiler.generateLEMSDocument();
+		Lems compiledLems = new LEMSCompilerFrontend(lemsDoc, schema).generateLEMSDocument();
 		Component comp0 = compiledLems.getComponentById("comp0");
 		@SuppressWarnings("unchecked")
 		SymbolicExpression<DerivedVariable> dv0 = (SymbolicExpression<DerivedVariable>)
@@ -99,6 +100,17 @@ public class ExpressionResolverTest extends BaseTest {
 								.put("x0", 0.)
 								.build());
 		assertEquals(x, 0, 1e-10);
+
+		Component comp1 = compiledLems.getComponentById("comp1");
+		@SuppressWarnings("unchecked")
+		SymbolicExpression<DerivedVariable> dy1 = (SymbolicExpression<DerivedVariable>)
+			comp1.resolve("dy1_dt");
+		Set<String> independentVariables1 = dy1.getIndependentVariables();
+		assertTrue(independentVariables1.contains("y1"));
+		Double dy = dy1.evaluate(new ImmutableMap.Builder<String, Double>()
+								.put("y1", 1.)
+								.build());
+		assertEquals(dy, 0, 1e-10);
 
 	}
 
