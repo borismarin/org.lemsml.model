@@ -148,6 +148,7 @@ class BuildSymbolDependenciesContexts extends
 			}catch(UndefinedSymbolException e){ // will resolve later, in order
 				dependencies.addNode(dep);
 				dependencies.addEdge(defName, dep);
+				expressions.put(dep, resolved.getValueDefinition());
 			}
 		}
 	}

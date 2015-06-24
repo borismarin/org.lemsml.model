@@ -60,8 +60,6 @@ public class ExpressionResolverTest extends BaseTest {
 		//TODO error if Requirement is not set
 		// (we find symbols upscope even if they are not required, set IScope.resolve)
 
-		//TODO test for Requirements involving derived variables/pars;
-		//     this is probably not working
 	}
 
 	@Test
@@ -99,7 +97,7 @@ public class ExpressionResolverTest extends BaseTest {
 		Double x = dv0.evaluate(new ImmutableMap.Builder<String, Double>()
 								.put("x0", 0.)
 								.build());
-		assertEquals(x, 0, 1e-10);
+		assertEquals(0, x, 1e-10);
 
 		Component comp1 = compiledLems.getComponentById("comp1");
 		@SuppressWarnings("unchecked")
@@ -107,10 +105,13 @@ public class ExpressionResolverTest extends BaseTest {
 			comp1.resolve("dy1_dt");
 		Set<String> independentVariables1 = dy1.getIndependentVariables();
 		assertTrue(independentVariables1.contains("y1"));
+		//TODO: think about what we expect for symb expre expressions which
+		//      depend on top-level symb exprs (i.e. do we expand "dv0" below?)
 		Double dy = dy1.evaluate(new ImmutableMap.Builder<String, Double>()
 								.put("y1", 1.)
+								.put("dv0", 1.)
 								.build());
-		assertEquals(dy, 0, 1e-10);
+		assertEquals(-1., dy, 1e-10);
 
 	}
 
