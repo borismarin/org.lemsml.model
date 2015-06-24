@@ -18,12 +18,12 @@ import expr_parser.utils.TopologicalSort;
  * @author borismarin
  *
  */
-public class ProcessTypeExtensions extends BaseVisitor<Boolean, Throwable> {
+public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private DirectedGraph<ComponentType> dependencies = new DirectedGraph<ComponentType>();
 
-	public ProcessTypeExtensions(Lems lems) throws Throwable {
+	public TypeExtensionVisitor(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 
