@@ -21,11 +21,11 @@ import com.google.common.collect.Lists;
  * @author borismarin
  *
  */
-public class AddFamilyToComponents extends BaseVisitor<Boolean, Throwable> {
+public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
-	public AddFamilyToComponents(Lems lems) throws Throwable {
+	public FamilyVisitor(Lems lems) throws Throwable {
 		this.lems = lems;	
 	}
 

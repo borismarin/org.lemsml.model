@@ -1,14 +1,10 @@
 package org.lemsml.model.compiler.semantic;
 
-import org.lemsml.model.compiler.semantic.visitors.AddFamilyToComponents;
 import org.lemsml.model.compiler.semantic.visitors.BuildScope;
 import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ResolveSymbols;
 import org.lemsml.model.extended.Lems;
-import org.lemsml.visitors.TraversingVisitor;
-import org.lemsml.visitors.Visitor;
 
 /**
  * @author borismarin
@@ -21,6 +17,7 @@ public class LEMSSemanticAnalyser {
 	private ResolveUnitsDimensions dimensionResolver;
 	private DecorateComponentsWithType typeDecorator;
 	private ExtendTypes typeExtender;
+	private AddFamilyToComponents familyAdder;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
@@ -30,6 +27,7 @@ public class LEMSSemanticAnalyser {
 		dimensionResolver = new ResolveUnitsDimensions(lems);
 		typeDecorator = new DecorateComponentsWithType(lems);
 		typeExtender = new ExtendTypes(lems);
+		familyAdder = new AddFamilyToComponents(lems);
 	}
 
 	public Lems analyse() throws Throwable {
@@ -38,8 +36,7 @@ public class LEMSSemanticAnalyser {
 		dimensionResolver.apply();
 		typeDecorator.apply();
 		typeExtender.apply();
-
-		depthFirstWith(new AddFamilyToComponents(lems));
+		familyAdder.apply();
 
 		lems.accept(new BuildScope(lems));
 
@@ -62,12 +59,6 @@ public class LEMSSemanticAnalyser {
 
 		return lems;
 
-	}
-
-	private void depthFirstWith(Visitor<Boolean, Throwable> visitor) throws Throwable {
-		TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
-				new DepthFirstTraverserExt<Throwable>(), visitor);
-		lems.accept(trav);
 	}
 
 }
