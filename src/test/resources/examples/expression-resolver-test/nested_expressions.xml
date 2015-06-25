@@ -41,6 +41,8 @@
 
 	<ComponentType name="Foo">
 		<Parameter name="p2" dimension="none"/>
+		<!--  name clash ! -->
+		<DerivedParameter name="dp0" dimension="none" value="p2*const0^2"/>
 	</ComponentType>
 
 	<Component type="Exposes_dv0_p0" p0="2" id="comp0">

@@ -57,6 +57,12 @@ public class ExpressionResolverTest extends BaseTest {
 		assertEquals(10., p1, 1e-12);
 		assertEquals((p0 * p1) , dp1_1, 1e-12);
 
+		Component nested = compiledLems.getComponentById("veryNested");
+		Double p2 = nested.resolve("p2").evaluate();
+		Double dp0_nested= nested.resolve("dp0").evaluate();
+		assertEquals(p2 * Math.pow(const0, 2) , dp0_nested, 1e-12);
+
+
 		//TODO error if Requirement is not set
 		// (we find symbols upscope even if they are not required, set IScope.resolve)
 
