@@ -34,7 +34,7 @@ public class DimensionalAnalysisTest extends BaseTest {
 		lemsDoc = getLocalFile("/examples/dimensional-analysis-test/dimensional.xml");
 		compiler = new LEMSCompilerFrontend(lemsDoc, schema);
 	}
-	
+
 	@Test
 	public void testPlainFile() throws Throwable{
 		compiler.generateLEMSDocument();
@@ -62,22 +62,22 @@ public class DimensionalAnalysisTest extends BaseTest {
 	public void testDerivedParDimension() throws Throwable {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.DimensionalAnalysis.toString());
-		Lems fakeLems = new Lems(); 
-		
+		Lems fakeLems = new Lems();
+
 		Dimension lenDim = new Dimension();
 		lenDim.setL( BigInteger.valueOf(1));
 		lenDim.setName("length");
 		Dimension timeDim = new Dimension();
 		timeDim.setT( BigInteger.valueOf(1));
 		timeDim.setName("time");
-		
+
 		Unit metre = new Unit();
 		metre.setDimension("length");
 		metre.setSymbol("m");
-		
+
 		ComponentType type = new ComponentType();
 		type.setName("Foo");
-		
+
 		Parameter par = new Parameter();
 		par.setName("p");
 		par.setDimension("length");
@@ -88,7 +88,7 @@ public class DimensionalAnalysisTest extends BaseTest {
 		derPar.setValueDefinition("2*p");
 		derPar.setDimension("time"); //ooops!
 		type.getDerivedParameters().add(derPar);
-		
+
 		Component comp = new Component();
 		comp.setName("foo");
 		comp.setType("Foo");

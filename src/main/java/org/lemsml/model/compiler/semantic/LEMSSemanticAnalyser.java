@@ -1,6 +1,5 @@
 package org.lemsml.model.compiler.semantic;
 
-import org.lemsml.model.compiler.semantic.visitors.CheckExpressionDimensions;
 import org.lemsml.model.compiler.semantic.visitors.DimensionalAnalysis;
 import org.lemsml.model.compiler.semantic.visitors.ResolveSymbols;
 import org.lemsml.model.extended.Lems;
@@ -18,6 +17,7 @@ public class LEMSSemanticAnalyser {
 	private ExtendTypes typeExtender;
 	private AddFamilyToComponents familyAdder;
 	private BuildScope scopeBuilder;
+	private CheckExpressionDimensions exprChecker;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
@@ -29,6 +29,7 @@ public class LEMSSemanticAnalyser {
 		typeExtender = new ExtendTypes(lems);
 		familyAdder = new AddFamilyToComponents(lems);
 		scopeBuilder = new BuildScope(lems);
+		exprChecker = new CheckExpressionDimensions(lems);
 	}
 
 	public Lems analyse() throws Throwable {
@@ -40,7 +41,7 @@ public class LEMSSemanticAnalyser {
 		familyAdder.apply();
 		scopeBuilder.apply();
 
-		lems.accept(new CheckExpressionDimensions(lems));
+		exprChecker.apply();
 
 		lems.accept(new ResolveSymbols(lems));
 

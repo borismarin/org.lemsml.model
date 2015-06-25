@@ -24,7 +24,6 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.TimeDerivative;
 import org.lemsml.visitors.BaseVisitor;
-import org.lemsml.visitors.TraversingVisitor;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
@@ -35,7 +34,7 @@ import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.TopologicalSort;
 
-public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
+public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private Map<String, String> expressions;
@@ -45,34 +44,21 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(ProcessIncludes.class);
 
-	public CheckExpressionDimensions(Lems lems) {
+	public ExpressionDimensionVisitor(Lems lems) {
 		this.lems = lems;
         expressions = new HashMap<String, String>();
         unitContext = new HashMap<String, Unit<?>>();
         dependencies = new DirectedGraph<String>();
 	}
 
-	//TODO: have a "traverse components / comptypes" traverser, to be used here and with buildcontext
-	@Override
-	public Void visit(org.lemsml.model.Lems lems) throws Throwable {
-		for(ComponentType compType : lems.getComponentTypes()){
-			compType.accept(this);
-			CheckExpressionDimensions exprCalc = new CheckExpressionDimensions(this.lems);
-			TraversingVisitor<Void, Throwable> trav = new TraversingVisitor<Void, Throwable>(
-					new DepthFirstTraverserExt<Throwable>(),
-					exprCalc);
-			compType.accept(trav);
-			exprCalc.evalInterdependentExprs(compType);
-		}
-		//TODO: decide whether constant accept expression
-//		for(Constant ctt : lems.getConstants()){
-//			ctt.accept(this);
-//		}
+	public Boolean visit(org.lemsml.model.extended.ComponentType compType) throws LEMSCompilerException {
+		//TraverseFirst expected (so the method below will eval correctly)
+		evalInterdependentExprs(compType);
 		return null;
 	}
 
 	@Override
-	public Void visit(DerivedParameter typeDef) throws LEMSCompilerException {
+	public Boolean visit(DerivedParameter typeDef) throws LEMSCompilerException {
 
 		Unit<?> dim = this.lems.getDimensionByName(typeDef.getDimension());
 		buildDependenciesAndContext(typeDef.getName(), typeDef.getValueDefinition(), dim);
@@ -80,7 +66,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	}
 
 	@Override
-	public Void visit(DerivedVariable derVar) throws LEMSCompilerException {
+	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(derVar.getDimension());
 		//TODO: think about "Selected" dervars
 		if(derVar.getSelect() != null){
@@ -92,36 +78,36 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 	}
 
 	@Override
-	public Void visit(Parameter parDef) throws LEMSCompilerException {
+	public Boolean visit(Parameter parDef) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(parDef.getDimension());
 		unitContext.put(parDef.getName(), dim);
 		return null;
 	}
 
 	@Override
-	public Void visit(Constant ctt) throws LEMSCompilerException {
+	public Boolean visit(Constant ctt) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(ctt.getDimension());
 		unitContext.put(ctt.getName(), dim);
 		return null;
 	}
 
 	@Override
-	public Void visit(Requirement req) throws LEMSCompilerException {
+	public Boolean visit(Requirement req) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(req.getDimension());
 		unitContext.put(req.getName(), dim);
 		return null;
 	}
 
 	@Override
-	public Void visit(StateVariable x) throws LEMSCompilerException {
+	public Boolean visit(StateVariable x) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(x.getDimension());
 		unitContext.put(x.getName(), dim);
 		return null;
 	}
-	
+
 
 	@Override
-	public Void visit(TimeDerivative dx) throws LEMSCompilerException {
+	public Boolean visit(TimeDerivative dx) throws LEMSCompilerException {
 		buildDependenciesAndContext(dx.getName(), dx.getValueDefinition(), unitContext.get(dx.getVariable()).divide(SECOND));
 		return null;
 	}
@@ -136,7 +122,7 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 			dependencies.addEdge(name, dep);
 		}
 	}
-	
+
 	private void evalInterdependentExprs(ComponentType compType) throws LEMSCompilerException {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
@@ -165,6 +151,6 @@ public class CheckExpressionDimensions extends BaseVisitor<Void, Throwable> {
 				}
 			}
 		}
-	}	
+	}
 
 }
