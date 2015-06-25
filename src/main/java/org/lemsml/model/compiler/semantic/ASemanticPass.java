@@ -10,6 +10,7 @@ public abstract class ASemanticPass {
 	private Lems lems;
 	private Visitor<Boolean, Throwable> visitor;
 	private Traverser<Throwable> traverser;
+	private boolean traverseFirst = false;
 
 	protected void apply() throws Throwable {
 		traverseVisit();
@@ -18,6 +19,7 @@ public abstract class ASemanticPass {
 	public void traverseVisit() throws Throwable {
 		TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
 				this.getTraverser(), this.visitor);
+		trav.setTraverseFirst(traverseFirst);
 		this.getLems().accept(trav);
 	}
 
@@ -43,5 +45,9 @@ public abstract class ASemanticPass {
 
 	public void setVisitor(Visitor<Boolean, Throwable> visitor) {
 		this.visitor = visitor;
+	}
+
+	public void setTraveseFirst(boolean b) {
+		this.traverseFirst = b;
 	}
 }

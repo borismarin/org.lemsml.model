@@ -9,6 +9,7 @@ public class AddFamilyToComponents extends ASemanticPass {
 	AddFamilyToComponents(Lems lems) throws Throwable {
 		super.setLems(lems);
 		super.setTraverser(new DepthFirstTraverserExt<Throwable>());
+		super.setTraveseFirst(true);
 		super.setVisitor(new FamilyVisitor(lems));
 	}
 
