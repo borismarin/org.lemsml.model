@@ -10,7 +10,7 @@ import org.lemsml.visitors.Visitor;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public class TimeDerivative extends org.lemsml.model.TimeDerivative implements INamed, IValueDefinition{
+public class TimeDerivative extends org.lemsml.model.TimeDerivative implements INamedValueDefinition{
 
 	public String getName() {
 		return "d" + this.getVariable() + "_dt";

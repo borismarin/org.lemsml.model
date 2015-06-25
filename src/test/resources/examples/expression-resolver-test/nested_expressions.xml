@@ -1,10 +1,12 @@
 <Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+	<Dimension name="time" t="1"/>
+	<Unit symbol="s" dimension="time"/>
 
 	<Constant name="const0" value="-0.1" dimension="none" />
-
+	<Constant name="SEC" value="1s" dimension="time" />
 
 	<ComponentType name="DependsOn_dv0_p0">
- 		<Child name="child1" type="Foo" /> 
+ 		<Child name="child1" type="Foo" />
 		<Parameter name="p1" dimension="none" />
 		<DerivedParameter name="dp1" dimension="none" value="p0 * p1" />
 
@@ -15,8 +17,8 @@
 		<Dynamics>
 			<StateVariable name="x1" exposure="x1" />
 			<StateVariable name="y1" exposure="y1" />
-			<TimeDerivative variable="x1" value="const0*dp1/p0/p1*x1" />
-			<TimeDerivative variable="y1" value="-dv0 * y1" />
+			<TimeDerivative variable="x1" value="const0*dp1/p0/p1*x1/SEC" />
+			<TimeDerivative variable="y1" value="-dv0 * y1/SEC" />
 		</Dynamics>
 
 	</ComponentType>
@@ -43,7 +45,7 @@
 
 	<Component type="Exposes_dv0_p0" p0="2" id="comp0">
 		<Component type="DependsOn_dv0_p0" p1="10" id="comp1">
- 			<Component type="Foo" p2="100" id="veryNested" /> 
+ 			<Component type="Foo" p2="100" id="veryNested" />
 		</Component>
 	</Component>
 

@@ -71,7 +71,7 @@
       </jxb:bindings>
 
        <jxb:bindings node=".//xs:complexType[@name='NamedDimensionalValuedType']">
-         <inheritance:implements>org.lemsml.model.extended.IValueDefinition</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.INamedValueDefinition</inheritance:implements>
       </jxb:bindings>
 
       <jxb:bindings multiple="true" node=".//xs:attribute[@name='value']">

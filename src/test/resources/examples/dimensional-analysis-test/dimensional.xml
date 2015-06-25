@@ -3,6 +3,7 @@
 	<Dimension name="time" t="1" />
 	<Dimension name="length" l="1" />
 	<Dimension name="mass" m="1" />
+	<Dimension name="speed" l="1" t="-1" />
 	<Dimension name="acceleration" l="1" t="-2" />
 	<Dimension name="angular_momentum" l="2" t="-1" m="1" />
 	<Dimension name="angular_mass" l="2" m="1" />
@@ -24,8 +25,8 @@
 		<Parameter name="m" dimension="mass" />
 		<DerivedParameter name="omega2" dimension="per_time_sq" value="k/m" />
 		<Dynamics>
-			<StateVariable name="x" exposure="x" />
-			<StateVariable name="v" exposure="x" />
+			<StateVariable name="x" exposure="x" dimension="length"/>
+			<StateVariable name="v" exposure="x" dimension="speed"/>
 			<TimeDerivative variable="x" value="v" />
 			<TimeDerivative variable="v" value="-omega2 * x" />
 		</Dynamics>

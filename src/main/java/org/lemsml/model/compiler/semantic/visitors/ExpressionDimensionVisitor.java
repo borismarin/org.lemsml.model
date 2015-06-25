@@ -6,6 +6,7 @@ import static tec.units.ri.util.SI.SECOND;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -21,6 +22,7 @@ import org.lemsml.model.Requirement;
 import org.lemsml.model.StateVariable;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.extended.INamedValueDefinition;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.TimeDerivative;
 import org.lemsml.visitors.BaseVisitor;
@@ -28,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 
+import com.google.common.collect.Sets;
 import com.google.common.collect.Sets.SetView;
 
 import expr_parser.utils.DirectedGraph;
@@ -40,39 +43,42 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 	private Map<String, String> expressions;
 	private Map<String, Unit<?>> unitContext;
 	private DirectedGraph<String> dependencies;
+	private HashMap<String, INamedValueDefinition> nameToObj;
+	ComponentType context = null;
+	private Map<String, Unit<?>> globalUnitContext = new HashMap<String, Unit<?>>();
 
 	private static final Logger logger = (Logger) LoggerFactory
 			.getLogger(ProcessIncludes.class);
 
 	public ExpressionDimensionVisitor(Lems lems) {
 		this.lems = lems;
-        expressions = new HashMap<String, String>();
-        unitContext = new HashMap<String, Unit<?>>();
-        dependencies = new DirectedGraph<String>();
+		clearMaps();
 	}
 
-	public Boolean visit(org.lemsml.model.extended.ComponentType compType) throws LEMSCompilerException {
-		//TraverseFirst expected (so the method below will eval correctly)
-		evalInterdependentExprs(compType);
+	public Boolean visit(org.lemsml.model.extended.ComponentType compType)
+			throws LEMSCompilerException {
+		context = compType;
+		// TraverseFirst expected (so the method below will eval correctly)
+		evalInterdependentExprs();
+		clearMaps();
 		return null;
 	}
 
 	@Override
 	public Boolean visit(DerivedParameter typeDef) throws LEMSCompilerException {
-
 		Unit<?> dim = this.lems.getDimensionByName(typeDef.getDimension());
-		buildDependenciesAndContext(typeDef.getName(), typeDef.getValueDefinition(), dim);
+		buildDependenciesAndContext(typeDef, dim);
 		return null;
 	}
 
 	@Override
 	public Boolean visit(DerivedVariable derVar) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(derVar.getDimension());
-		//TODO: think about "Selected" dervars
-		if(derVar.getSelect() != null){
+		// TODO: think about "Selected" dervars
+		if (derVar.getSelect() != null) {
 			unitContext.put(derVar.getName(), dim);
-		}else{
-			buildDependenciesAndContext(derVar.getName(), derVar.getValueDefinition(), dim);
+		} else {
+			buildDependenciesAndContext(derVar, dim);
 		}
 		return null;
 	}
@@ -87,7 +93,11 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 	@Override
 	public Boolean visit(Constant ctt) throws LEMSCompilerException {
 		Unit<?> dim = this.lems.getDimensionByName(ctt.getDimension());
-		unitContext.put(ctt.getName(), dim);
+		if(context != null)
+			unitContext.put(ctt.getName(), dim);
+		else
+			globalUnitContext.put(ctt.getName(), dim);
+
 		return null;
 	}
 
@@ -105,15 +115,17 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 		return null;
 	}
 
-
 	@Override
 	public Boolean visit(TimeDerivative dx) throws LEMSCompilerException {
-		buildDependenciesAndContext(dx.getName(), dx.getValueDefinition(), unitContext.get(dx.getVariable()).divide(SECOND));
+		buildDependenciesAndContext(dx, unitContext.get(dx.getVariable()).divide(SECOND));
 		return null;
 	}
 
-	private void buildDependenciesAndContext(String name, String value,
+	private void buildDependenciesAndContext(INamedValueDefinition node,
 			Unit<?> dimension) throws LEMSCompilerException {
+		String name = node.getName();
+		String value = node.getValueDefinition();
+		nameToObj.put(name, node);
 		expressions.put(name, value);
 		dependencies.addNode(name);
 		unitContext.put(name, dimension);
@@ -123,34 +135,69 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 		}
 	}
 
-	private void evalInterdependentExprs(ComponentType compType) throws LEMSCompilerException {
+	private void evalInterdependentExprs()
+			throws LEMSCompilerException {
 		List<String> sorted = TopologicalSort.sort(dependencies);
 		Collections.reverse(sorted);
 		for (String depName : sorted) {
 			String expression = expressions.get(depName);
-			if (null != expression){
+			if (null != expression) {
 				Set<String> edgesFrom = dependencies.edgesFrom(depName);
-				Set<String> haveUnits = unitContext.keySet();
-				SetView<String> difference = com.google.common.collect.Sets.difference(edgesFrom, haveUnits);
-				if(difference.size() != 0){
+				Set<String> haveUnits = new HashSet<String>();
+				haveUnits.addAll(unitContext.keySet());
+				haveUnits.addAll(globalUnitContext.keySet());
+				INamedValueDefinition node = nameToObj.get(depName);
+				SetView<String> difference = Sets.difference(edgesFrom,
+						haveUnits);
+				if (difference.size() != 0) {
 					String err = MessageFormat
-							.format("Symbol(s) {0} undefined in  expression [{1}], at [({2}) {3}]",
-									difference.toString(), expression, compType.getClass().getSimpleName(), compType.getName());
+							.format("Symbol(s) {0} undefined in expression [{1}], in  [({2}) {3}] in [(ComponentType) {4}]",
+									difference.toString(),
+									expression,
+									node.getClass().getSimpleName(),
+									node.getName(),
+									context.getName());
 					throw new LEMSCompilerException(err, LEMSCompilerError.UndefinedSymbol);
-				}
-				else{
+				} else {
 					Unit<?> unit = ONE;
 					try {
-						unit = ExpressionParser.dimensionalAnalysis(expression, unitContext);
+						HashMap<String, Unit<?>> extendedUnits = new HashMap<String, Unit<?>>();
+						extendedUnits.putAll(globalUnitContext);
+						extendedUnits.putAll(unitContext);
+						unit = ExpressionParser.dimensionalAnalysis(expression, extendedUnits);
 					} catch (NumberFormatException e) {
-						logger.warn("Cannot perform unit checking for variable exponent. " + e.getLocalizedMessage());
+						logger.warn("Cannot perform unit checking for variable exponent. "
+								+ e.getLocalizedMessage());
 						logger.warn("Will tacitly assume that the base is adimensional, which is reasonable given that there be dragons with fractional units.");
 					}
-
-					unitContext.put(depName, unit);
+					checkUnits(node, unit, unitContext.get(depName));
 				}
 			}
 		}
+	}
+
+	private void checkUnits(INamedValueDefinition node, Unit<?> declaredDim,
+			Unit<?> calculatedDim) throws LEMSCompilerException {
+
+		if (!declaredDim.equals(calculatedDim)) {
+			String err = MessageFormat.format(
+					"Unit mismatch for [({0}) {1}] defined in [{2}]:"
+							+ " Expecting  [{3}], but"
+							+ " dimension of [{4}] is [{5}].",
+							node.getClass().getSimpleName(),
+							node.getName(),
+							context.getName(),
+							declaredDim.toString(), node.getValueDefinition(),
+							calculatedDim);
+			throw new LEMSCompilerException(err, LEMSCompilerError.DimensionalAnalysis);
+		}
+	}
+
+	public void clearMaps() {
+		expressions = new HashMap<String, String>();
+		unitContext = new HashMap<String, Unit<?>>();
+		dependencies = new DirectedGraph<String>();
+		nameToObj = new HashMap<String, INamedValueDefinition>();
 	}
 
 }

@@ -18,7 +18,7 @@ import org.lemsml.visitors.Visitor;
  *
  */
 @XmlTransient
-public class Lems extends org.lemsml.model.Lems implements IScope {
+public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 
 	@XmlTransient
 	private Map<String, Component> idToComponent = new HashMap<String, Component>();
@@ -125,6 +125,10 @@ public class Lems extends org.lemsml.model.Lems implements IScope {
 	@Override
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
+	}
+
+	public String getName() {
+		return getScopeName();
 	}
 
 }

@@ -88,21 +88,6 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 		for (TimeDerivative bean : aBean.getTimeDerivatives()) {
 			bean.accept(aVisitor);
 		}
-		for (OnStart bean : aBean.getOnStarts()) {
-			bean.accept(aVisitor);
-		}
-		for (OnEvent bean : aBean.getOnEvents()) {
-			bean.accept(aVisitor);
-		}
-		for (OnCondition bean : aBean.getOnConditions()) {
-			bean.accept(aVisitor);
-		}
-		for (Regime bean : aBean.getRegimes()) {
-			bean.accept(aVisitor);
-		}
-		for (KineticScheme bean : aBean.getKineticSchemes()) {
-			bean.accept(aVisitor);
-		}
 	}
 
 	@Override
@@ -123,13 +108,13 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 
 	@Override
 	public void traverse(ComponentType aBean, Visitor<?, E> aVisitor) throws E {
+		for (Constant bean : aBean.getConstants()) {
+			bean.accept(aVisitor);
+		}
 		for (Parameter bean : aBean.getParameters()) {
 			bean.accept(aVisitor);
 		}
 		for (Fixed bean : aBean.getFixeds()) {
-			bean.accept(aVisitor);
-		}
-		for (Constant bean : aBean.getConstants()) {
 			bean.accept(aVisitor);
 		}
 		for (DerivedParameter bean : aBean.getDerivedParameters()) {
@@ -141,59 +126,15 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 		for (Dynamics bean : aBean.getDynamics()) {
 			bean.accept(aVisitor);
 		}
-		for (Property bean : aBean.getProperties()) {
-			bean.accept(aVisitor);
-		}
-		for (IndexParameter bean : aBean.getIndexParameters()) {
-			bean.accept(aVisitor);
-		}
-		for (Child bean : aBean.getChildren()) {
-			bean.accept(aVisitor);
-		}
-		for (Children bean : aBean.getChildrens()) {
-			bean.accept(aVisitor);
-		}
-		for (Link bean : aBean.getLinks()) {
-			bean.accept(aVisitor);
-		}
-		for (ComponentReference bean : aBean.getComponentReferences()) {
-			bean.accept(aVisitor);
-		}
-		for (Attachments bean : aBean.getAttachments()) {
-			bean.accept(aVisitor);
-		}
-		for (EventPort bean : aBean.getEventPorts()) {
-			bean.accept(aVisitor);
-		}
 		for (Exposure bean : aBean.getExposures()) {
 			bean.accept(aVisitor);
 		}
-		for (ComponentRequirement bean : aBean.getComponentRequirements()) {
-			bean.accept(aVisitor);
-		}
-		for (InstanceRequirement bean : aBean.getInstanceRequirements()) {
-			bean.accept(aVisitor);
-		}
-		for (Path bean : aBean.getPaths()) {
-			bean.accept(aVisitor);
-		}
-		for (Text bean : aBean.getTexts()) {
-			bean.accept(aVisitor);
-		}
-		for (Structure bean : aBean.getStructures()) {
-			bean.accept(aVisitor);
-		}
-		for (Simulation bean : aBean.getSimulations()) {
-			bean.accept(aVisitor);
-		}
-
 	}
 
 	@Override
 	public void traverse(org.lemsml.model.extended.ComponentType aBean,
 			Visitor<?, E> aVisitor) throws E {
 		traverse((ComponentType) aBean, aVisitor);
-
 	}
 
 	// all others should be empty
