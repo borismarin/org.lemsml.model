@@ -7,11 +7,14 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.measure.Unit;
+import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
 import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.visitors.Visitor;
+
+import tec.units.ri.unit.BaseUnit;
 
 /**
  * @author borismarin
@@ -31,11 +34,18 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 	 * dimensions and what UOM calls dimensions. We'll thus confusingly use
 	 * Unit<?> here to store a dimension...
 	 */
+
+	@XmlTransient
+    final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	{
 		//TODO: ugly.
 	    nameToDimension.put("none", ONE);
+	    nameToDimension.put("", ONE);
+
+		//TODO: ugly workaround for '*'
+		nameToDimension.put("*", anyDimension);
 	}
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
@@ -43,6 +53,7 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 		//TODO: ugly.
 	    symbolToUnit.put("none", ONE);
 	    symbolToUnit.put("", ONE);
+
 	}
 	@XmlTransient
 	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
@@ -129,6 +140,10 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 
 	public String getName() {
 		return getScopeName();
+	}
+
+	public Unit<?> getAnyDimension() {
+		return anyDimension;
 	}
 
 }

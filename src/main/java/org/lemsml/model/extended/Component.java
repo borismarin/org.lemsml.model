@@ -120,7 +120,7 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 	}
 
 	public String toString(){
-		return MessageFormat.format("[{0}] {1}", this.getType(), this.getId());
+		return MessageFormat.format("({0}) {1}", this.getType(), this.getId());
 	}
 
 }

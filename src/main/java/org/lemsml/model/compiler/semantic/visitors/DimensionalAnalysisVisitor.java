@@ -20,25 +20,22 @@ import expr_parser.utils.UndefinedSymbolException;
  * @author borismarin
  *
  */
-public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
+public class DimensionalAnalysisVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 
-	public DimensionalAnalysis(Lems lems) throws Throwable {
+	public DimensionalAnalysisVisitor(Lems lems) {
 		this.lems = lems;
 	}
-	
+
 	@Override
 	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
 		checkScope(this.lems);
-		for(Component comp : lems.getComponents()){
-			comp.accept(this);
-		}
 		return null;
 	}
-	
+
 	@Override
-	public Boolean visit(Component comp) throws Throwable {
+	public Boolean visit(Component comp) throws LEMSCompilerException {
 		checkScope(comp);
 		return null;
 	}
@@ -70,19 +67,21 @@ public class DimensionalAnalysis extends BaseVisitor<Boolean, Throwable> {
 							dimNameFromType,
 							resolved.getType().getClass().getSimpleName(),
 							resolved.getName(),
-							scope.getScopeName());
+							scope.toString());
 			throw new LEMSCompilerException(err,
 					LEMSCompilerError.UndefinedDimension);
 		}
 		Dimension dimFromType = uomUnitFromType.getDimension();
-		if (!dimFromValue.equals(dimFromType)) {
+		//TODO: think about the need of this "wildcard" dimension
+		if (!dimFromValue.equals(dimFromType) && !uomUnitFromType.equals(lems.getAnyDimension())) {
 			String unitString = resolved.getUnit().toString();
 			String err = MessageFormat
-					.format("Unit mismatch for [({0}) {1}] defined in [{2}]:"
+					.format("Unit mismatch for [({0}) {1}] defined in {2}:"
 							+ " Expecting  [{3}], but"
 							+ " dimension of [{4}] is [{5}].",
 							resolved.getType().getClass().getSimpleName(),
-							resolved.getName(), scope.getScopeName(),
+							resolved.getName(),
+							scope.toString(),
 							dimFromType.toString(),
 							unitString,
 							dimFromValue.toString());
