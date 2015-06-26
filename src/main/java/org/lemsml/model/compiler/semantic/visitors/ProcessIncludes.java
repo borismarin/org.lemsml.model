@@ -44,6 +44,15 @@ public class ProcessIncludes extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	@Override
+	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
+		// TODO: having a traverser just to do that seems silly
+		for (Include inc : lems.getIncludes()) {
+			inc.accept(this);
+		}
+		return null;
+	}
+
+	@Override
 	public Boolean visit(Include inc) throws Throwable {
 
 		File includedFile = new File(cwd.getPath(), inc.getFile());
@@ -60,12 +69,15 @@ public class ProcessIncludes extends BaseVisitor<Boolean, Throwable> {
 			includedLems.accept(addFile);
 
 			// recursively process inputs
-			includedLems.accept(new TraversingVisitor<Boolean, Throwable>(new DepthFirstTraverserExt<Throwable>(), new ProcessIncludes(includedLems, schema, cwd,
-					this.includedFiles)));
+			includedLems.accept(new TraversingVisitor<Boolean, Throwable>(
+					new DepthFirstTraverserExt<Throwable>(),
+					new ProcessIncludes(includedLems, schema, cwd,
+							this.includedFiles)));
 
 			// will copy the content of the visited LEMS document to inputLems
 			TraversingVisitor<Boolean, Throwable> copyContent = new TraversingVisitor<Boolean, Throwable>(
-					new TopLevelTraverser<Throwable>(), new CopyContent(inputLems));
+					new TopLevelTraverser<Throwable>(), new CopyContent(
+							inputLems));
 			includedLems.accept(copyContent);
 		} else {
 			logger.warn("Skipping double inclusion of file {}",

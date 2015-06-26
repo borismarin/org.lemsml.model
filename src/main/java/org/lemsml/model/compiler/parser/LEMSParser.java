@@ -63,9 +63,7 @@ public class LEMSParser {
 		lems.accept(addFile);
 
 		ProcessIncludes processIncludes = new ProcessIncludes(lems, schema, cwd);
-		TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
-				new DepthFirstTraverserExt<Throwable>(), processIncludes);
-		lems.accept(trav);
+		lems.accept(processIncludes);
 		lems = processIncludes.getInputLems();
 	}
 
