@@ -16,8 +16,6 @@ public class LEMSSemanticAnalyser {
 	private AddFamilyToComponents familyAdder;
 	private BuildScope scopeBuilder;
 	private CheckExpressionDimensions exprDimChecker;
-	private ResolveSymbols symbResolver;
-	private DimensionalAnalysis dimensionalAnalyser;
 
 	public LEMSSemanticAnalyser(Lems lems) throws Throwable {
 		super();
@@ -30,8 +28,6 @@ public class LEMSSemanticAnalyser {
 		familyAdder = new AddFamilyToComponents(lems);
 		scopeBuilder = new BuildScope(lems);
 		exprDimChecker = new CheckExpressionDimensions(lems);
-		symbResolver = new ResolveSymbols(lems);
-		dimensionalAnalyser = new DimensionalAnalysis(lems);
 	}
 
 	public Lems analyse() throws Throwable {
@@ -43,8 +39,6 @@ public class LEMSSemanticAnalyser {
 		familyAdder.apply();
 		scopeBuilder.apply();
 		exprDimChecker.apply(); //checks exprs in comptype definitions
-		symbResolver.apply();
-		dimensionalAnalyser.apply(); //checks components
 
 
 		// TODO move error checking to dedicated visitors

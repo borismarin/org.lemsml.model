@@ -17,7 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.ComponentType;
 import org.lemsml.model.Parameter;
-import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
@@ -25,6 +24,7 @@ import org.lemsml.model.compiler.parser.XMLUtils;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Symbol;
 
 import tec.units.ri.AbstractQuantity;
 import tec.units.ri.quantity.NumberQuantity;
@@ -78,15 +78,15 @@ public class SimplePendulumTest extends BaseTest {
 				.getDimension());
 
 		Component pend = compiledLems.getComponentById("pend");
-		ISymbol<Parameter> length = pend.getParameterByName("l");
+		//ISymbol<Parameter> length = pend.getParameterByName("l");
 
 		// the "l" parameter is defined in kilometres
-		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnit().toString());
+//		Unit<?> unitL = compiledLems.getUnitBySymbol(length.getUnit().toString());
+		Unit<?> unitL = compiledLems.getUnitBySymbol(pend.getScope().resolve("l").getUnit().getSymbol());
 		assertEquals(unitL, METRE.multiply(1000));
 
 		// testing conversion to SI
-		AbstractQuantity<?> lenghtWithUnit = NumberQuantity.of(
-				length.evaluate(), unitL);
+		AbstractQuantity<?> lenghtWithUnit = NumberQuantity.of(pend.getScope().evaluate("length"), unitL);
 		assertEquals(lenghtWithUnit.getValue().floatValue(), 0.001, 1e-8);
 		assertEquals(lenghtWithUnit.toSI().getValue().floatValue(), 1.0, 1e-8);
 	}
@@ -138,7 +138,7 @@ public class SimplePendulumTest extends BaseTest {
 		ComponentType pendType = compiledLems
 				.getComponentTypeByName("SimplePendulum");
 
-		ISymbol<Parameter> length = pend.getParameterByName("l");
+		Symbol length = pend.getScope().resolve("l");
 		assertTrue(pendType.getParameters().contains(length.getType()));
 		assertTrue(length.getUnit().equals(METRE.multiply(1000)));
 

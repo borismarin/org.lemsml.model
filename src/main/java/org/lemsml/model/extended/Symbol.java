@@ -1,30 +1,32 @@
 package org.lemsml.model.extended;
 
+import java.util.Set;
+
 import javax.measure.Unit;
 
-import org.lemsml.model.compiler.ISymbol;
+import org.lemsml.model.NamedDimensionalType;
 
-import tec.units.ri.quantity.NumberQuantity;
-import expr_parser.utils.UndefinedSymbolException;
+import expr_parser.utils.ExpressionParser;
 
-public class Symbol<T> implements ISymbol<T> {
+public class Symbol {
 
-	private Double value;
 	private String name;
-	private T type;
+	private LemsNode type;
 	private Unit<?> unit;
+	private String valueDefinition;
 
-	public Symbol(String name, T instance) {
-		this.name = name;
-		this.type = instance;
+	public Symbol(NamedDimensionalType type, String valueDef) {
+		setName(type.getName());
+		setType(type);
+		setValueDefinition(valueDef);
 	}
 
-	@Override
-	public Double evaluate() throws UndefinedSymbolException {
-		return this.value;
+	public <T extends INamedValueDefinition> Symbol(T instance) {
+		setName(instance.getName());
+		setType((LemsNode) instance);
+		setValueDefinition(instance.getValueDefinition());
 	}
 
-	@Override
 	public String getName() {
 		return this.name;
 	}
@@ -33,44 +35,34 @@ public class Symbol<T> implements ISymbol<T> {
 		this.name = name;
 	}
 
-	@Override
 	public Unit<?> getUnit() {
 		return this.unit;
 	}
 
-	@Override
-	public T getType() {
-		return this.type;
-	}
-
-	@Override
-	public void setType(T type) {
-		this.type = type;
-	}
-
-
-	@Override
-	public Double evaluateSI() {
-		return new Double(NumberQuantity.of(value, getUnit()).toSI().getValue().doubleValue());
-	}
-
-	public void setUnit(Unit <?> unit) {
+	public void setUnit(Unit<?> unit) {
 		this.unit = unit;
 	}
 
-	public Double getValue() {
-		return this.value;
-	}
-
-	@Override
-	public void setValue(Double val) {
-		this.value = val;
-		
-	}
-
-	@Override
 	public String getValueDefinition() {
-		return ((IValueDefinition) this.getType()).getValueDefinition();
+		return this.valueDefinition;
+	}
+
+	public void setValueDefinition(String def) {
+		this.valueDefinition = def;
+	}
+
+	public Set<String> getIndependentVariables() {
+		Set<String> syms = ExpressionParser
+				.listSymbolsInExpression(getValueDefinition());
+		return syms;
+	}
+
+	public LemsNode getType() {
+		return type;
+	}
+
+	public void setType(LemsNode type) {
+		this.type = type;
 	}
 
 }

@@ -6,12 +6,12 @@ import javax.measure.Dimension;
 import javax.measure.Unit;
 
 import org.lemsml.model.NamedDimensionalType;
-import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.IScope;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Symbol;
 import org.lemsml.visitors.BaseVisitor;
 
 import expr_parser.utils.UndefinedSymbolException;
@@ -30,21 +30,21 @@ public class DimensionalAnalysisVisitor extends BaseVisitor<Boolean, Throwable> 
 
 	@Override
 	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
-		checkScope(this.lems);
+		checkScope(this.lems.getScope());
 		return null;
 	}
 
 	@Override
 	public Boolean visit(Component comp) throws LEMSCompilerException {
-		checkScope(comp);
+		checkScope(comp.getScope());
 		return null;
 	}
 
 	private void checkScope(IScope scope) throws LEMSCompilerException{
 		for(String symb : scope.getDefinedSymbols()){
 			try{
-				ISymbol<?> resolved = scope.resolve(symb);
-				if(null != resolved.evaluate()){//UGLY: guard for StateVariable
+				Symbol resolved = scope.resolve(symb);
+				if(null != scope.evaluate(symb)){//UGLY: guard for StateVariable
 					checkUnits(resolved, scope);
 				}
 			}
@@ -54,7 +54,7 @@ public class DimensionalAnalysisVisitor extends BaseVisitor<Boolean, Throwable> 
 		}
 	}
 
-	private void checkUnits(ISymbol<?> resolved, IScope scope)
+	private void checkUnits(Symbol resolved, IScope scope)
 			throws LEMSCompilerException {
 
 		Dimension dimFromValue = resolved.getUnit().getDimension();

@@ -4,14 +4,12 @@ import static tec.units.ri.AbstractUnit.ONE;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import javax.measure.Unit;
 import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
-import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.visitors.Visitor;
 
 import tec.units.ri.unit.BaseUnit;
@@ -20,8 +18,7 @@ import tec.units.ri.unit.BaseUnit;
  * @author borismarin
  *
  */
-@XmlTransient
-public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
+public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 
 	@XmlTransient
 	private Map<String, Component> idToComponent = new HashMap<String, Component>();
@@ -36,7 +33,7 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 	 */
 
 	@XmlTransient
-    final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
+    private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	{
@@ -55,13 +52,9 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 	    symbolToUnit.put("", ONE);
 
 	}
+
 	@XmlTransient
-	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
-
-
-	public Map<String, ISymbol<?>> getScope() {
-		return scope;
-	}
+	private Scope scope = new Scope("global");
 
 	public Component getComponentById(String id) {
 		return idToComponent.get(id);
@@ -108,42 +101,47 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 		return this.symbolToUnit.put(name, unit);
 	}
 
-	@Override
-	public IScope getEnclosingScope() {
-		return null;
-	}
-
-	@Override
-	public ISymbol<?> define(ISymbol<?> sym) {
-		return this.scope.put(sym.getName(), sym);
-	}
-
-	@Override
-	public ISymbol<?> resolve(String name) {
-		return this.scope.get(name);
-	}
-
-	@Override
-	public String getScopeName() {
-		return "global";
-	}
-
-	@Override
-	public Set<String> getDefinedSymbols() {
-		return this.scope.keySet();
-	}
 
 	@Override
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
 	}
 
-	public String getName() {
-		return getScopeName();
-	}
-
 	public Unit<?> getAnyDimension() {
 		return anyDimension;
 	}
+
+//	public void parseValueUnit(String symbolDef, Symbol resolved)
+//			throws LEMSCompilerException {
+//
+//		String valUnitRegEx = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
+//		Pattern pattern = Pattern.compile(valUnitRegEx);
+//		Matcher matcher = pattern.matcher(symbolDef);
+//
+//		if (matcher.find()) {
+//			resolved.setValue(Double.parseDouble(matcher.group(1)));
+//			resolved.setUnit(getUnitBySymbol(matcher.group(2)));
+//		} else {
+//			throw new LEMSCompilerException("Could not parse ",
+//					LEMSCompilerError.CantParseValueUnit);
+//		}
+//	}
+
+
+
+	@Override
+	public IScope getScope() {
+		return scope;
+	}
+
+	@Override
+	public String getName() {
+		return scope.getScopeName();
+	}
+
+	public Symbol resolve(String sym) {
+		return scope.resolve(sym);
+	}
+
 
 }

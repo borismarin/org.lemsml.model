@@ -1,4 +1,4 @@
 package org.lemsml.model.extended;
 
-public interface INamedDimensionalEvaluable extends IDimensionalEvaluable, INamed{
-}
+//public interface INamedDimensionalEvaluable extends IDimensionalEvaluable, INamed{
+//}

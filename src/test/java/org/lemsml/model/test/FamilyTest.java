@@ -71,6 +71,10 @@ public class FamilyTest extends BaseTest {
 	@Test
 	public void testParents() throws Throwable {
 
+		ComponentType Baz = (ComponentType) new ComponentType()
+							.withName("Baz")
+							.withChildren(new Child().withType("Foo"));
+
 		Component bar0 = (Component) new Component()
 				.withType("Bar")
 				.withName("bar0");
@@ -80,14 +84,21 @@ public class FamilyTest extends BaseTest {
 					.withType("Foo")
 					.withComponent(bar0);
 
+		Component baz0 = (Component) new Component()
+					.withId("baz0")
+					.withType("Baz")
+					.withComponent(foo0);
+
 		Lems lems = (Lems) new Lems()
-				.withComponentTypes(Bar, Foo)
-				.withComponents(foo0);
+				.withComponentTypes(Bar, Foo, Baz)
+				.withComponents(baz0);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
+
 		Assert.assertEquals(foo0, bar0.getParent());
-		Assert.assertEquals(lems, foo0.getParent());
+		Assert.assertEquals(baz0, foo0.getParent());
+		Assert.assertEquals(null, baz0.getParent());
 	}
 
 	@Test

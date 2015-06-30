@@ -2,16 +2,23 @@ package org.lemsml.model.extended;
 
 import java.util.Set;
 
-import org.lemsml.model.compiler.ISymbol;
-import org.lemsml.visitors.Visitable;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 
+import expr_parser.utils.UndefinedSymbolException;
 
-
-public interface IScope extends Visitable {
+public interface IScope {
 	public String getScopeName();
+
 	public IScope getEnclosingScope();
-	public ISymbol<?> resolve(String name);
-	ISymbol<?> define(ISymbol<?> sym);
+
+	public Symbol resolve(String name);
+
+	Symbol define(Symbol sym) throws LEMSCompilerException, UndefinedSymbolException;
+
 	public Set<String> getDefinedSymbols();
+
+	Double evaluate(String symbol) throws UndefinedSymbolException;
+
+	Double evaluateSI(String symbol) throws UndefinedSymbolException;
 
 }

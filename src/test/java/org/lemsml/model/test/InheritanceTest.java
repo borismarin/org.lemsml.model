@@ -2,8 +2,6 @@ package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.xml.namespace.QName;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,7 +20,7 @@ public class InheritanceTest extends BaseTest {
 
 	@Test
 	public void testInheritedPar() throws Throwable {
-		
+
 		Lems lems = (Lems) new Lems()
 			.withComponentTypes(
 				(ComponentType)
@@ -41,21 +39,20 @@ public class InheritanceTest extends BaseTest {
 							.withType("Bar")
 							.withId("comp0");
 		//ugly...
-		comp0.getOtherAttributes().put(new QName("p0"), "1");
-		
+		comp0.withParameterValue("p0", "1");
+
 		lems.getComponents().add(comp0);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		
+
 		assertEquals(1, lems
 					.getComponentById("comp0")
-					.getParameterByName("p0")
-					.evaluateSI(), 1e-12);
+					.getScope().evaluateSI("p0"), 1e-12);
 	}
 
 	@Test
 	public void testInheritedParBis() throws Throwable {
-		
+
 		Lems lems = (Lems) new Lems()
 			.withComponentTypes(
 				(ComponentType)
@@ -79,12 +76,12 @@ public class InheritanceTest extends BaseTest {
 		exception.expectMessage(LEMSCompilerError.RequiredParameterUndefined.toString());
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		
+
 	}
 
 	@Test
 	public void testWrongInheritance() throws Throwable {
-		
+
 		Lems lems = (Lems) new Lems()
 			.withComponentTypes(
 				(ComponentType)
@@ -95,8 +92,8 @@ public class InheritanceTest extends BaseTest {
 		exception.expectMessage(LEMSCompilerError.ComponentTypeNotDefined.toString());
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		
+
 	}
-	
+
 
 }
