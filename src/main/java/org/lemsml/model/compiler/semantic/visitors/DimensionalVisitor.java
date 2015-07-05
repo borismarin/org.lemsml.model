@@ -14,11 +14,11 @@ import ch.qos.logback.classic.Logger;
  * @author borismarin
  *
  */
-public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
+public class DimensionalVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
 	private static final Logger logger = (Logger) LoggerFactory
-			.getLogger(UnitsDimensionsVisitor.class);
+			.getLogger(DimensionalVisitor.class);
 
 	private void logRegistration(String identifier, LemsNode n) {
 		StringBuilder sb = new StringBuilder();
@@ -40,7 +40,7 @@ public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
 	 * @param lems
 	 * @throws Throwable
 	 */
-	public UnitsDimensionsVisitor(Lems lems) throws Throwable {
+	public DimensionalVisitor(Lems lems) throws Throwable {
 		this.lems = lems;
 	}
 

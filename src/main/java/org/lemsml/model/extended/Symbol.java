@@ -2,18 +2,14 @@ package org.lemsml.model.extended;
 
 import java.util.Set;
 
-import javax.measure.Unit;
-
-import org.lemsml.model.NamedDimensionalType;
-
 import expr_parser.utils.ExpressionParser;
 
 public class Symbol {
 
 	private String name;
 	private LemsNode type;
-	private Unit<?> unit;
 	private String valueDefinition;
+	private Scope scope;
 
 	public Symbol(NamedDimensionalType type, String valueDef) {
 		setName(type.getName());
@@ -35,13 +31,6 @@ public class Symbol {
 		this.name = name;
 	}
 
-	public Unit<?> getUnit() {
-		return this.unit;
-	}
-
-	public void setUnit(Unit<?> unit) {
-		this.unit = unit;
-	}
 
 	public String getValueDefinition() {
 		return this.valueDefinition;
@@ -61,8 +50,16 @@ public class Symbol {
 		return type;
 	}
 
-	public void setType(LemsNode type) {
-		this.type = type;
+	public void setType(LemsNode instance) {
+		this.type = instance;
+	}
+
+	public Scope getScope() {
+		return scope;
+	}
+
+	public void setInScope(Scope inScope) {
+		this.scope = inScope;
 	}
 
 }

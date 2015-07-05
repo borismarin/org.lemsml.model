@@ -28,8 +28,7 @@ public class InheritanceTest extends BaseTest {
 					.withName("Foo")
 					.withParameters(
 						new Parameter()
-							.withName("p0")))
-			.withComponentTypes(
+							.withName("p0")),
 				(ComponentType)
 				new ComponentType()
 					.withName("Bar")
@@ -60,8 +59,7 @@ public class InheritanceTest extends BaseTest {
 					.withName("Foo")
 					.withParameters(
 						new Parameter()
-							.withName("p0")))
-			.withComponentTypes(
+							.withName("p0")),
 				(ComponentType)
 				new ComponentType()
 					.withName("Bar")

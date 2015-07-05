@@ -11,6 +11,7 @@ public class LEMSSemanticAnalyser {
 	private Lems lems;
 	private BuildNameToObjMaps mapBuilder;
 	private ResolveUnitsDimensions dimensionResolver;
+	private DecorateWithDimensions dimensionDecorator;
 	private DecorateComponentsWithType typeDecorator;
 	private ExtendTypes typeExtender;
 	private AddFamilyToComponents familyAdder;
@@ -23,6 +24,7 @@ public class LEMSSemanticAnalyser {
 
 		mapBuilder = new BuildNameToObjMaps(lems);
 		dimensionResolver = new ResolveUnitsDimensions(lems);
+		dimensionDecorator = new DecorateWithDimensions(lems);
 		typeDecorator = new DecorateComponentsWithType(lems);
 		typeExtender = new ExtendTypes(lems);
 		familyAdder = new AddFamilyToComponents(lems);
@@ -34,21 +36,12 @@ public class LEMSSemanticAnalyser {
 
 		mapBuilder.apply();
 		dimensionResolver.apply();
+		dimensionDecorator.apply();
 		typeDecorator.apply();
 		typeExtender.apply();
 		familyAdder.apply();
 		scopeBuilder.apply();
-		exprDimChecker.apply(); //checks exprs in comptype definitions
-
-
-		// TODO move error checking to dedicated visitors
-		// ERROR CHECKING
-		// Type mismatch
-		// Undeclared variable
-		// Reserved identifier misuse
-		// Multiple declaration of variable in a scope
-		// Accessing an out of scope variable
-		// Actual and formal parameter mismatch
+		exprDimChecker.apply();
 
 		return lems;
 

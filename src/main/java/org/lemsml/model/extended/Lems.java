@@ -4,12 +4,17 @@ import static tec.units.ri.AbstractUnit.ONE;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.measure.Unit;
 import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lemsml.model.Constant;
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.visitors.Visitor;
 
 import tec.units.ri.unit.BaseUnit;
@@ -33,23 +38,24 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	 */
 
 	@XmlTransient
-    private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
+	private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>(
+			"*");
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	{
-		//TODO: ugly.
-	    nameToDimension.put("none", ONE);
-	    nameToDimension.put("", ONE);
+		// TODO: ugly.
+		nameToDimension.put("none", ONE);
+		nameToDimension.put("", ONE);
 
-		//TODO: ugly workaround for '*'
+		// TODO: ugly workaround for '*'
 		nameToDimension.put("*", anyDimension);
 	}
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
 	{
-		//TODO: ugly.
-	    symbolToUnit.put("none", ONE);
-	    symbolToUnit.put("", ONE);
+		// TODO: ugly.
+		symbolToUnit.put("none", ONE);
+		symbolToUnit.put("", ONE);
 
 	}
 
@@ -93,41 +99,41 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 		return this.nameToConstant.put(name, ctt);
 	}
 
-	public Unit<?> registerDimensionName(String name, javax.measure.Unit<?> dim) {
+	public javax.measure.Unit<?> registerDimensionName(String name, javax.measure.Unit<?> dim) {
 		return this.nameToDimension.put(name, dim);
 	}
 
-	public Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
+	public javax.measure.Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
 		return this.symbolToUnit.put(name, unit);
 	}
-
 
 	@Override
 	public <R, E extends Throwable> R accept(Visitor<R, E> aVisitor) throws E {
 		return aVisitor.visit(this);
 	}
 
-	public Unit<?> getAnyDimension() {
+	public javax.measure.Unit<?> getAnyDimension() {
 		return anyDimension;
 	}
 
-//	public void parseValueUnit(String symbolDef, Symbol resolved)
-//			throws LEMSCompilerException {
-//
-//		String valUnitRegEx = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
-//		Pattern pattern = Pattern.compile(valUnitRegEx);
-//		Matcher matcher = pattern.matcher(symbolDef);
-//
-//		if (matcher.find()) {
-//			resolved.setValue(Double.parseDouble(matcher.group(1)));
-//			resolved.setUnit(getUnitBySymbol(matcher.group(2)));
-//		} else {
-//			throw new LEMSCompilerException("Could not parse ",
-//					LEMSCompilerError.CantParseValueUnit);
-//		}
-//	}
+	@SuppressWarnings("unchecked")
+	public Pair<Double, javax.measure.Unit<?>> parseValueUnit(String symbolDef)
+			throws LEMSCompilerException {
 
+		String valUnitRegEx = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
+		Pattern pattern = Pattern.compile(valUnitRegEx);
+		Matcher matcher = pattern.matcher(symbolDef);
 
+		if (matcher.find()) {
+			Double val = Double.parseDouble(matcher.group(1));
+			javax.measure.Unit<?> unit = getUnitBySymbol(matcher.group(2));
+			Pair<Double, ?> p = Pair.of(val, unit);
+			return (Pair<Double, Unit<?>>) p;
+		} else {
+			throw new LEMSCompilerException("Could not parse ",
+					LEMSCompilerError.CantParseValueUnit);
+		}
+	}
 
 	@Override
 	public IScope getScope() {
@@ -138,10 +144,5 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	public String getName() {
 		return scope.getScopeName();
 	}
-
-	public Symbol resolve(String sym) {
-		return scope.resolve(sym);
-	}
-
 
 }

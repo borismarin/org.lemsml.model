@@ -1,7 +1,7 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
 import static tec.units.ri.AbstractUnit.ONE;
-import static tec.units.ri.util.SI.SECOND;
+import static tec.units.ri.unit.SI.SECOND;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -143,15 +143,15 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 			String expression = expressions.get(depName);
 			if (null != expression) {
 				Set<String> edgesFrom = dependencies.edgesFrom(depName);
-				Set<String> haveUnits = new HashSet<String>();
-				haveUnits.addAll(unitContext.keySet());
-				haveUnits.addAll(globalUnitContext.keySet());
+				Set<String> knownSymbols = new HashSet<String>();
+				knownSymbols.addAll(unitContext.keySet());
+				knownSymbols.addAll(globalUnitContext.keySet());
 				INamedValueDefinition node = nameToObj.get(depName);
-				SetView<String> difference = Sets.difference(edgesFrom,
-						haveUnits);
+				SetView<String> difference = Sets.difference(edgesFrom, knownSymbols);
 				if (difference.size() != 0) {
 					String err = MessageFormat
-							.format("Symbol(s) {0} undefined in expression [{1}], in  [({2}) {3}] in [(ComponentType) {4}]",
+							.format("Unit for Symbol(s) {0} undefined in expression [{1}]"
+									+ ", in  [({2}) {3}] in [(ComponentType) {4}]",
 									difference.toString(),
 									expression,
 									node.getClass().getSimpleName(),
@@ -168,7 +168,8 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 					} catch (NumberFormatException e) {
 						logger.warn("Cannot perform unit checking for variable exponent. "
 								+ e.getLocalizedMessage());
-						logger.warn("Will tacitly assume that the base is adimensional, which is reasonable given that there be dragons with fractional units.");
+						logger.warn("Will tacitly assume that the base is adimensional,"
+								+ "which is reasonable given that there be dragons with fractional units.");
 					}
 					checkUnits(node, unit, unitContext.get(depName));
 				}
@@ -187,7 +188,8 @@ public class ExpressionDimensionVisitor extends BaseVisitor<Boolean, Throwable> 
 							node.getClass().getSimpleName(),
 							node.getName(),
 							context.getName(),
-							declaredDim.toString(), node.getValueDefinition(),
+							declaredDim.toString(),
+							node.getValueDefinition(),
 							calculatedDim);
 			throw new LEMSCompilerException(err, LEMSCompilerError.DimensionalAnalysis);
 		}

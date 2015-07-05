@@ -13,6 +13,7 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.IScoped;
+import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Scope;
 import org.lemsml.model.extended.Symbol;
 import org.lemsml.model.extended.TimeDerivative;
@@ -22,8 +23,10 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private IScoped context;
 	private Scope scope;
+	private Lems lems;
 
-	public ScopeVisitor(IScoped context) {
+	public ScopeVisitor(IScoped context, Lems lems) {
+		this.lems = lems;
 		this.context = context;
 		this.scope = (Scope) context.getScope();
 	}
@@ -32,7 +35,7 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 	public Boolean visit(Component comp) throws Throwable {
 		this.context = comp;
 		this.scope = comp.getScope();
-		comp.getScope().setScopeName(comp.getName());
+		comp.getScope().setScopeName(comp.getId());
 		return null;
 	}
 
@@ -51,6 +54,7 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 					LEMSCompilerError.RequiredParameterUndefined);
 		}
 		scope.define(new Symbol(par, valDef));
+		scope.defineLiteral(par, lems.parseValueUnit(valDef));
 		return true;
 	}
 
@@ -63,6 +67,7 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(Constant constant) throws Throwable {
 		scope.define(new Symbol(constant));
+		scope.defineLiteral(constant, lems.parseValueUnit(constant.getValueDefinition()));
 		return true;
 	}
 

@@ -1,5 +1,6 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -7,6 +8,8 @@ import java.util.Set;
 
 import javax.measure.Unit;
 
+import org.apache.commons.lang3.tuple.Pair;
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 
 import tec.units.ri.quantity.NumberQuantity;
@@ -37,46 +40,54 @@ public class Scope implements IScope {
 	}
 
 	@Override
-	public String getScopeName() {
-		return this.name;
-	}
-
-	@Override
-	public IScope getEnclosingScope() {
-		return this.parent;
-	}
-
-	@Override
 	public Symbol define(Symbol sym) throws LEMSCompilerException,
 			UndefinedSymbolException {
 		getExpressions().put(sym.getName(), sym.getValueDefinition());
 		buildDependencies(sym);
+		sym.setInScope(this);
 
 		return this.symbolTable.put(sym.getName(), sym);
+	}
 
+	public void defineLiteral(NamedDimensionalType type, Pair<Double, Unit<?>> valueUnit) throws LEMSCompilerException {
+
+		String name = type.getName();
+		Unit<?> defDim = type.getUOMDimension();
+
+		Double val = valueUnit.getLeft();
+		Unit<?> unit = valueUnit.getRight();
+
+		//TODO: ugly wildcard
+		if(!valueUnit.getRight().isCompatible(defDim) && !defDim.getSymbol().equals("*")){
+			String err = MessageFormat.format(
+					"Unit mismatch for [({0}) {1}] defined in [{2}]:"
+							+ " Expecting  [{3}], but"
+							+ " dimension of [{4}] is [{5}].",
+							type.getClass().getSimpleName(),
+							name,
+							this.getScopeName(),
+							defDim.getDimension().toString(),
+							unit,
+							unit.getDimension());
+			throw new LEMSCompilerException(err, LEMSCompilerError.DimensionalAnalysis);
+		}
+		else{
+			this.getContext().put(name, val);
+			this.getUnitContext().put(name, unit);
+		}
 	}
 
 	private void buildDependencies(Symbol sym) throws LEMSCompilerException,
 			UndefinedSymbolException {
 
+		if (sym.getType() instanceof ILiteralDefinition) //no need to parse consts, pars, state vars
+			return;
+
 		getDependencies().addNode(sym.getName());
 		for (String dep : ExpressionParser.listSymbolsInExpression(sym
 				.getValueDefinition())) {
-			// ISymbol<?> resolved = this.resolve(defName);
-			// TODO: where/how should errors be handled?
-			// if (resolved == null) {
-			// String err = MessageFormat
-			// .format("Symbol[{0}] undefined in  expression [{1}], at [({2}) {3}]",
-			// dep,
-			// defValue,
-			// sym.getType().getClass().getSimpleName(),
-			// defName);
-			// throw new LEMSCompilerException(err,
-			// LEMSCompilerError.UndefinedSymbol);
-			// }
 			getDependencies().addNode(dep);
 			getDependencies().addEdge(sym.getName(), dep);
-			// getExpressions().put(dep, resolved.getValueDefinition());
 		}
 	}
 
@@ -96,56 +107,28 @@ public class Scope implements IScope {
 		return this.symbolTable.keySet();
 	}
 
-	public IScope getParent() {
-		return parent;
-	}
-
-	public void setParent(IScope parent) {
-		this.parent = parent;
-	}
-
-	public Map<String, String> getExpressions() {
-		return expressions;
-	}
-
-	public void setExpressions(Map<String, String> expressions) {
-		this.expressions = expressions;
-	}
-
-	public Map<String, Double> getContext() {
-		return context;
-	}
-
-	public void setContext(Map<String, Double> context) {
-		this.context = context;
-	}
-
-	public Map<String, Unit<?>> getUnitContext() {
-		return unitContext;
-	}
-
-	public void setUnitContext(Map<String, Unit<?>> unitContext) {
-		this.unitContext = unitContext;
-	}
-
-	public DirectedGraph<String> getDependencies() {
-		return dependencies;
-	}
-
-	public void setDependencies(DirectedGraph<String> dependencies) {
-		this.dependencies = dependencies;
-	}
-
 	public void evalDependencies(String symbol) throws UndefinedSymbolException {
 
-		Set<String> edgesFrom = getDependencies().edgesFrom(symbol);
-		for (String dep : edgesFrom) {
-			if(!dep.equals(symbol)) //ugly guard for state vars
-				evalDependencies(dep);
+		Symbol resolved = resolve(symbol);
+		LemsNode type = resolved.getType();
+
+		if (type instanceof ILiteralDefinition) {
+			Scope symbScope = resolved.getScope();
+			if(!symbScope.equals(this)){ //but need to copy their value from parent scopes
+				context.put(symbol, symbScope.getContext().get(symbol));
+				unitContext.put(symbol, symbScope.getUnitContext().get(symbol));
+			}
+			return;
 		}
-		if (null == context.get(symbol)) {
+
+		Set<String> edgesFrom = getDependencies().edgesFrom(symbol);
+		for (String dep : edgesFrom) { // why aren't we using the toposorted
+									   // graph?
+			evalDependencies(dep);
+		}
+		if (null == context.get(symbol)) { // TODO: DANGER! must clear context
+											// on setters
 			try {
-				Symbol resolved = resolve(symbol);
 				Double val = ExpressionParser.evaluateInContext(
 						resolved.getValueDefinition(), context);
 				Unit<?> unit = ExpressionParser.dimensionalAnalysis(
@@ -178,12 +161,11 @@ public class Scope implements IScope {
 
 	public Unit<?> evaluateUnit(String symbol) throws UndefinedSymbolException {
 		evalDependencies(symbol);
+		// ImmutableMap<String, Unit<?>> units = new
+		// ImmutableMap.Builder<String, Unit<?>>()
+		// .putAll(this.getUnitContext()).putAll(unitRegistry).build();
 		return ExpressionParser.dimensionalAnalysis(getExpressions()
-				.get(symbol), this.getUnitContext());
-	}
-
-	public void setScopeName(String name) {
-		this.name = name;
+				.get(symbol), getUnitContext());
 	}
 
 	public Set<String> getIndependentVariables(String symbol) {
@@ -201,4 +183,47 @@ public class Scope implements IScope {
 		return new Double(NumberQuantity.of(val, unit).toSI().getValue()
 				.doubleValue());
 	}
+
+	@Override
+	public String getScopeName() {
+		return this.name;
+	}
+
+	@Override
+	public IScope getEnclosingScope() {
+		return this.parent;
+	}
+
+	public void setScopeName(String name) {
+		this.name = name;
+	}
+
+	public IScope getParent() {
+		return parent;
+	}
+
+	public void setParent(IScope parent) {
+		this.parent = parent;
+	}
+
+	public Map<String, String> getExpressions() {
+		return expressions;
+	}
+
+	public Map<String, Double> getContext() {
+		return context;
+	}
+
+	public void setContext(Map<String, Double> context) {
+		this.context = context;
+	}
+
+	public Map<String, Unit<?>> getUnitContext() {
+		return unitContext;
+	}
+
+	public DirectedGraph<String> getDependencies() {
+		return dependencies;
+	}
+
 }

@@ -9,7 +9,7 @@ public class BuildScope extends ASemanticPass {
 	BuildScope(Lems lems) throws Throwable {
 		super.setLems(lems);
 		super.setTraverser(new ScopeTraverser<Throwable>());
-		super.setVisitor(new ScopeVisitor(lems));
+		super.setVisitor(new ScopeVisitor(lems, lems));
 	}
 
 }

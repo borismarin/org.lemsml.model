@@ -470,6 +470,5 @@ public class TopLevelTraverser<E extends Throwable> implements Traverser<E> {
 
 	}
 
-
 }
 
