@@ -58,6 +58,7 @@ public class Scope implements IScope {
 		Unit<?> unit = valueUnit.getRight();
 
 		//TODO: ugly wildcard
+		// see extended.Lems.getAnyDimension()
 		if(!valueUnit.getRight().isCompatible(defDim) && !defDim.getSymbol().equals("*")){
 			String err = MessageFormat.format(
 					"Unit mismatch for [({0}) {1}] defined in [{2}]:"
