@@ -29,7 +29,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	private Lems lemsRoot;
 
 	@XmlTransient
-	private Scope scope = new Scope();
+	private Scope scope = new Scope(""); //TODO: ugly
 
 	@XmlTransient
 	private Component parent;

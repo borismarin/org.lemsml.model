@@ -1,6 +1,10 @@
 package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static tec.units.ri.AbstractUnit.ONE;
+
+import javax.measure.Quantity;
+import javax.measure.quantity.Dimensionless;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -12,6 +16,8 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
+
+import tec.units.ri.quantity.Quantities;
 
 public class InheritanceTest extends BaseTest {
 
@@ -44,9 +50,9 @@ public class InheritanceTest extends BaseTest {
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
-		assertEquals(1, lems
+		assertEquals(adim(1.0), lems
 					.getComponentById("comp0")
-					.getScope().evaluateSI("p0"), 1e-12);
+					.getScope().evaluate("p0"));
 	}
 
 	@Test
@@ -91,6 +97,10 @@ public class InheritanceTest extends BaseTest {
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
+	}
+
+	public Quantity<Dimensionless> adim(Double x) {
+		return Quantities.getQuantity(x, ONE);
 	}
 
 

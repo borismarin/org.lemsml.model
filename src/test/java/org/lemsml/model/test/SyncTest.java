@@ -2,9 +2,14 @@ package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static tec.units.ri.AbstractUnit.ONE;
+import static tec.units.ri.unit.SI.SECOND;
 
 import java.io.File;
 import java.util.Set;
+
+import javax.measure.Quantity;
+import javax.measure.quantity.Dimensionless;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,6 +21,8 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Symbol;
+
+import tec.units.ri.quantity.Quantities;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -41,9 +48,10 @@ public class SyncTest extends BaseTest {
 				.withComponents(foo);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
-		assertEquals(1.0, foo.getScope().evaluate("p"), 1e-12);
+		assertEquals(adim(1.0), foo.getScope().evaluate("p"));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSymbolicExpression() throws Throwable {
 
@@ -56,9 +64,9 @@ public class SyncTest extends BaseTest {
 		Symbol dv0 = comp0.getScope().resolve("dv0");
 		Set<String> independentVariables = dv0.getIndependentVariables();
 		assertTrue(independentVariables.contains("x0"));
-		Double x = comp0.getScope().evaluate("dv0", new ImmutableMap.Builder<String, Double>().put(
-				"x0", 0.).build());
-		assertEquals(0, x, 1e-10);
+		Quantity<?> x = comp0.getScope().evaluate("dv0", new ImmutableMap.Builder<String, Quantity<?>>().put(
+				"x0", adim(10.)).build());
+		assertEquals(adim(-10.), x);
 
 		Component comp1 = compiledLems.getComponentById("comp1");
 		Symbol dy1 = comp1.getScope().resolve("dy1_dt");
@@ -66,10 +74,13 @@ public class SyncTest extends BaseTest {
 		assertTrue(independentVariables1.contains("y1"));
 		// TODO: think about what we expect for symb expre expressions which
 		// depend on top-level symb exprs (i.e. do we expand "dv0" below?)
-		Double dy = comp1.getScope().evaluate("dy1_dt", new ImmutableMap.Builder<String, Double>()
-				.put("y1", 1.).put("dv0", 1.).build());
-		assertEquals(-1., dy, 1e-10);
+		Quantity<?> dy = comp1.getScope().evaluate("dy1_dt", new ImmutableMap.Builder<String, Quantity<?>>()
+				.put("y1", adim(1.)).put("dv0", adim(1.)).build());
+		assertEquals(Quantities.getQuantity(-1., SECOND.inverse()), dy);
 
 	}
 
+	public Quantity<Dimensionless> adim(Double x) {
+		return Quantities.getQuantity(x, ONE);
+	}
 }

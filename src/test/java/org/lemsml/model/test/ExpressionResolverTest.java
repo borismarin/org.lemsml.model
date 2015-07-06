@@ -2,9 +2,14 @@ package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static tec.units.ri.AbstractUnit.ONE;
+import static tec.units.ri.unit.SI.SECOND;
 
 import java.io.File;
 import java.util.Set;
+
+import javax.measure.Quantity;
+import javax.measure.quantity.Dimensionless;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -18,6 +23,8 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Symbol;
+
+import tec.units.ri.quantity.Quantities;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -39,33 +46,42 @@ public class ExpressionResolverTest extends BaseTest {
 				schema);
 		Lems compiledLems = compiler.generateLEMSDocument();
 
-		Double const0 = compiledLems.getScope().evaluate("const0");
+		Double c0d = -0.1;
+		Double p0d = 2.;
+		Double p1d = 10.;
+		Double p2d = 100.;
+		Double dp0d = p0d * p0d;
+		Double dp1d = (p0d * p0d) / dp0d;
+		Double dp2d = dp0d * dp1d * c0d;
+		Double dp1_1d = p0d * p1d;
+
+		Quantity<?> const0 = compiledLems.getScope().evaluate("const0");
 		Component comp0 = compiledLems.getComponentById("comp0");
-		Double p0 = comp0.getScope().evaluate("p0");
-		Double dp0 = comp0.getScope().evaluate("dp0");
-		Double dp1 = comp0.getScope().evaluate("dp1");
-		Double dp2 = comp0.getScope().evaluate("dp2");
-		assertEquals(-0.1, const0, 1e-12);
-		assertEquals(p0 * p0, dp0, 1e-12);
-		assertEquals((p0 * p0) / dp0, dp1, 1e-12);
-		assertEquals(dp0 * dp1 * const0, dp2, 1e-12);
+		Quantity<?> dp0 = comp0.getScope().evaluate("dp0");
+		Quantity<?> dp1 = comp0.getScope().evaluate("dp1");
+		Quantity<?> dp2 = comp0.getScope().evaluate("dp2");
+
+		assertEquals(adim(c0d), const0);
+		assertEquals(adim(dp0d), dp0);
+		assertEquals(adim(dp1d), dp1);
+		assertEquals(adim(dp2d), dp2);
 
 		Component comp1 = compiledLems.getComponentById("comp1");
-		Double p1 = comp1.getScope().evaluate("p1");
-		Double dp1_1 = comp1.getScope().evaluate("dp1");
-		assertEquals(10., p1, 1e-12);
-		assertEquals((p0 * p1) , dp1_1, 1e-12);
+		Quantity<?> p1 = comp1.getScope().evaluate("p1");
+		Quantity<?> dp1_1 = comp1.getScope().evaluate("dp1");
+		assertEquals(adim(p1d), p1);
+		assertEquals(adim(dp1_1d) , dp1_1);
 
 		Component nested = compiledLems.getComponentById("veryNested");
-		Double p2 = nested.getScope().evaluate("p2");
-		Double dp0_nested= nested.getScope().evaluate("dp0");
-		assertEquals(p2 * Math.pow(const0, 2) , dp0_nested, 1e-12);
+		Quantity<?> dp0_nested= nested.getScope().evaluate("dp0");
+		assertEquals(adim(p2d * Math.pow(c0d, 2)), dp0_nested);
 
 
 		//TODO error if Requirement is not set
 		// (we find symbols upscope even if they are not required, set IScope.resolve)
 
 	}
+
 
 	@Test
 	public void testUndefinedSymbol() throws Throwable {
@@ -87,6 +103,7 @@ public class ExpressionResolverTest extends BaseTest {
 		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testSymbolicExpression() throws Throwable {
 
@@ -99,10 +116,10 @@ public class ExpressionResolverTest extends BaseTest {
 		Symbol dv0 = comp0.getScope().resolve("dv0");
 		Set<String> independentVariables = dv0.getIndependentVariables();
 		assertTrue(independentVariables.contains("x0"));
-		Double x = comp0.getScope().evaluate("dv0", new ImmutableMap.Builder<String, Double>()
-								.put("x0", 0.)
+		Quantity<?> x = comp0.getScope().evaluate("dv0", new ImmutableMap.Builder<String, Quantity<?>>()
+								.put("x0", adim(1.))
 								.build());
-		assertEquals(0, x, 1e-10);
+		assertEquals(adim(-1.), x);
 
 		Component comp1 = compiledLems.getComponentById("comp1");
 		Symbol dy1 = comp1.getScope().resolve("dy1_dt");
@@ -110,12 +127,16 @@ public class ExpressionResolverTest extends BaseTest {
 		assertTrue(independentVariables1.contains("y1"));
 		//TODO: think about what we expect for symb expre expressions which
 		//      depend on top-level symb exprs (i.e. do we expand "dv0" below?)
-		Double dy = comp1.getScope().evaluate("dy1_dt", new ImmutableMap.Builder<String, Double>()
-								.put("y1", 1.)
-								.put("dv0", 1.)
+		Quantity<?> dy = comp1.getScope().evaluate("dy1_dt", new ImmutableMap.Builder<String, Quantity<?>>()
+								.put("y1", adim(0.1))
+								.put("dv0", adim(10.))
 								.build());
-		assertEquals(-1., dy, 1e-10);
+		assertEquals(Quantities.getQuantity(-1.0, SECOND.inverse()), dy);
 
+	}
+
+	public Quantity<Dimensionless> adim(Double x) {
+		return Quantities.getQuantity(x, ONE);
 	}
 
 }

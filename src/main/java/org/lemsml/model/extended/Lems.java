@@ -4,17 +4,11 @@ import static tec.units.ri.AbstractUnit.ONE;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.measure.Unit;
 import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.lemsml.model.Constant;
-import org.lemsml.model.exceptions.LEMSCompilerError;
-import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.visitors.Visitor;
 
 import tec.units.ri.unit.BaseUnit;
@@ -54,8 +48,8 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
 	{
 		// TODO: ugly.
-		symbolToUnit.put("none", ONE);
-		symbolToUnit.put("", ONE);
+		getSymbolToUnit().put("none", ONE);
+		getSymbolToUnit().put("", ONE);
 
 	}
 
@@ -80,7 +74,7 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	}
 
 	public javax.measure.Unit<?> getUnitBySymbol(String name) {
-		return symbolToUnit.get(name);
+		return getSymbolToUnit().get(name);
 	}
 
 	public Map<String, ComponentType> getNameToCompTypeMap() {
@@ -104,7 +98,7 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	}
 
 	public javax.measure.Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
-		return this.symbolToUnit.put(name, unit);
+		return this.getSymbolToUnit().put(name, unit);
 	}
 
 	@Override
@@ -116,25 +110,6 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 		return anyDimension;
 	}
 
-	@SuppressWarnings("unchecked")
-	public Pair<Double, javax.measure.Unit<?>> parseValueUnit(String symbolDef)
-			throws LEMSCompilerException {
-
-		String valUnitRegEx = "\\s*([0-9-]*\\.?[0-9]*[eE]?[-+]?[0-9]+)?\\s*(\\w*)";
-		Pattern pattern = Pattern.compile(valUnitRegEx);
-		Matcher matcher = pattern.matcher(symbolDef);
-
-		if (matcher.find()) {
-			Double val = Double.parseDouble(matcher.group(1));
-			javax.measure.Unit<?> unit = getUnitBySymbol(matcher.group(2));
-			Pair<Double, ?> p = Pair.of(val, unit);
-			return (Pair<Double, Unit<?>>) p;
-		} else {
-			throw new LEMSCompilerException("Could not parse ",
-					LEMSCompilerError.CantParseValueUnit);
-		}
-	}
-
 	@Override
 	public IScope getScope() {
 		return scope;
@@ -143,6 +118,14 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	@Override
 	public String getName() {
 		return scope.getScopeName();
+	}
+
+	public Map<String, javax.measure.Unit<?>> getSymbolToUnit() {
+		return symbolToUnit;
+	}
+
+	public void setSymbolToUnit(Map<String, javax.measure.Unit<?>> symbolToUnit) {
+		this.symbolToUnit = symbolToUnit;
 	}
 
 }

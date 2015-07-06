@@ -2,6 +2,8 @@ package org.lemsml.model.extended;
 
 import java.util.Set;
 
+import javax.measure.Quantity;
+
 import org.lemsml.model.exceptions.LEMSCompilerException;
 
 import expr_parser.utils.UndefinedSymbolException;
@@ -17,8 +19,6 @@ public interface IScope {
 
 	public Set<String> getDefinedSymbols();
 
-	Double evaluate(String symbol) throws UndefinedSymbolException;
-
-	Double evaluateSI(String symbol) throws UndefinedSymbolException;
+	Quantity<?> evaluate(String symbol) throws UndefinedSymbolException;
 
 }

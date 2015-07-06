@@ -29,13 +29,15 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 		this.lems = lems;
 		this.context = context;
 		this.scope = (Scope) context.getScope();
+		this.scope.setUnitContext(this.lems.getSymbolToUnit());
 	}
 
 	@Override
 	public Boolean visit(Component comp) throws Throwable {
 		this.context = comp;
 		this.scope = comp.getScope();
-		comp.getScope().setScopeName(comp.getId());
+		this.scope.setScopeName(comp.getId());
+		this.scope.setUnitContext(this.lems.getSymbolToUnit());
 		return null;
 	}
 
@@ -54,7 +56,6 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 					LEMSCompilerError.RequiredParameterUndefined);
 		}
 		scope.define(new Symbol(par, valDef));
-		scope.defineLiteral(par, lems.parseValueUnit(valDef));
 		return true;
 	}
 
@@ -67,7 +68,6 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(Constant constant) throws Throwable {
 		scope.define(new Symbol(constant));
-		scope.defineLiteral(constant, lems.parseValueUnit(constant.getValueDefinition()));
 		return true;
 	}
 
