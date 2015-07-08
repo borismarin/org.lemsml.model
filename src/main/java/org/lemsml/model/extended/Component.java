@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.Parameter;
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.INamed;
 import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
@@ -45,8 +47,17 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		this._ComponentType = _ComponentType;
 	}
 
-	public Component withParameterValue(String pName, String val) {
+	public Component withParameterValue(String pName, String val) throws LEMSCompilerException {
 		this.getOtherAttributes().put(new QName(pName), val);
+		try{
+			Symbol resolved = getScope().resolve(pName);
+			scope.define(new Symbol((NamedDimensionalType) resolved.getType(), val));
+		} catch(LEMSCompilerException e){
+			if(!e.getErrorCode().equals(LEMSCompilerError.UndefinedSymbol)){
+				throw e;
+			}
+			//OK, we haven't compiled it yet
+		}
 		return this;
 	}
 

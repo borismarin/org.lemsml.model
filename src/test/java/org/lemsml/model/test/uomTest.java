@@ -95,10 +95,10 @@ public class uomTest extends BaseTest {
 
 
 		//TODO: this needs to pass (sync)
-//		lems.getComponentById("aCar").withParameterValue("dt", "0s");
-//		assertEquals(cm(1.), lems
-//					.getComponentById("aCar")
-//					.getScope().evaluate("x"));
+		lems.getComponentById("aCar").withParameterValue("dt", "0s");
+		assertEquals(cm(1.), lems
+					.getComponentById("aCar")
+					.getScope().evaluate("x"));
 
 	}
 
