@@ -65,6 +65,10 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return getOtherAttributes().get(new QName(par.getName()));
 	}
 
+	public String getParameterValue(String pName) {
+		return getOtherAttributes().get(new QName(pName));
+	}
+
 	public List<Component> getSubComponentsOfType(String type) {
 		return Lists.newArrayList(Iterables.filter(getComponent(),
 				hasType(type)));
