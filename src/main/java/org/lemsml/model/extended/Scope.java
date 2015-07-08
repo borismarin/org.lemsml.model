@@ -40,7 +40,8 @@ public class Scope implements IScope {
 
 	private void buildDependencies(Symbol sym) throws LEMSCompilerException {
 		getDependencies().addNode(sym.getName());
-		for (String dep : ExpressionParser.listSymbolsInExpression(sym.getValueDefinition())) {
+		for (String dep : ExpressionParser.listSymbolsInExpression(sym
+				.getValueDefinition())) {
 			getDependencies().addNode(dep);
 			getDependencies().addEdge(sym.getName(), dep);
 		}
@@ -54,7 +55,8 @@ public class Scope implements IScope {
 		if (null != getParent()) {
 			return getParent().resolve(name);
 		}
-		throw new LEMSCompilerException("Undefined symbol: " +  name , LEMSCompilerError.UndefinedSymbol);
+		throw new LEMSCompilerException("Undefined symbol: " + name,
+				LEMSCompilerError.UndefinedSymbol);
 	}
 
 	@Override
@@ -62,16 +64,29 @@ public class Scope implements IScope {
 		return this.symbolTable.keySet();
 	}
 
-	private Map<String, Quantity<?>> evalDependencies(Symbol symbol, Map<String, Quantity<?>> localContext) throws LEMSCompilerException,
+	//TODO: this method could use some refactoring...
+	private Map<String, Quantity<?>> evalDependencies(Symbol symbol,
+			Map<String, Quantity<?>> localContext,
+			Map<String, Quantity<?>> indepVars) throws LEMSCompilerException,
 			UndefinedSymbolException {
 
+		localContext.putAll(indepVars);
 		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
 			Symbol resolved = resolve(dep);
-			if(!localContext.containsKey(dep) && !(dep.equals(symbol.getName())))
-				localContext.putAll(evalDependencies(resolved, localContext));
+			// don't calculate deps which are already calculated, not circular deps (e.g. state vars)
+			if (!localContext.containsKey(dep) && !(dep.equals(symbol.getName())))
+				// Need to calculate vars in upper scopes, which can't see this one
+				if (!resolved.getScope().equals(this)) {
+					localContext.put(dep,
+							resolved.getScope().evaluate(dep, indepVars)); // don't carry local names!!
+				} else {
+					localContext.putAll(evalDependencies(resolved,
+							localContext, indepVars));
+				}
 		}
-		localContext.put(symbol.getName(), ExpressionParser.evaluateQuantitiesContext(
-				symbol.getValueDefinition(), localContext, getUnitContext()));
+		localContext.put(symbol.getName(), ExpressionParser
+				.evaluateQuantitiesContext(symbol.getValueDefinition(),
+						localContext, getUnitContext()));
 
 		return localContext;
 
@@ -85,15 +100,14 @@ public class Scope implements IScope {
 			Map<String, Quantity<?>> indepVars) throws LEMSCompilerException {
 		try {
 			HashMap<String, Quantity<?>> context = new HashMap<String, Quantity<?>>();
-			context.putAll(indepVars);
-			Map<String, Quantity<?>> evaluated = evalDependencies(resolve(symbol), context);
+			Map<String, Quantity<?>> evaluated = evalDependencies(
+					resolve(symbol), context, indepVars);
 			return evaluated.get(symbol);
 		} catch (UndefinedSymbolException e) {
 			throw new LEMSCompilerException(e.getMessage(),
 					LEMSCompilerError.MissingSymbolValue);
 		}
 	}
-
 
 	@Override
 	public String getScopeName() {

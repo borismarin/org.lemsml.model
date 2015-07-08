@@ -2,6 +2,7 @@ package org.lemsml.model.extended;
 
 import static tec.units.ri.AbstractUnit.ONE;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +10,8 @@ import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.INamed;
 import org.lemsml.model.extended.interfaces.IScope;
 import org.lemsml.model.extended.interfaces.IScoped;
@@ -59,8 +62,18 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 	@XmlTransient
 	private Scope scope = new Scope("global");
 
-	public Component getComponentById(String id) {
-		return idToComponent.get(id);
+	public Component getComponentById(String id) throws LEMSCompilerException {
+		Component component = idToComponent.get(id);
+		if(null == component){
+			String msg = MessageFormat.format(
+					"Component ID [{0}] undefined in [({1}) {2}].",
+					id,
+					this.getClass().getSimpleName(),
+					this.getName());
+			throw new LEMSCompilerException(msg,
+					LEMSCompilerError.UndefinedID);
+		}
+		return component;
 	}
 
 	public ComponentType getComponentTypeByName(String name) {

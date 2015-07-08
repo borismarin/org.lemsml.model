@@ -93,7 +93,7 @@ public class InheritanceTest extends BaseTest {
 					.withName("Foo")
 					.withExtends("Bar"));
 		exception.expect(LEMSCompilerException.class);
-		exception.expectMessage(LEMSCompilerError.ComponentTypeNotDefined.toString());
+		exception.expectMessage(LEMSCompilerError.UndefinedComponentType.toString());
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
