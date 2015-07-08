@@ -39,7 +39,7 @@ public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 						.format("(ComponentType) {0} trying to extend from of unknow (ComponentType) {1}",
 								compType.getName(), ext);
 				throw new LEMSCompilerException(err,
-						LEMSCompilerError.ComponentTypeNotDefined);
+						LEMSCompilerError.UndefinedComponentType);
 			} else {
 				dependencies.addNode(compType);
 				dependencies.addNode(base);

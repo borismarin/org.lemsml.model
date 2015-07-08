@@ -9,7 +9,15 @@ public class LEMSCompilerException extends Exception {
 
 	public LEMSCompilerException(String message, LEMSCompilerError err) {
 		super(String.format("LEMS error [%s]: ", err) + message);
-		this.errorCode = err;
+		this.setErrorCode(err);
+	}
+
+	public LEMSCompilerError getErrorCode() {
+		return errorCode;
+	}
+
+	public void setErrorCode(LEMSCompilerError errorCode) {
+		this.errorCode = errorCode;
 	}
 
 }

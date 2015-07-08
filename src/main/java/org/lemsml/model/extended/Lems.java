@@ -2,16 +2,19 @@ package org.lemsml.model.extended;
 
 import static tec.units.ri.AbstractUnit.ONE;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-import javax.measure.Unit;
 import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
-import org.lemsml.model.compiler.ISymbol;
+import org.lemsml.model.exceptions.LEMSCompilerError;
+import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.extended.interfaces.INamed;
+import org.lemsml.model.extended.interfaces.IScope;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
 
 import tec.units.ri.unit.BaseUnit;
@@ -20,8 +23,7 @@ import tec.units.ri.unit.BaseUnit;
  * @author borismarin
  *
  */
-@XmlTransient
-public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
+public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
 
 	@XmlTransient
 	private Map<String, Component> idToComponent = new HashMap<String, Component>();
@@ -36,35 +38,42 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 	 */
 
 	@XmlTransient
-    final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
+	private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>(
+			"*");
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	{
-		//TODO: ugly.
-	    nameToDimension.put("none", ONE);
-	    nameToDimension.put("", ONE);
+		// TODO: ugly.
+		nameToDimension.put("none", ONE);
+		nameToDimension.put("", ONE);
 
-		//TODO: ugly workaround for '*'
+		// TODO: ugly workaround for '*'
 		nameToDimension.put("*", anyDimension);
 	}
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> symbolToUnit = new HashMap<String, javax.measure.Unit<?>>();
 	{
-		//TODO: ugly.
-	    symbolToUnit.put("none", ONE);
-	    symbolToUnit.put("", ONE);
+		// TODO: ugly.
+		getSymbolToUnit().put("none", ONE);
+		getSymbolToUnit().put("", ONE);
 
 	}
+
 	@XmlTransient
-	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
+	private Scope scope = new Scope("global");
 
-
-	public Map<String, ISymbol<?>> getScope() {
-		return scope;
-	}
-
-	public Component getComponentById(String id) {
-		return idToComponent.get(id);
+	public Component getComponentById(String id) throws LEMSCompilerException {
+		Component component = idToComponent.get(id);
+		if(null == component){
+			String msg = MessageFormat.format(
+					"Component ID [{0}] undefined in [({1}) {2}].",
+					id,
+					this.getClass().getSimpleName(),
+					this.getName());
+			throw new LEMSCompilerException(msg,
+					LEMSCompilerError.UndefinedID);
+		}
+		return component;
 	}
 
 	public ComponentType getComponentTypeByName(String name) {
@@ -81,7 +90,7 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 	}
 
 	public javax.measure.Unit<?> getUnitBySymbol(String name) {
-		return symbolToUnit.get(name);
+		return getSymbolToUnit().get(name);
 	}
 
 	public Map<String, ComponentType> getNameToCompTypeMap() {
@@ -100,37 +109,12 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 		return this.nameToConstant.put(name, ctt);
 	}
 
-	public Unit<?> registerDimensionName(String name, javax.measure.Unit<?> dim) {
+	public javax.measure.Unit<?> registerDimensionName(String name, javax.measure.Unit<?> dim) {
 		return this.nameToDimension.put(name, dim);
 	}
 
-	public Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
-		return this.symbolToUnit.put(name, unit);
-	}
-
-	@Override
-	public IScope getEnclosingScope() {
-		return null;
-	}
-
-	@Override
-	public ISymbol<?> define(ISymbol<?> sym) {
-		return this.scope.put(sym.getName(), sym);
-	}
-
-	@Override
-	public ISymbol<?> resolve(String name) {
-		return this.scope.get(name);
-	}
-
-	@Override
-	public String getScopeName() {
-		return "global";
-	}
-
-	@Override
-	public Set<String> getDefinedSymbols() {
-		return this.scope.keySet();
+	public javax.measure.Unit<?> registerUnitSymbol(String name, javax.measure.Unit<?> unit) {
+		return this.getSymbolToUnit().put(name, unit);
 	}
 
 	@Override
@@ -138,12 +122,26 @@ public class Lems extends org.lemsml.model.Lems implements IScope, INamed {
 		return aVisitor.visit(this);
 	}
 
-	public String getName() {
-		return getScopeName();
+	public javax.measure.Unit<?> getAnyDimension() {
+		return anyDimension;
 	}
 
-	public Unit<?> getAnyDimension() {
-		return anyDimension;
+	@Override
+	public IScope getScope() {
+		return scope;
+	}
+
+	@Override
+	public String getName() {
+		return scope.getScopeName();
+	}
+
+	public Map<String, javax.measure.Unit<?>> getSymbolToUnit() {
+		return symbolToUnit;
+	}
+
+	public void setSymbolToUnit(Map<String, javax.measure.Unit<?>> symbolToUnit) {
+		this.symbolToUnit = symbolToUnit;
 	}
 
 }

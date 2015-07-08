@@ -3,6 +3,7 @@ package org.lemsml.model.extended;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 
+import org.lemsml.model.extended.interfaces.INamedValueDefinition;
 import org.lemsml.visitors.Visitor;
 
 /**

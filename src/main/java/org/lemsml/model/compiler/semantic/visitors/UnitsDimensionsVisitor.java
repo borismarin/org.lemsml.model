@@ -38,7 +38,7 @@ public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	/**
 	 * @param lems
-	 * @throws Throwable 
+	 * @throws Throwable
 	 */
 	public UnitsDimensionsVisitor(Lems lems) throws Throwable {
 		this.lems = lems;
@@ -46,11 +46,11 @@ public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(Dimension dimension) throws Throwable {
-		dimension.setDimension(UOMUtils.LemsDimensionToUOM(dimension));
+		dimension.setUOMDimension(UOMUtils.LemsDimensionToUOM(dimension));
 		logRegistration(dimension.getName(), dimension);
-		javax.measure.Unit<?> old = this.lems.registerDimensionName(dimension.getName(), dimension.getDimension());
+		javax.measure.Unit<?> old = this.lems.registerDimensionName(dimension.getName(), dimension.getUOMDimension());
 		if(null != old){
-			warnMapOverwrite(dimension.getName(), old, dimension.getDimension());
+			warnMapOverwrite(dimension.getName(), old, dimension.getUOMDimension());
 		};
 		return true;
 	}
@@ -64,7 +64,7 @@ public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
 		javax.measure.Unit<?> uomUnit = dim.multiply(Math.pow(10, unit.getPower().intValue()));
 		uomUnit = uomUnit.shift(unit.getOffset());
 
-		unit.setUnit(uomUnit);
+		unit.setUOMUnit(uomUnit);
 		logRegistration(unit.getSymbol(), unit);
 		javax.measure.Unit<?> old = lems.registerUnitSymbol(unit.getSymbol(), uomUnit);
 		if(null != old){

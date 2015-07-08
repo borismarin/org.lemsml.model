@@ -1,36 +1,43 @@
 package org.lemsml.model.extended;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.namespace.QName;
 
 import org.lemsml.model.Parameter;
-import org.lemsml.model.compiler.ISymbol;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.extended.interfaces.INamed;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * @author borismarin
  *
  */
 @XmlTransient
-public class Component extends org.lemsml.model.Component implements IScope, INamed{
+public class Component extends org.lemsml.model.Component implements INamed,
+		IScoped {
 	@XmlTransient
 	private ComponentType _ComponentType;
 
 	@XmlTransient
-	private Map<String, ISymbol<?>> scope = new HashMap<String, ISymbol<?>>();
-
-	@XmlTransient
-	private IScope parent;
-
-	@XmlTransient
 	private List<Component> children;
+
+	@XmlTransient
+	private Lems lemsRoot;
+
+	@XmlTransient
+	private Scope scope = new Scope(""); //TODO: ugly
+
+	@XmlTransient
+	private Component parent;
 
 	public ComponentType getComponentType() {
 		return _ComponentType;
@@ -40,47 +47,39 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 		this._ComponentType = _ComponentType;
 	}
 
-	public ISymbol<Parameter> getParameterByName(String name)
-			throws LEMSCompilerException {
-		//Instance<Parameter> pVal = this.nameToParameterValue.get(name);
-		@SuppressWarnings("unchecked")
-		ISymbol<Parameter> parSym = (ISymbol<Parameter>) this.resolve(name);
-		if (null != parSym) {
-			return parSym;
-		} else {
-			// TODO: shouldn't this type of error be handled somewhere else?
-			throw new LEMSCompilerException("ComponentType" + type
-					+ " does not allow parameter " + name,
-					LEMSCompilerError.ParameterNotAllowed);
+	public Component withParameterValue(String pName, String val) throws LEMSCompilerException {
+		this.getOtherAttributes().put(new QName(pName), val);
+		try{
+			Symbol resolved = getScope().resolve(pName);
+			scope.define(new Symbol((NamedDimensionalType) resolved.getType(), val));
+		} catch(LEMSCompilerException e){
+			if(!e.getErrorCode().equals(LEMSCompilerError.UndefinedSymbol)){
+				throw e;
+			}
+			//OK, we haven't compiled it yet
 		}
+		return this;
 	}
 
-	@Override
-	public String getScopeName() {
-		return this.getId();
+	public String getParameterValue(Parameter par) {
+		return getOtherAttributes().get(new QName(par.getName()));
 	}
 
-	@Override
-	public IScope getEnclosingScope() {
-		return this.parent;
+	public List<Component> getSubComponentsOfType(String type) {
+		return Lists.newArrayList(Iterables.filter(getComponent(),
+				hasType(type)));
 	}
 
-	@Override
-	public ISymbol<?> define(ISymbol<?> sym) {
-		return this.scope.put(sym.getName(), sym);
+	public static Predicate<Component> hasType(final String type) {
+		return new Predicate<Component>() {
+			@Override
+			public boolean apply(Component input) {
+				return input.getType() != null && input.getType().equals(type);
+			}
+		};
 	}
 
-	@Override
-	public ISymbol<?> resolve(String name) {
-		ISymbol<?> symb = this.scope.get(name);
-		if(null != symb) return symb;
-		if(null != getParent()){
-			return getParent().resolve(name);
-		}
-		return null;
-	}
-
-	public Map<String, ISymbol<?>> getScope() {
+	public Scope getScope() {
 		return this.scope;
 	}
 
@@ -91,19 +90,6 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 
 	public void setName(String name) {
 		this.id = name;
-	}
-
-	@Override
-	public Set<String> getDefinedSymbols() {
-		return this.scope.keySet();
-	}
-
-	public IScope getParent() {
-		return parent;
-	}
-
-	public void setParent(IScope parent) {
-		this.parent = parent;
 	}
 
 	public List<Component> getChildren() {
@@ -119,8 +105,16 @@ public class Component extends org.lemsml.model.Component implements IScope, INa
 		return aVisitor.visit(this);
 	}
 
-	public String toString(){
+	public String toString() {
 		return MessageFormat.format("({0}) {1}", this.getType(), this.getId());
+	}
+
+	public Component getParent() {
+		return this.parent;
+	}
+
+	public void setParent(Component comp) {
+		this.parent = comp;
 	}
 
 }

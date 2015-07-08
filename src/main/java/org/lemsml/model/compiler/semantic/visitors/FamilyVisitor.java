@@ -13,10 +13,6 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-
 /**
  * @author borismarin
  *
@@ -26,15 +22,16 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 	private Lems lems;
 
 	public FamilyVisitor(Lems lems) throws Throwable {
-		this.lems = lems;	
+		this.lems = lems;
 	}
 
 	@Override
 	public Boolean visit(Component comp) throws LEMSCompilerException {
-		comp.setParent(lems);
+		comp.getScope().setParent(lems.getScope()); //TODO: ugly but effective given depth-first traversal...
+		//comp.setLemsRoot(lems);
 		processChildrens(comp);
 		processChilds(comp);
-	
+
 		return true;
 	}
 
@@ -43,9 +40,10 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 	private void processChildrens(Component comp) throws LEMSCompilerException{
 		List<Component> subComps = new ArrayList<Component>();
 		for(Children expected : comp.getComponentType().getChildrens()){
-			subComps.addAll(getSubComponentsOfType(comp, expected.getType()));
+			subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
 		}
 		for(Component subComp : subComps){
+			subComp.getScope().setParent(comp.getScope());
 			subComp.setParent(comp);
 		}
 		comp.setChildren(subComps);
@@ -57,7 +55,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 		for(Child expected : comp.getComponentType().getChildren()){
 			//TODO: child (only one..., how does it work for multiple?) logic
 			//TODO: is child/children only a syntactic constraint?
-			subComps.addAll(getSubComponentsOfType(comp, expected.getType()));
+			subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
 			if (subComps.size() == 0) {
 				missingChilds(comp, expected);
 			}else if (subComps.size() > 1) {
@@ -65,10 +63,11 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 			}
 		}
 		for(Component subComp : subComps){
+			subComp.getScope().setParent(comp.getScope());
 			subComp.setParent(comp);
 		}
 		comp.setChildren(subComps);
-		
+
 	}
 
 	private void tooManyChilds(Component comp, Child expected) throws LEMSCompilerException {
@@ -78,7 +77,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 						comp.getType(),
 						expected.getType());
 		throw new LEMSCompilerException(err, LEMSCompilerError.TooManyChildren);
-		
+
 	}
 
 	private void missingChilds(Component comp, NamedTyped expected)
@@ -92,17 +91,6 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 		throw new LEMSCompilerException(err, LEMSCompilerError.MissingChildren);
 	}
 
-	private List<Component> getSubComponentsOfType(Component comp, String type) {
-		return Lists.newArrayList(Iterables.filter(comp.getComponent(), hasType(type)));
-	}
 
-	private static Predicate<Component> hasType(final String type) {
-	    return new Predicate<Component>() {
-	        @Override
-	        public boolean apply(Component input) {
-	            return input.getType() != null && input.getType().equals(type);
-	        }
-	    };
-	}
-	
+
 }

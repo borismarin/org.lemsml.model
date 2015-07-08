@@ -17,8 +17,10 @@
 		<Dynamics>
 			<StateVariable name="x1" exposure="x1" />
 			<StateVariable name="y1" exposure="y1" />
+			<StateVariable name="z1" exposure="y1" />
 			<TimeDerivative variable="x1" value="const0*dp1/p0/p1*x1/SEC" />
 			<TimeDerivative variable="y1" value="-dv0 * y1/SEC" />
+			<TimeDerivative variable="z1" value="dv0 * p0/SEC" />
 		</Dynamics>
 
 	</ComponentType>

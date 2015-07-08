@@ -42,16 +42,6 @@ import ch.qos.logback.classic.Logger;
 		return true;
 	}
 
-//	@Override
-//	public Boolean visit(Constant ctt) throws Throwable {
-//		logRegistration(ctt.getName(), ctt);
-//		Constant old = this.lems.registerConstantName(ctt.getName(), ctt);
-//		if(null != old){
-//			warnMapOverwrite(ctt.getName(), old, ctt);
-//		};
-//		return true;
-//	}
-
 	private void logRegistration(String identifier, LemsNode n) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(String.format("Registering [%s '%s'] ", n.getClass()

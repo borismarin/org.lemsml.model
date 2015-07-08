@@ -30,7 +30,7 @@ public class TypeToComponentVisitor extends BaseVisitor<Boolean, Throwable> {
 			throw new LEMSCompilerException(
 					"Trying to build Component of unknow type "
 							+ comp.getType(),
-					LEMSCompilerError.ComponentTypeNotDefined);
+					LEMSCompilerError.UndefinedComponentType);
 		}
 		comp.setComponentType(typeToSet);
 		return true;
