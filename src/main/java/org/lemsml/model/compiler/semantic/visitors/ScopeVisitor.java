@@ -2,8 +2,6 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import java.text.MessageFormat;
 
-import javax.xml.namespace.QName;
-
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
@@ -12,11 +10,11 @@ import org.lemsml.model.StateVariable;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
-import org.lemsml.model.extended.IScoped;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Scope;
 import org.lemsml.model.extended.Symbol;
 import org.lemsml.model.extended.TimeDerivative;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.BaseVisitor;
 
 public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
@@ -44,8 +42,7 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(Parameter par) throws Throwable {
 		Component comp = (Component) context;
-		String valDef = comp.getOtherAttributes().get(
-				new QName(par.getName()));
+		String valDef = comp.getParameterValue(par);
 		if (null == valDef) {
 			String msg = MessageFormat.format(
 					"Component [({0}) {1}] must define parameter {2}",

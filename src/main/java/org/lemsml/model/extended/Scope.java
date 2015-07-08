@@ -1,16 +1,15 @@
 package org.lemsml.model.extended;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
-
-import com.google.common.collect.ImmutableMap;
+import org.lemsml.model.extended.interfaces.IScope;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
@@ -23,7 +22,6 @@ public class Scope implements IScope {
 	private IScope parent;
 
 	private Map<String, String> expressions = new HashMap<String, String>();
-	private Map<String, Quantity<?>> context = new HashMap<String, Quantity<?>>();
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
 
 	private DirectedGraph<String> dependencies = new DirectedGraph<String>();
@@ -33,35 +31,30 @@ public class Scope implements IScope {
 	}
 
 	@Override
-	public Symbol define(Symbol sym) throws LEMSCompilerException,
-			UndefinedSymbolException {
+	public Symbol define(Symbol sym) throws LEMSCompilerException {
 		getExpressions().put(sym.getName(), sym.getValueDefinition());
 		buildDependencies(sym);
 		sym.setInScope(this);
-
 		return this.symbolTable.put(sym.getName(), sym);
 	}
 
-	private void buildDependencies(Symbol sym) throws LEMSCompilerException,
-			UndefinedSymbolException {
-
+	private void buildDependencies(Symbol sym) throws LEMSCompilerException {
 		getDependencies().addNode(sym.getName());
-		for (String dep : ExpressionParser.listSymbolsInExpression(sym
-				.getValueDefinition())) {
+		for (String dep : ExpressionParser.listSymbolsInExpression(sym.getValueDefinition())) {
 			getDependencies().addNode(dep);
 			getDependencies().addEdge(sym.getName(), dep);
 		}
 	}
 
 	@Override
-	public Symbol resolve(String name) {
+	public Symbol resolve(String name) throws LEMSCompilerException {
 		Symbol symb = this.symbolTable.get(name);
 		if (null != symb)
 			return symb;
 		if (null != getParent()) {
 			return getParent().resolve(name);
 		}
-		return null;
+		throw new LEMSCompilerException("Undefined symbol: " +  name , LEMSCompilerError.UndefinedSymbol);
 	}
 
 	@Override
@@ -69,49 +62,38 @@ public class Scope implements IScope {
 		return this.symbolTable.keySet();
 	}
 
-	public void evalDependencies(String symbol) throws UndefinedSymbolException {
+	private Map<String, Quantity<?>> evalDependencies(Symbol symbol, Map<String, Quantity<?>> localContext) throws LEMSCompilerException,
+			UndefinedSymbolException {
 
-		Symbol resolved = resolve(symbol);
-
-		Set<String> edgesFrom = getDependencies().edgesFrom(symbol);
-		for (String dep : edgesFrom) { // why aren't we using the toposorted graph?
-			if(!dep.equals(symbol)) //ugly guard for state vars
-				evalDependencies(dep);
+		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
+			Symbol resolved = resolve(dep);
+			if(!localContext.containsKey(dep) && !(dep.equals(symbol.getName())))
+				localContext.putAll(evalDependencies(resolved, localContext));
 		}
-		if (null == context.get(symbol)) { // TODO: DANGER! must clear context on setters
-			try {
-				Quantity<?> val = ExpressionParser.evaluateQuantitiesContext(resolved.getValueDefinition(), context, getUnitContext());
-				context.put(symbol, val);
-			} catch (UndefinedSymbolException e) {
-				// OK, those are symbolic expressions
-				getContext().putAll(context);
-			}
+		localContext.put(symbol.getName(), ExpressionParser.evaluateQuantitiesContext(
+				symbol.getValueDefinition(), localContext, getUnitContext()));
+
+		return localContext;
+
+	}
+
+	public Quantity<?> evaluate(String symbol) throws LEMSCompilerException {
+		return evaluate(symbol, new HashMap<String, Quantity<?>>());
+	}
+
+	public Quantity<?> evaluate(String symbol,
+			Map<String, Quantity<?>> indepVars) throws LEMSCompilerException {
+		try {
+			HashMap<String, Quantity<?>> context = new HashMap<String, Quantity<?>>();
+			context.putAll(indepVars);
+			Map<String, Quantity<?>> evaluated = evalDependencies(resolve(symbol), context);
+			return evaluated.get(symbol);
+		} catch (UndefinedSymbolException e) {
+			throw new LEMSCompilerException(e.getMessage(),
+					LEMSCompilerError.MissingSymbolValue);
 		}
-		return;
-
 	}
 
-	public Quantity<?> evaluate(String symbol) throws UndefinedSymbolException {
-		evalDependencies(symbol);
-		return getContext().get(symbol);
-	}
-
-	public Quantity<?> evaluate(String symbol, Map<String, Quantity<?>> indepVars)
-			throws UndefinedSymbolException {
-		evalDependencies(symbol);
-		ImmutableMap<String, Quantity<?>> context = new ImmutableMap.Builder<String, Quantity<?>>()
-				.putAll(this.getContext()).putAll(indepVars).build();
-		return ExpressionParser.evaluateQuantitiesContext(getExpressions().get(symbol), context, getUnitContext());
-	}
-
-
-	public Set<String> getIndependentVariables(String symbol) {
-		Set<String> syms = ExpressionParser
-				.listSymbolsInExpression(getExpressions().get(symbol));
-		Set<String> inContext = new HashSet<String>(getContext().keySet());
-		syms.removeAll(inContext);
-		return syms;
-	}
 
 	@Override
 	public String getScopeName() {
@@ -137,14 +119,6 @@ public class Scope implements IScope {
 
 	public Map<String, String> getExpressions() {
 		return expressions;
-	}
-
-	public Map<String, Quantity<?>> getContext() {
-		return context;
-	}
-
-	public void setContext(Map<String, Quantity<?>> context) {
-		this.context = context;
 	}
 
 	public Map<String, Unit<?>> getUnitContext() {

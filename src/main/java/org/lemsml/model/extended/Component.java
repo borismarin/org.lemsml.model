@@ -6,6 +6,9 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.namespace.QName;
 
+import org.lemsml.model.Parameter;
+import org.lemsml.model.extended.interfaces.INamed;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
 
 import com.google.common.base.Predicate;
@@ -45,6 +48,10 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	public Component withParameterValue(String pName, String val) {
 		this.getOtherAttributes().put(new QName(pName), val);
 		return this;
+	}
+
+	public String getParameterValue(Parameter par) {
+		return getOtherAttributes().get(new QName(par.getName()));
 	}
 
 	public List<Component> getSubComponentsOfType(String type) {

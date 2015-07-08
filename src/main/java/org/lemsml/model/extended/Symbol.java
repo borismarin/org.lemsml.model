@@ -2,6 +2,8 @@ package org.lemsml.model.extended;
 
 import java.util.Set;
 
+import org.lemsml.model.extended.interfaces.INamedValueDefinition;
+
 import expr_parser.utils.ExpressionParser;
 
 public class Symbol {

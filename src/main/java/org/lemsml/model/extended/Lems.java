@@ -9,6 +9,9 @@ import javax.measure.quantity.Dimensionless;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.lemsml.model.Constant;
+import org.lemsml.model.extended.interfaces.INamed;
+import org.lemsml.model.extended.interfaces.IScope;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
 
 import tec.units.ri.unit.BaseUnit;

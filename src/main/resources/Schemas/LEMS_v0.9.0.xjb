@@ -51,15 +51,15 @@
       </jxb:bindings>
 
       <jxb:bindings node=".//xs:complexType[@name='Parameter']">
-         <inheritance:implements>org.lemsml.model.extended.ILiteralDefinition</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.interfaces.ILiteralDefinition</inheritance:implements>
       </jxb:bindings>
 
       <jxb:bindings node=".//xs:complexType[@name='Constant']">
-         <inheritance:implements>org.lemsml.model.extended.ILiteralDefinition</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.interfaces.ILiteralDefinition</inheritance:implements>
       </jxb:bindings>
 
       <jxb:bindings node=".//xs:complexType[@name='StateVariable']">
-         <inheritance:implements>org.lemsml.model.extended.ILiteralDefinition</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.interfaces.ILiteralDefinition</inheritance:implements>
       </jxb:bindings>
 
        <jxb:bindings node=".//xs:complexType[@name='NamedDimensionalType']">
@@ -83,11 +83,11 @@
       </jxb:bindings>
 
        <jxb:bindings node=".//xs:complexType[@name='Named']">
-         <inheritance:implements>org.lemsml.model.extended.INamed</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.interfaces.INamed</inheritance:implements>
       </jxb:bindings>
 
        <jxb:bindings node=".//xs:complexType[@name='NamedDimensionalValuedType']">
-         <inheritance:implements>org.lemsml.model.extended.INamedValueDefinition</inheritance:implements>
+         <inheritance:implements>org.lemsml.model.extended.interfaces.INamedValueDefinition</inheritance:implements>
       </jxb:bindings>
 
 
