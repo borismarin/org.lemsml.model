@@ -121,4 +121,9 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		this.parent = comp;
 	}
 
+	public List<Component> getComponents(){
+		//TODO: can't get it pluralized via jaxb...
+		return getComponent();
+	}
+
 }
