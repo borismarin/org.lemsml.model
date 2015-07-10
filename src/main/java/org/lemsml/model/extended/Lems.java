@@ -12,6 +12,7 @@ import javax.xml.bind.annotation.XmlTransient;
 import org.lemsml.model.Constant;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.extended.interfaces.HasComponents;
 import org.lemsml.model.extended.interfaces.INamed;
 import org.lemsml.model.extended.interfaces.IScope;
 import org.lemsml.model.extended.interfaces.IScoped;
@@ -23,7 +24,7 @@ import tec.units.ri.unit.BaseUnit;
  * @author borismarin
  *
  */
-public class Lems extends org.lemsml.model.Lems implements IScoped, INamed {
+public class Lems extends org.lemsml.model.Lems implements IScoped, INamed, HasComponents {
 
 	@XmlTransient
 	private Map<String, Component> idToComponent = new HashMap<String, Component>();

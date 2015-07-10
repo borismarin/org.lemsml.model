@@ -9,6 +9,7 @@ import javax.xml.namespace.QName;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
+import org.lemsml.model.extended.interfaces.HasComponents;
 import org.lemsml.model.extended.interfaces.INamed;
 import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
@@ -23,7 +24,7 @@ import com.google.common.collect.Lists;
  */
 @XmlTransient
 public class Component extends org.lemsml.model.Component implements INamed,
-		IScoped {
+		IScoped, HasComponents {
 	@XmlTransient
 	private ComponentType _ComponentType;
 
