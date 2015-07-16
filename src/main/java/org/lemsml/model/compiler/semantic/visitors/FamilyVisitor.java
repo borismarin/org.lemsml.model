@@ -13,6 +13,10 @@ import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 /**
  * @author borismarin
  *
@@ -36,11 +40,15 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	//TODO: ambiguity when representing child / children
-	//TODO: inheritance
+	//TODO: children (how does it work for >1 children of same type?)
 	private void processChildrens(Component comp) throws LEMSCompilerException{
 		List<Component> subComps = new ArrayList<Component>();
 		for(Children expected : comp.getComponentType().getChildrens()){
-			subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
+			List<Component> subComponentsOfType = comp.getSubComponentsOfType(expected.getType());
+			for(Component sc : subComponentsOfType){
+				sc.setBoundTo(expected.getName());
+			}
+			subComps.addAll(subComponentsOfType);
 		}
 		for(Component subComp : subComps){
 			subComp.getScope().setParent(comp.getScope());
@@ -50,24 +58,74 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	//TODO: ambiguity when representing child / children
-	private void processChilds(Component comp) throws LEMSCompilerException{
+	//TODO: is child/children only a structural constraint?
+	private void processChilds(Component comp) throws LEMSCompilerException {
 		List<Component> subComps = new ArrayList<Component>();
-		for(Child expected : comp.getComponentType().getChildren()){
-			//TODO: child (only one..., how does it work for multiple?) logic
-			//TODO: is child/children only a syntactic constraint?
-			subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
-			if (subComps.size() == 0) {
+		for (Child expected : comp.getComponentType().getChildren()) {
+			// TODO: child (only one..., how does it work for multiple?) logic
+			// subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
+			List<Component> subComponentsOfType = comp
+					.getSubComponentsOfType(expected.getType());
+			// TODO: see https://github.com/LEMS/jLEMS/issues/71
+			// 		 this is a quick & dirty workaround
+			switch(subComponentsOfType.size()){
+			case 0:
 				missingChilds(comp, expected);
-			}else if (subComps.size() > 1) {
-				tooManyChilds(comp, expected);
+				break;
+			case 1:
+				Component sc = subComponentsOfType.get(0);
+				sc.setBoundTo(expected.getName());
+				subComps.add(sc); // only one here
+				break;
+			default: // more than 1
+				List<Component> rightName = filterName(subComponentsOfType, expected.getName());
+				switch(rightName.size()){
+				case 0:
+					unboundChild(comp, expected);
+					break;
+				case 1:
+					sc = rightName.get(0);
+					sc.setBoundTo(expected.getName());
+					subComps.add(sc);
+					break;
+				default: //more than 1
+					tooManyChilds(comp, expected);
+					break;
+				}
+				break;
 			}
+
 		}
-		for(Component subComp : subComps){
+		for (Component subComp : subComps) {
 			subComp.getScope().setParent(comp.getScope());
 			subComp.setParent(comp);
 		}
 		comp.setChildren(subComps);
+	}
 
+	private void unboundChild(Component comp, Child expected) throws LEMSCompilerException {
+		// TODO Auto-generated method stub
+		String err = MessageFormat
+				.format("Component {0} of type [{1}] needs to define a Child of type {2} named {3}.",
+						comp.getName(),
+						comp.getType(),
+						expected.getType(),
+						expected.getName());
+		throw new LEMSCompilerException(err, LEMSCompilerError.UnboundChild);
+
+	}
+
+	public List<Component> filterName(List<Component> comps, String name) {
+		return Lists.newArrayList(Iterables.filter(comps, isNamed(name)));
+	}
+
+	public static Predicate<Component> isNamed(final String name) {
+		return new Predicate<Component>() {
+			@Override
+			public boolean apply(Component input) {
+				return input.getName() != null && input.getName().equals(name);
+			}
+		};
 	}
 
 	private void tooManyChilds(Component comp, Child expected) throws LEMSCompilerException {
@@ -90,7 +148,5 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 						expected.getType());
 		throw new LEMSCompilerException(err, LEMSCompilerError.MissingChildren);
 	}
-
-
 
 }

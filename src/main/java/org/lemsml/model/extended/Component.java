@@ -40,6 +40,9 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	@XmlTransient
 	private Component parent;
 
+	@XmlTransient
+	private String boundTo;
+
 	public ComponentType getComponentType() {
 		return _ComponentType;
 	}
@@ -75,11 +78,25 @@ public class Component extends org.lemsml.model.Component implements INamed,
 				hasType(type)));
 	}
 
+	public List<Component> getSubComponentsWithName(String name) {
+		return Lists.newArrayList(Iterables.filter(getComponent(),
+				isNamed(name)));
+	}
+
 	public static Predicate<Component> hasType(final String type) {
 		return new Predicate<Component>() {
 			@Override
 			public boolean apply(Component input) {
 				return input.getType() != null && input.getType().equals(type);
+			}
+		};
+	}
+
+	public static Predicate<Component> isNamed(final String name) {
+		return new Predicate<Component>() {
+			@Override
+			public boolean apply(Component input) {
+				return input.getName() != null && input.getName().equals(name);
 			}
 		};
 	}
@@ -125,6 +142,14 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	public List<Component> getComponents(){
 		//TODO: can't get it pluralized via jaxb...
 		return getComponent();
+	}
+
+	public String getBoundTo() {
+		return boundTo;
+	}
+
+	public void setBoundTo(String boundTo) {
+		this.boundTo = boundTo;
 	}
 
 }

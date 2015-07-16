@@ -29,8 +29,12 @@ public class FamilyTest extends BaseTest {
 
 	ComponentType Foo = (ComponentType) new ComponentType()
 				.withName("Foo")
-				.withChildren(new Child().withType("Bar"));
+				.withChildren(
+						new Child()
+							.withType("Bar")
+							.withName("bar0"));
 
+//	TODO: see https://github.com/LEMS/jLEMS/issues/71
 	@Test
 	public void testTooManyChilds() throws Throwable {
 
@@ -43,7 +47,7 @@ public class FamilyTest extends BaseTest {
 
 		Component bar1 = (Component) new Component()
 				.withType("Bar")
-				.withName("bar1");
+				.withName("bar0");
 
 		Component foo = (Component) new Component()
 				.withType("Foo")
@@ -52,6 +56,38 @@ public class FamilyTest extends BaseTest {
 		Lems lems = (Lems) new Lems()
 				.withComponentTypes(Bar, Foo)
 				.withComponents(foo);
+
+		LEMSCompilerFrontend.semanticAnalysis(lems);
+
+	}
+
+	@Test
+	public void testUnboundChild() throws Throwable {
+
+		exception.expect(LEMSCompilerException.class);
+		exception.expectMessage(LEMSCompilerError.UnboundChild.toString());
+
+		ComponentType Goo = (ComponentType) new ComponentType()
+								.withName("Goo")
+								.withChildren(
+										new Child().withType("Bar").withName("bar0"),
+										new Child().withType("Bar").withName("bar1"));
+
+		Component bar0 = (Component) new Component()
+				.withType("Bar")
+				.withName("bar0");
+
+		Component bar1 = (Component) new Component()
+				.withType("Bar")
+				.withName("bar11");
+
+		Component goo = (Component) new Component()
+				.withType("Goo")
+				.withComponent(bar0, bar1);
+
+		Lems lems = (Lems) new Lems()
+				.withComponentTypes(Bar, Goo)
+				.withComponents(goo);
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
