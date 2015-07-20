@@ -65,12 +65,9 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return this;
 	}
 
-	public String getParameterValue(Parameter par) {
-		return getOtherAttributes().get(new QName(par.getName()));
-	}
-
-	public String getParameterValue(String pName) {
-		return getOtherAttributes().get(new QName(pName));
+	//TODO: That is only used for scoping, shouldn't it belong in Scope?
+	public Component followPath(String path){
+		return getSubComponentsWithName(path.split("\\.")[0]).get(0);
 	}
 
 	public List<Component> getSubComponentsOfType(String type) {
@@ -99,6 +96,14 @@ public class Component extends org.lemsml.model.Component implements INamed,
 				return input.getName() != null && input.getName().equals(name);
 			}
 		};
+	}
+
+	public String getParameterValue(Parameter par) {
+		return getOtherAttributes().get(new QName(par.getName()));
+	}
+
+	public String getParameterValue(String pName) {
+		return getOtherAttributes().get(new QName(pName));
 	}
 
 	public Scope getScope() {

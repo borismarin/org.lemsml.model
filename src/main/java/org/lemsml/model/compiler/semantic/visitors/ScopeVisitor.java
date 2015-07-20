@@ -35,6 +35,7 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 		this.context = comp;
 		this.scope = comp.getScope();
 		this.scope.setScopeName(comp.getId());
+		this.scope.setBelongsTo(comp);
 		this.scope.setUnitContext(this.lems.getSymbolToUnit());
 		return null;
 	}
@@ -70,7 +71,8 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(DerivedVariable derVar) throws Throwable {
-		scope.define(new Symbol(derVar));
+		Symbol sym = new Symbol(derVar);
+		scope.define(sym);
 		return true;
 	}
 

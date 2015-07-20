@@ -1,5 +1,6 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
 import java.util.Set;
 
 import org.lemsml.model.extended.interfaces.INamedValueDefinition;
@@ -62,6 +63,14 @@ public class Symbol {
 
 	public void setInScope(Scope inScope) {
 		this.scope = inScope;
+	}
+
+	@Override
+	public String toString() {
+		return MessageFormat.format("({0}) {1}: {2}",
+								this.getType().getClass().getSimpleName(),
+								this.getName(),
+								this.getValueDefinition());
 	}
 
 }

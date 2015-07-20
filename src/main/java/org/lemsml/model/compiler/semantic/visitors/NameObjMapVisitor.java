@@ -25,6 +25,8 @@ import ch.qos.logback.classic.Logger;
 	@Override
 	public Boolean visit(Component c) throws Throwable {
 		logRegistration(c.getId(), c);
+		//TODO: shall we only do that for toplevel components?
+		//      if not how do we treat repeated IDs?
 		Component old = this.lems.registerComponentId(c.getId(), c);
 		if(null != old){
 			warnMapOverwrite(c.getId(), old, c);
