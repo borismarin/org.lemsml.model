@@ -10,6 +10,9 @@ import static tec.units.ri.unit.SI.SQUARE_METRES_PER_SECOND;
 import java.io.File;
 import java.util.List;
 
+import javax.measure.Quantity;
+import javax.measure.Unit;
+import javax.measure.quantity.Length;
 import javax.xml.namespace.QName;
 
 import org.junit.Before;
@@ -64,6 +67,7 @@ public class SimplePendulumTest extends BaseTest {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void testDimensions() throws Throwable {
 
@@ -76,13 +80,13 @@ public class SimplePendulumTest extends BaseTest {
 		Component pend = compiledLems.getComponentById("pend");
 
 		// the "l" parameter is defined in kilometres
-		//Unit<?> unitL = compiledLems.getUnitBySymbol(pend);
-		//assertEquals(unitL, METRE.multiply(1000));
+		Unit<?> unitL = compiledLems.getUnitBySymbol("km");
+		assertEquals(unitL, METRE.multiply(1000));
 
 		// testing conversion to SI
-		//AbstractQuantity<?> lenghtWithUnit = NumberQuantity.of(pend.getScope().evaluate("length"), unitL);
-		//assertEquals(lenghtWithUnit.getValue().floatValue(), 0.001, 1e-8);
-		//assertEquals(lenghtWithUnit.toSI().getValue().floatValue(), 1.0, 1e-8);
+		Quantity<Length> length = (Quantity<Length>) pend.getScope().evaluate("l");
+		assertEquals(0.001,length.getValue().floatValue(), 1e-8);
+		assertEquals(1., length.to(METRE).getValue().floatValue(), 1e-8);
 	}
 
 	@Test(expected = LEMSCompilerException.class)
@@ -134,7 +138,7 @@ public class SimplePendulumTest extends BaseTest {
 
 		Symbol length = pend.getScope().resolve("l");
 		assertTrue(pendType.getParameters().contains(length.getType()));
-		//assertTrue(length.getUnit().equals(METRE.multiply(1000)));
+		assertTrue(pend.getScope().evaluate("l").getUnit().equals(METRE.multiply(1000)));
 
 	}
 
