@@ -1,13 +1,9 @@
 package org.lemsml.model.extended;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -17,9 +13,7 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.IScope;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableMap;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
@@ -51,24 +45,25 @@ public class Scope implements IScope {
 
 	private void buildDependencies(Symbol sym) throws LEMSCompilerException {
 		getDependencies().addNode(sym.getName());
-		if (null != sym.getValueDefinition()) { //TODO: better logic for select/reduce
+		if (null != sym.getValueDefinition()) { // TODO: better logic for
+												// select/reduce
 			for (String dep : ExpressionParser.listSymbolsInExpression(sym
 					.getValueDefinition())) {
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
 			}
-		}
-		else{ // select/reduce
-			PathQDParser pathParser = new PathQDParser(sym, this.getBelongsTo());
-			for(String dep : pathParser.expand()){
+		} else { // select/reduce
+			DerivedVariable dv = ((DerivedVariable) sym.getType());
+			String path = dv.getSelect().replace('/', '.');
+			List<String> deps = PathQDParser.expand(path, this.getBelongsTo());
+			for (String dep : deps) {
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
 			}
-			sym.setValueDefinition(pathParser.reduceToExpr());
+			sym.setValueDefinition(PathQDParser.reduceToExpr(deps,
+					Optional.fromNullable(dv.getReduce())));
 		}
 	}
-
-
 
 	@Override
 	public Symbol resolve(String name) throws LEMSCompilerException {
@@ -78,17 +73,13 @@ public class Scope implements IScope {
 		if(null != symb)
 			return symb;
 		if(name.indexOf('.') > 0){ // path notation breaks neat scoping...
-			return resolvePath(name);
+			return PathQDParser.resolvePath(name, this.getBelongsTo());
 		}
 		if (null != getParent()) {
 			return getParent().resolve(name);
 		}
 		throw new LEMSCompilerException("Undefined symbol: " + name,
 				LEMSCompilerError.UndefinedSymbol);
-	}
-
-	private Symbol resolvePath(String path) throws LEMSCompilerException {
-		return this.getBelongsTo().followPath(path).getScope().resolve(path.split("\\.")[1]);
 	}
 
 	@Override
