@@ -1,6 +1,7 @@
 package org.lemsml.model.test;
 
 import static org.junit.Assert.assertEquals;
+import static tec.units.ri.AbstractUnit.ONE;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
+
+import tec.units.ri.quantity.Quantities;
 
 public class PathTest extends BaseTest {
 
@@ -38,11 +41,11 @@ public class PathTest extends BaseTest {
 								.withDerivedVariables(
 										new DerivedVariable()
 											.withName("foo1_p0")
-											.withSelect("foo1/p0")))
-//										new DerivedVariable()
-//											.withName("foos_p0_sum")
-//											.withSelect("foos/p0")
-//											.withReduce("sum")))
+											.withSelect("foo1/p0"),
+										new DerivedVariable()
+											.withName("foos_p0_sum")
+											.withSelect("Foo[*]/p0")
+											.withReduce("add")))
 					.withChildrens(
 							new Children()
 								.withName("Foos")
@@ -75,6 +78,9 @@ public class PathTest extends BaseTest {
 
 		assertEquals(lems.getComponentById("foo1").getScope().evaluate("p0"),
 				lems.getComponentById("bar0").getScope().evaluate("foo1_p0"));
+
+		assertEquals(Quantities.getQuantity(3.0, ONE),
+				lems.getComponentById("bar0").getScope().evaluate("foos_p0_sum"));
 
 	}
 

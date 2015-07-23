@@ -2,6 +2,8 @@ package org.lemsml.model.extended;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.namespace.QName;
@@ -67,7 +69,14 @@ public class Component extends org.lemsml.model.Component implements INamed,
 
 	//TODO: That is only used for scoping, shouldn't it belong in Scope?
 	public Component followPath(String path){
-		return getSubComponentsWithName(path.split("\\.")[0]).get(0);
+		Pattern pat = Pattern.compile("([^\\[\\]]*)\\[(.*)\\]([^\\[\\]]*)");
+		Matcher m = pat.matcher(path);
+		if (m.find()) {
+			return getSubComponentsOfType(m.group(1)).get(Integer.valueOf(m.group(2)));
+		}
+		else{
+			return getSubComponentsWithName(path.split("\\.")[0]).get(0);
+		}
 	}
 
 	public List<Component> getSubComponentsOfType(String type) {

@@ -1,8 +1,13 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.measure.Quantity;
 import javax.measure.Unit;
@@ -11,7 +16,10 @@ import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.IScope;
-import org.lemsml.model.extended.interfaces.IScoped;
+
+import com.google.common.base.Joiner;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
@@ -35,8 +43,8 @@ public class Scope implements IScope {
 
 	@Override
 	public Symbol define(Symbol sym) throws LEMSCompilerException {
-		getExpressions().put(sym.getName(), sym.getValueDefinition());
 		buildDependencies(sym);
+		getExpressions().put(sym.getName(), sym.getValueDefinition());
 		sym.setInScope(this);
 		return this.symbolTable.put(sym.getName(), sym);
 	}
@@ -51,11 +59,50 @@ public class Scope implements IScope {
 			}
 		}
 		else{ // select/reduce
-			String path = ((DerivedVariable) sym.getType()).getSelect().replace("/", ".");
-			sym.setValueDefinition(path);
-			getDependencies().addNode(path);
-			getDependencies().addEdge(sym.getName(), path);
+			String path = ((DerivedVariable) sym.getType()).getSelect();
+			Optional<String> reduce = Optional.fromNullable(((DerivedVariable) sym.getType()).getReduce());
+			for(String dep : expandPath(path)){
+				getDependencies().addNode(dep);
+				getDependencies().addEdge(sym.getName(), dep);
+			}
+			sym.setValueDefinition(reduceToExpr(path, reduce));
 		}
+	}
+
+	private String reduceToExpr(String path, Optional<String> reduce) {
+		final Map<String, String> reducers = ImmutableMap.of(
+		        "add", "+",
+		        "multiply", "*"
+		);
+		String expr;
+		if(reduce.isPresent()){
+			expr = Joiner.on(reducers.get(reduce.get())).join(expandPath(path));
+		}
+		else{
+			expr = path;
+		}
+		return expr.replace('/', '.');
+	}
+
+	private List<String> expandPath(String path) {
+		String sanePath = path.replace('/', '.');
+		ArrayList<String> deps = new ArrayList<String>();
+		Pattern pat = Pattern.compile("([^\\[\\]]*)\\[(.*)\\]([^\\[\\]]*)");
+		Matcher m = pat.matcher(sanePath);
+		if (m.find()) {
+			int n = this.getBelongsTo().getSubComponentsOfType(m.group(1)).size();
+			for(int i = 0; i < n; i++){
+				String depName = MessageFormat.format("{0}[{1}]{2}",
+						m.group(1),
+						i,
+						m.group(3));
+				deps.add(depName);
+			}
+		}
+		else{
+			deps.add(sanePath);
+		}
+		return deps;
 	}
 
 	@Override
