@@ -6,6 +6,7 @@ import static tec.units.ri.AbstractUnit.ONE;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.lemsml.model.Child;
 import org.lemsml.model.Children;
 import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Dynamics;
@@ -32,7 +33,17 @@ public class PathTest extends BaseTest {
 					.withName("Foo")
 					.withParameters(
 						new Parameter()
-							.withName("p0")),
+							.withName("p0"))
+					.withChildren(
+							new Child()
+								.withName("baz")
+								.withType("Baz")),
+				(ComponentType)
+				new ComponentType()
+					.withName("Baz")
+					.withParameters(
+							new Parameter()
+							.withName("q0")),
 				(ComponentType)
 				new ComponentType()
 					.withName("Bar")
@@ -42,6 +53,13 @@ public class PathTest extends BaseTest {
 										new DerivedVariable()
 											.withName("foo1_p0")
 											.withSelect("foo1/p0"),
+										new DerivedVariable()
+											.withName("foo2_baz_q0")
+											.withSelect("foo2/baz/q0"),
+										new DerivedVariable()
+											.withName("foos_baz_q0_mult")
+											.withSelect("Foo[*]/baz/q0")
+											.withReduce("multiply"),
 										new DerivedVariable()
 											.withName("foos_p0_sum")
 											.withSelect("Foo[*]/p0")
@@ -58,18 +76,36 @@ public class PathTest extends BaseTest {
 						.withId("bar0")
 						.withComponent(
 								((Component)
-									new Component()
-										.withType("Foo")
-										.withId("foo0"))
-										.withParameterValue("p0", "0.0"),
+								new Component()
+									.withType("Foo")
+									.withComponent(
+										((Component)
+										new Component()
+											.withType("Baz")
+											.withId("baz"))
+											.withParameterValue("q0", "0.1"))
+									.withId("foo0"))
+									.withParameterValue("p0", "0.0"),
 								((Component)
 									new Component()
 										.withType("Foo")
+										.withComponent(
+											((Component)
+												new Component()
+													.withType("Baz")
+													.withId("baz"))
+													.withParameterValue("q0", "0.2"))
 										.withId("foo1"))
 										.withParameterValue("p0", "1.0"),
 								((Component)
 									new Component()
 										.withType("Foo")
+										.withComponent(
+											((Component)
+												new Component()
+													.withType("Baz")
+													.withId("baz"))
+													.withParameterValue("q0", "0.3"))
 										.withId("foo2"))
 										.withParameterValue("p0", "2.0"))
 			);
@@ -81,6 +117,12 @@ public class PathTest extends BaseTest {
 
 		assertEquals(Quantities.getQuantity(3.0, ONE),
 				lems.getComponentById("bar0").getScope().evaluate("foos_p0_sum"));
+
+		assertEquals(Quantities.getQuantity(0.3, ONE),
+				lems.getComponentById("bar0").getScope().evaluate("foo2_baz_q0"));
+
+		assertEquals(0.006,
+				lems.getComponentById("bar0").getScope().evaluate("foos_baz_q0_mult").getValue().doubleValue(), 1e-9);
 
 	}
 
