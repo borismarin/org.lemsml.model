@@ -51,7 +51,7 @@ public class Scope implements IScope {
 
 	private void buildDependencies(Symbol sym) throws LEMSCompilerException {
 		getDependencies().addNode(sym.getName());
-		if (null != sym.getValueDefinition()) { // disregard select/reduce
+		if (null != sym.getValueDefinition()) { //TODO: better logic for select/reduce
 			for (String dep : ExpressionParser.listSymbolsInExpression(sym
 					.getValueDefinition())) {
 				getDependencies().addNode(dep);
@@ -59,51 +59,16 @@ public class Scope implements IScope {
 			}
 		}
 		else{ // select/reduce
-			String path = ((DerivedVariable) sym.getType()).getSelect();
-			Optional<String> reduce = Optional.fromNullable(((DerivedVariable) sym.getType()).getReduce());
-			for(String dep : expandPath(path)){
+			PathQDParser pathParser = new PathQDParser(sym, this.getBelongsTo());
+			for(String dep : pathParser.expand()){
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
 			}
-			sym.setValueDefinition(reduceToExpr(path, reduce));
+			sym.setValueDefinition(pathParser.reduceToExpr());
 		}
 	}
 
-	private String reduceToExpr(String path, Optional<String> reduce) {
-		final Map<String, String> reducers = ImmutableMap.of(
-		        "add", "+",
-		        "multiply", "*"
-		);
-		String expr;
-		if(reduce.isPresent()){
-			expr = Joiner.on(reducers.get(reduce.get())).join(expandPath(path));
-		}
-		else{
-			expr = path;
-		}
-		return expr.replace('/', '.');
-	}
 
-	private List<String> expandPath(String path) {
-		String sanePath = path.replace('/', '.');
-		ArrayList<String> deps = new ArrayList<String>();
-		Pattern pat = Pattern.compile("([^\\[\\]]*)\\[(.*)\\]([^\\[\\]]*)");
-		Matcher m = pat.matcher(sanePath);
-		if (m.find()) {
-			int n = this.getBelongsTo().getSubComponentsOfType(m.group(1)).size();
-			for(int i = 0; i < n; i++){
-				String depName = MessageFormat.format("{0}[{1}]{2}",
-						m.group(1),
-						i,
-						m.group(3));
-				deps.add(depName);
-			}
-		}
-		else{
-			deps.add(sanePath);
-		}
-		return deps;
-	}
 
 	@Override
 	public Symbol resolve(String name) throws LEMSCompilerException {
