@@ -1,6 +1,7 @@
 package org.lemsml.model.extended;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlTransient;
@@ -66,8 +67,16 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	}
 
 	public List<Component> getSubComponentsOfType(String type) {
-		return Lists.newArrayList(Iterables.filter(getComponent(),
-				hasType(type)));
+		ArrayList<Component> comps = new ArrayList<Component>();
+		for (Component subComp : getComponent()){
+			ComponentType subCompType = subComp.getComponentType();
+			do{
+				if(subCompType.getName().equals(type))
+					comps.add(subComp);
+			}
+			while(null != (subCompType = subCompType.getParent()));
+		}
+		return comps;
 	}
 
 	public List<Component> getSubComponentsWithName(String name) {

@@ -62,12 +62,10 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 	private void processChilds(Component comp) throws LEMSCompilerException {
 		List<Component> subComps = new ArrayList<Component>();
 		for (Child expected : comp.getComponentType().getChildren()) {
-			// TODO: child (only one..., how does it work for multiple?) logic
-			// subComps.addAll(comp.getSubComponentsOfType(expected.getType()));
-			List<Component> subComponentsOfType = comp
-					.getSubComponentsOfType(expected.getType());
 			// TODO: see https://github.com/LEMS/jLEMS/issues/71
 			// 		 this is a quick & dirty workaround
+			List<Component> subComponentsOfType = comp
+					.getSubComponentsOfType(expected.getType());
 			switch(subComponentsOfType.size()){
 			case 0:
 				missingChilds(comp, expected);
