@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
 
+import org.lemsml.model.compiler.semantic.visitors.traversers.DepthFirstTraverserExt;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.ComponentType;

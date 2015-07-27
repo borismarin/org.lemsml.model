@@ -1,7 +1,7 @@
 package org.lemsml.model.compiler.semantic;
 
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.UnitsDimensionsVisitor;
+import org.lemsml.model.compiler.semantic.visitors.traversers.DepthFirstTraverserExt;
 import org.lemsml.model.extended.Lems;
 
 public class ResolveUnitsDimensions extends ASemanticPass {

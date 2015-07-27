@@ -1,4 +1,4 @@
-package org.lemsml.model.compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors.traversers;
 
 import org.lemsml.model.Assign;
 import org.lemsml.model.Attachments;
@@ -56,88 +56,63 @@ import org.lemsml.model.With;
 import org.lemsml.visitors.Traverser;
 import org.lemsml.visitors.Visitor;
 
-public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
+public class TopLevelTraverser<E extends Throwable> implements Traverser<E> {
 
 	@Override
-	public void traverse(Lems aBean, Visitor<?, E> aVisitor) throws E {
-		for (Constant bean : aBean.getConstants()) {
-			bean.accept(aVisitor);
-		}
-		for (org.lemsml.model.extended.Component bean : aBean.getComponents()) {
-			bean.accept(aVisitor);
-		}
-	}
+    public void traverse(Lems aBean, Visitor<?, E> aVisitor)
+        throws E
+    {
+        for (Target bean: aBean.getTargets()) {
+            bean.accept(aVisitor);
+        }
+        for (Include bean: aBean.getIncludes()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Dimension bean: aBean.getDimensions()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Unit bean: aBean.getUnits()) {
+            bean.accept(aVisitor);
+        }
+        for (Constant bean: aBean.getConstants()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.ComponentType bean: aBean.getComponentTypes()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Component bean: aBean.getComponents()) {
+            bean.accept(aVisitor);
+        }
+    }
 
-	public void traverse(org.lemsml.model.extended.Lems aBean,
-			Visitor<?, E> aVisitor) throws E {
-		traverse((Lems) aBean, aVisitor);
-	}
+    public void traverse(org.lemsml.model.extended.Lems aBean, Visitor<?, E> aVisitor)
+        throws E
+    {
+        for (Target bean: aBean.getTargets()) {
+            bean.accept(aVisitor);
+        }
+        for (Include bean: aBean.getIncludes()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Dimension bean: aBean.getDimensions()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Unit bean: aBean.getUnits()) {
+            bean.accept(aVisitor);
+        }
+        for (Constant bean: aBean.getConstants()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.ComponentType bean: aBean.getComponentTypes()) {
+            bean.accept(aVisitor);
+        }
+        for (org.lemsml.model.extended.Component bean: aBean.getComponents()) {
+            bean.accept(aVisitor);
+        }
+    }
 
-	@Override
-	public void traverse(Dynamics aBean, Visitor<?, E> aVisitor) throws E {
-		for (StateVariable bean : aBean.getStateVariables()) {
-			bean.accept(aVisitor);
-		}
-		for (DerivedVariable bean : aBean.getDerivedVariables()) {
-			bean.accept(aVisitor);
-		}
-		for (ConditionalDerivedVariable bean : aBean
-				.getConditionalDerivedVariables()) {
-			bean.accept(aVisitor);
-		}
-		for (TimeDerivative bean : aBean.getTimeDerivatives()) {
-			bean.accept(aVisitor);
-		}
-	}
 
-	@Override
-	public void traverse(Component aBean, Visitor<?, E> aVisitor) throws E {
-		// TODO: should never be called on nonextended comps!
-		assert (false);
-	}
-
-	@Override
-	public void traverse(org.lemsml.model.extended.Component aBean,
-			Visitor<?, E> aVisitor) throws E {
-		ComponentType compType = aBean.getComponentType();
-		compType.accept(aVisitor);
-		for (Component subComp : aBean.getComponent()) {
-			subComp.accept(aVisitor);
-		}
-	}
-
-	@Override
-	public void traverse(ComponentType aBean, Visitor<?, E> aVisitor) throws E {
-		for (Constant bean : aBean.getConstants()) {
-			bean.accept(aVisitor);
-		}
-		for (Parameter bean : aBean.getParameters()) {
-			bean.accept(aVisitor);
-		}
-		for (Fixed bean : aBean.getFixeds()) {
-			bean.accept(aVisitor);
-		}
-		for (DerivedParameter bean : aBean.getDerivedParameters()) {
-			bean.accept(aVisitor);
-		}
-		for (Requirement bean : aBean.getRequirements()) {
-			bean.accept(aVisitor);
-		}
-		for (Dynamics bean : aBean.getDynamics()) {
-			bean.accept(aVisitor);
-		}
-		for (Exposure bean : aBean.getExposures()) {
-			bean.accept(aVisitor);
-		}
-	}
-
-	@Override
-	public void traverse(org.lemsml.model.extended.ComponentType aBean,
-			Visitor<?, E> aVisitor) throws E {
-		traverse((ComponentType) aBean, aVisitor);
-	}
-
-	// all others should be empty
+    // all others should be empty
 
 	@Override
 	public void traverse(Assign aBean, Visitor<?, E> aVisitor) throws E {
@@ -171,6 +146,46 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 
 	@Override
 	public void traverse(Children aBean, Visitor<?, E> aVisitor) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(Component aBean, Visitor<?, E> aVisitor) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(org.lemsml.model.extended.Component aBean,
+			Visitor<?, E> aVisitor) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(ComponentReference aBean, Visitor<?, E> aVisitor)
+			throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(ComponentRequirement aBean, Visitor<?, E> aVisitor)
+			throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(ComponentType aBean, Visitor<?, E> aVisitor) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(org.lemsml.model.extended.ComponentType aBean,
+			Visitor<?, E> aVisitor) throws E {
 		// TODO Auto-generated method stub
 
 	}
@@ -223,6 +238,12 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 	@Override
 	public void traverse(org.lemsml.model.extended.Dimension aBean,
 			Visitor<?, E> aVisitor) throws E {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void traverse(Dynamics aBean, Visitor<?, E> aVisitor) throws E {
 		// TODO Auto-generated method stub
 
 	}
@@ -449,18 +470,5 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 
 	}
 
-	@Override
-	public void traverse(ComponentReference aBean, Visitor<?, E> aVisitor)
-			throws E {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void traverse(ComponentRequirement aBean, Visitor<?, E> aVisitor)
-			throws E {
-		// TODO Auto-generated method stub
-
-	}
-
 }
+

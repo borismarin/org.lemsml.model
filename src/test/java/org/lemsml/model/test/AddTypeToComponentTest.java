@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.lemsml.model.compiler.parser.LEMSParser;
 import org.lemsml.model.compiler.semantic.visitors.TypeToComponentVisitor;
 import org.lemsml.model.compiler.semantic.visitors.NameObjMapVisitor;
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
+import org.lemsml.model.compiler.semantic.visitors.traversers.DepthFirstTraverserExt;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
 

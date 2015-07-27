@@ -9,7 +9,7 @@ import org.lemsml.model.compiler.parser.LEMSXMLWriter;
 import org.lemsml.model.compiler.semantic.visitors.CopyIfNotIncluded;
 import org.lemsml.model.compiler.semantic.visitors.ILemsProcessor;
 import org.lemsml.model.compiler.semantic.visitors.RemoveIncludes;
-import org.lemsml.model.compiler.semantic.visitors.TopLevelTraverser;
+import org.lemsml.model.compiler.semantic.visitors.traversers.TopLevelTraverser;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
 

@@ -47,7 +47,7 @@ public abstract class ASemanticPass {
 		this.visitor = visitor;
 	}
 
-	public void setTraveseFirst(boolean b) {
+	public void setTraverseFirst(boolean b) {
 		this.traverseFirst = b;
 	}
 }

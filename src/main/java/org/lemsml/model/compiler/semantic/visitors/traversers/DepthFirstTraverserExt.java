@@ -1,4 +1,4 @@
-package org.lemsml.model.compiler.semantic.visitors;
+package org.lemsml.model.compiler.semantic.visitors.traversers;
 
 import org.lemsml.model.Assign;
 import org.lemsml.model.Attachments;

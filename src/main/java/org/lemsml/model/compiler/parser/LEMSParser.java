@@ -4,8 +4,8 @@ import java.io.File;
 import java.net.URL;
 
 import org.lemsml.model.compiler.semantic.visitors.DecorateWithSourceFile;
-import org.lemsml.model.compiler.semantic.visitors.DepthFirstTraverserExt;
 import org.lemsml.model.compiler.semantic.visitors.ProcessIncludes;
+import org.lemsml.model.compiler.semantic.visitors.traversers.DepthFirstTraverserExt;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.TraversingVisitor;
 

@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.lemsml.model.Include;
 import org.lemsml.model.compiler.parser.LEMSXMLReader;
+import org.lemsml.model.compiler.semantic.visitors.traversers.DepthFirstTraverserExt;
+import org.lemsml.model.compiler.semantic.visitors.traversers.TopLevelTraverser;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 import org.lemsml.visitors.TraversingVisitor;

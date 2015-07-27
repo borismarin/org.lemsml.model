@@ -64,6 +64,57 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 	}
 
 	@Override
+	public Boolean visit(DerivedParameter aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(DerivedVariable aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(Constant aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(Exposure aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(Parameter aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(Property aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(Requirement aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+	@Override
+	public Boolean visit(StateVariable aBean) throws Throwable {
+		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
+		return null;
+	}
+
+
+	/// all empty below
+
+	@Override
 	public Boolean visit(Assign aBean) throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
@@ -130,12 +181,6 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 	}
 
 	@Override
-	public Boolean visit(Constant aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
-		return null;
-	}
-
-	@Override
 	public Boolean visit(DataDisplay aBean) throws Throwable {
 		// TODO Auto-generated method stub
 		return null;
@@ -143,20 +188,6 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(DataWriter aBean) throws Throwable {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(DerivedParameter aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(DerivedVariable aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -187,13 +218,6 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(EventPort aBean) throws Throwable {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(Exposure aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -277,20 +301,8 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 	}
 
 	@Override
-	public Boolean visit(Parameter aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
-		return null;
-	}
-
-	@Override
 	public Boolean visit(Path aBean) throws Throwable {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(Property aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
 		return null;
 	}
 
@@ -303,12 +315,6 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(Regime aBean) throws Throwable {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(Requirement aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
 		return null;
 	}
 
@@ -327,12 +333,6 @@ public class DimToDimensionalVisitor implements Visitor<Boolean, Throwable> {
 	@Override
 	public Boolean visit(StateAssignment aBean) throws Throwable {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Boolean visit(StateVariable aBean) throws Throwable {
-		aBean.setUOMDimension(lems.getDimensionByName(aBean.getDimension()));
 		return null;
 	}
 
