@@ -39,7 +39,7 @@ public class PathQDParser {
 		ArrayList<String> deps = new ArrayList<String>();
 		Matcher matcher = predicatePattern.matcher(path);
 		if (matcher.find()) {
-			int n = comp.getSubComponentsOfType(matcher.group(1)).size();
+			int n = comp.getSubComponentsBoundToName(matcher.group(1)).size();
 			for (int i = 0; i < n; i++) {
 				String depName = MessageFormat.format(
 						"{0}[{1}]{2}",
@@ -71,10 +71,10 @@ public class PathQDParser {
 		if (matcher.find()) { // predicate
 			return followPath(
 					rest,
-					comp.getSubComponentsOfType(matcher.group(1))
+					comp.getSubComponentsBoundToName(matcher.group(1))
 							.get(Integer.valueOf(matcher.group(2))));
 		} else {
-			return followPath(rest, comp.getSubComponentsWithName(first).get(0));
+			return followPath(rest, comp.getSubComponentsBoundToName(first).get(0));
 		}
 	}
 

@@ -58,15 +58,15 @@ public class PathTest extends BaseTest {
 											.withSelect("foo2/baz/q0"),
 										new DerivedVariable()
 											.withName("foos_baz_q0_mult")
-											.withSelect("Foo[*]/baz/q0")
+											.withSelect("foos[*]/baz/q0")
 											.withReduce("multiply"),
 										new DerivedVariable()
 											.withName("foos_p0_sum")
-											.withSelect("Foo[*]/p0")
+											.withSelect("foos[*]/p0")
 											.withReduce("add")))
 					.withChildrens(
 							new Children()
-								.withName("Foos")
+								.withName("foos")
 								.withType("Foo"))
 				)
 			.withComponents(
