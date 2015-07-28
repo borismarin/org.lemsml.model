@@ -13,6 +13,7 @@ public class LEMSSemanticAnalyser {
 	private ResolveUnitsDimensions dimensionResolver;
 	private DecorateWithDimensions dimensionDecorator;
 	private DecorateComponentsWithType typeDecorator;
+	private BuildStructure structureBuilder;
 	private ExtendTypes typeExtender;
 	private AddFamilyToComponents familyAdder;
 	private BuildScope scopeBuilder;
@@ -28,6 +29,7 @@ public class LEMSSemanticAnalyser {
 		typeDecorator = new DecorateComponentsWithType(lems);
 		typeExtender = new ExtendTypes(lems);
 		familyAdder = new AddFamilyToComponents(lems);
+		structureBuilder = new BuildStructure(lems);
 		scopeBuilder = new BuildScope(lems);
 		exprDimChecker = new CheckExpressionDimensions(lems);
 	}
@@ -40,6 +42,7 @@ public class LEMSSemanticAnalyser {
 		typeDecorator.apply();
 		typeExtender.apply();
 		familyAdder.apply();
+		structureBuilder.apply();
 		scopeBuilder.apply();
 		exprDimChecker.apply();
 
