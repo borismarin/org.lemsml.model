@@ -79,6 +79,11 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return comps;
 	}
 
+	public List<Component> getSubComponentsBoundToName(String name) {
+		return Lists.newArrayList(Iterables.filter(getComponent(),
+				isBoundTo(name)));
+	}
+
 	public List<Component> getSubComponentsWithName(String name) {
 		return Lists.newArrayList(Iterables.filter(getComponent(),
 				isNamed(name)));
@@ -89,6 +94,15 @@ public class Component extends org.lemsml.model.Component implements INamed,
 			@Override
 			public boolean apply(Component input) {
 				return input.getType() != null && input.getType().equals(type);
+			}
+		};
+	}
+
+	public static Predicate<Component> isBoundTo(final String type) {
+		return new Predicate<Component>() {
+			@Override
+			public boolean apply(Component input) {
+				return input.getBoundTo() != null && input.getBoundTo().equals(type);
 			}
 		};
 	}

@@ -6,6 +6,7 @@ import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Parameter;
+import org.lemsml.model.Requirement;
 import org.lemsml.model.StateVariable;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
@@ -75,6 +76,13 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 		scope.define(sym);
 		return true;
 	}
+
+	@Override
+	public Boolean visit(Requirement req) throws Throwable {
+		scope.define(new Symbol(req, req.getName()));
+		return true;
+	}
+
 
 	@Override
 	public Boolean visit(StateVariable x) throws Throwable {

@@ -9,6 +9,7 @@ import javax.measure.Quantity;
 import javax.measure.Unit;
 
 import org.lemsml.model.DerivedVariable;
+import org.lemsml.model.Requirement;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.IScope;
@@ -70,8 +71,20 @@ public class Scope implements IScope {
 		// Scoping rules: if it is not found, look for it in parent (recurse)
 		//                paths allow direct access to any symbol in a scope
 		Symbol symb = this.symbolTable.get(name);
-		if(null != symb)
+		if(null != symb){
+			if(symb.getType() instanceof Requirement){
+				try{ // try to find actual def upscope
+					return getParent().resolve(name);
+				} catch(LEMSCompilerException e){
+					if (e.getErrorCode().equals(LEMSCompilerError.UndefinedSymbol)){
+						return symb; // OK, it is an unbound requirement
+					}else{
+						throw e;
+					}
+				}
+			}
 			return symb;
+		}
 		if(name.indexOf('.') > 0){ // path notation breaks neat scoping...
 			return PathQDParser.resolvePath(name, this.getBelongsTo());
 		}
@@ -97,7 +110,7 @@ public class Scope implements IScope {
 		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
 			// don't calculate deps which are already calculated, nor circular deps (e.g. state vars)
 			if (!localContext.containsKey(dep) && !(dep.equals(symbol.getName()))){
-				// Need to calculate vars in upper scopes, which can't see this one
+				// Need to evaluate vars in upper scopes, which can't see this one
 				Symbol resolved = resolve(dep);
 				if (!resolved.getScope().equals(this)) {
 					localContext.put(dep,
