@@ -74,7 +74,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 				if(subCompType.getName().equals(type))
 					comps.add(subComp);
 			}
-			while(null != (subCompType = subCompType.getParent()));
+			while(null != (subCompType = subCompType.getSuperType()));
 		}
 		return comps;
 	}

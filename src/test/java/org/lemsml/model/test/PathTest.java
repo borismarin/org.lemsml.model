@@ -51,12 +51,6 @@ public class PathTest extends BaseTest {
 							new Dynamics()
 								.withDerivedVariables(
 										new DerivedVariable()
-											.withName("foo1_p0")
-											.withSelect("foo1/p0"),
-										new DerivedVariable()
-											.withName("foo2_baz_q0")
-											.withSelect("foo2/baz/q0"),
-										new DerivedVariable()
 											.withName("foos_baz_q0_mult")
 											.withSelect("foos[*]/baz/q0")
 											.withReduce("multiply"),
@@ -112,14 +106,8 @@ public class PathTest extends BaseTest {
 
 		LEMSCompilerFrontend.semanticAnalysis(lems);
 
-		assertEquals(lems.getComponentById("foo1").getScope().evaluate("p0"),
-				lems.getComponentById("bar0").getScope().evaluate("foo1_p0"));
-
 		assertEquals(Quantities.getQuantity(3.0, ONE),
 				lems.getComponentById("bar0").getScope().evaluate("foos_p0_sum"));
-
-		assertEquals(Quantities.getQuantity(0.3, ONE),
-				lems.getComponentById("bar0").getScope().evaluate("foo2_baz_q0"));
 
 		assertEquals(0.006,
 				lems.getComponentById("bar0").getScope().evaluate("foos_baz_q0_mult").getValue().doubleValue(), 1e-9);

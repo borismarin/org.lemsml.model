@@ -20,7 +20,7 @@ import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.UndefinedSymbolException;
 
-public class Scope implements IScope {
+public class Scope implements IScope{
 
 	private Map<String, Symbol> symbolTable = new HashMap<String, Symbol>();
 	private String name;
@@ -72,6 +72,7 @@ public class Scope implements IScope {
 		//                paths allow direct access to any symbol in a scope
 		Symbol symb = this.symbolTable.get(name);
 		if(null != symb){
+			//TODO: ugly corner-case logic
 			if(symb.getType() instanceof Requirement){
 				try{ // try to find actual def upscope
 					return getParent().resolve(name);
@@ -190,6 +191,10 @@ public class Scope implements IScope {
 
 	public void setBelongsTo(Component belongsTo) {
 		this.belongsTo = belongsTo;
+	}
+
+	public Symbol get(String name) throws LEMSCompilerException{
+		return resolve(name);
 	}
 
 }
