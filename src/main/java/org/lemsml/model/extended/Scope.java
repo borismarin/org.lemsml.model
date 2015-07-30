@@ -50,8 +50,10 @@ public class Scope implements IScope{
 												// select/reduce
 			for (String dep : ExpressionParser.listSymbolsInExpression(sym
 					.getValueDefinition())) {
-				getDependencies().addNode(dep);
-				getDependencies().addEdge(sym.getName(), dep);
+				if (!(sym.getValueDefinition().equals(dep))) {
+					getDependencies().addNode(dep);
+					getDependencies().addEdge(sym.getName(), dep);
+				}
 			}
 		} else { // select/reduce
 			DerivedVariable dv = ((DerivedVariable) sym.getType());
