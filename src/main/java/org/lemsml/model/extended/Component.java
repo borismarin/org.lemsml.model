@@ -16,8 +16,10 @@ import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
 
 import com.google.common.base.Predicate;
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 
 /**
  * @author borismarin
@@ -36,13 +38,17 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	private Lems lemsRoot;
 
 	@XmlTransient
-	private Scope scope = new Scope(""); //TODO: ugly
+	private Scope scope = new Scope(""); // TODO: ugly
 
 	@XmlTransient
 	private Component parent;
 
 	@XmlTransient
 	private String boundTo;
+
+	@XmlTransient
+	public Multimap<String, Component> nameBindings = ArrayListMultimap
+			.create();
 
 	public ComponentType getComponentType() {
 		return _ComponentType;
@@ -52,36 +58,38 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		this._ComponentType = _ComponentType;
 	}
 
-	public Component withParameterValue(String pName, String val) throws LEMSCompilerException {
+	public Component withParameterValue(String pName, String val)
+			throws LEMSCompilerException {
 		this.getOtherAttributes().put(new QName(pName), val);
-		try{
+		try {
 			Symbol resolved = getScope().resolve(pName);
-			scope.define(new Symbol((NamedDimensionalType) resolved.getType(), val));
-		} catch(LEMSCompilerException e){
-			if(!e.getErrorCode().equals(LEMSCompilerError.UndefinedSymbol)){
+			scope.define(new Symbol((NamedDimensionalType) resolved.getType(),
+					val));
+		} catch (LEMSCompilerException e) {
+			if (!e.getErrorCode().equals(LEMSCompilerError.UndefinedSymbol)) {
 				throw e;
 			}
-			//OK, we haven't compiled it yet
+			// OK, we haven't compiled it yet
 		}
 		return this;
 	}
 
 	public List<Component> getSubComponentsOfType(String type) {
 		ArrayList<Component> comps = new ArrayList<Component>();
-		for (Component subComp : getComponent()){
+		for (Component subComp : getComponent()) {
 			ComponentType subCompType = subComp.getComponentType();
-			do{
-				if(subCompType.getName().equals(type))
+			do {
+				if (subCompType.getName().equals(type))
 					comps.add(subComp);
-			}
-			while(null != (subCompType = subCompType.getSuperType()));
+			} while (null != (subCompType = subCompType.getSuperType()));
 		}
 		return comps;
 	}
 
 	public List<Component> getSubComponentsBoundToName(String name) {
-		return Lists.newArrayList(Iterables.filter(getComponent(),
-				isBoundTo(name)));
+		return new ArrayList<Component>(nameBindings.get(name));
+		// return Lists.newArrayList(Iterables.filter(getComponent(),
+		// isBoundTo(name)));
 	}
 
 	public List<Component> getSubComponentsWithName(String name) {
@@ -94,15 +102,6 @@ public class Component extends org.lemsml.model.Component implements INamed,
 			@Override
 			public boolean apply(Component input) {
 				return input.getType() != null && input.getType().equals(type);
-			}
-		};
-	}
-
-	public static Predicate<Component> isBoundTo(final String type) {
-		return new Predicate<Component>() {
-			@Override
-			public boolean apply(Component input) {
-				return input.getBoundTo() != null && input.getBoundTo().equals(type);
 			}
 		};
 	}
@@ -162,17 +161,14 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		this.parent = comp;
 	}
 
-	public List<Component> getComponents(){
-		//TODO: can't get it pluralized via jaxb...
+	public List<Component> getComponents() {
+		// TODO: can't get it pluralized via jaxb...
 		return getComponent();
 	}
 
-	public String getBoundTo() {
-		return boundTo;
-	}
+	public void bindSubCompToName(Component sc, String name) {
+		nameBindings.put(name, sc);
 
-	public void setBoundTo(String boundTo) {
-		this.boundTo = boundTo;
 	}
 
 }

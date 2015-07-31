@@ -46,7 +46,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 		for(Children expected : comp.getComponentType().getChildrens()){
 			List<Component> subComponentsOfType = comp.getSubComponentsOfType(expected.getType());
 			for(Component sc : subComponentsOfType){
-				sc.setBoundTo(expected.getName());
+				comp.nameBindings.put(expected.getName(), sc);
 			}
 			subComps.addAll(subComponentsOfType);
 		}
@@ -72,7 +72,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 				break;
 			case 1:
 				Component sc = subComponentsOfType.get(0);
-				sc.setBoundTo(expected.getName());
+				comp.bindSubCompToName(sc, expected.getName());
 				subComps.add(sc); // only one here
 				break;
 			default: // more than 1
@@ -83,7 +83,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 					break;
 				case 1:
 					sc = rightName.get(0);
-					sc.setBoundTo(expected.getName());
+				    comp.bindSubCompToName(sc, expected.getName());
 					subComps.add(sc);
 					break;
 				default: //more than 1

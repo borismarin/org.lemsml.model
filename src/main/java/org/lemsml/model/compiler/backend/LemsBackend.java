@@ -30,15 +30,14 @@ public class LemsBackend {
 		ILemsProcessor preprocessor;
 
 		if (keepIncludes) {
-			preprocessor = new CopyIfNotIncluded( lemsDoc.getDefinedIn());
-		}
-		else{
+			preprocessor = new CopyIfNotIncluded(lemsDoc.getDefinedIn());
+		} else {
 			preprocessor = new RemoveIncludes();
 		}
-			TraversingVisitor<Boolean, Throwable> includeCleanup = new TraversingVisitor<Boolean, Throwable>(
-					new TopLevelTraverser<Throwable>(), preprocessor);
-			lemsDoc.accept(includeCleanup);
-			lems = preprocessor.getLems();
+		TraversingVisitor<Boolean, Throwable> includeCleanup = new TraversingVisitor<Boolean, Throwable>(
+				new TopLevelTraverser<Throwable>(), preprocessor);
+		lemsDoc.accept(includeCleanup);
+		lems = preprocessor.getLems();
 
 		LEMSXMLWriter.marshall(lems, outFile);
 	}

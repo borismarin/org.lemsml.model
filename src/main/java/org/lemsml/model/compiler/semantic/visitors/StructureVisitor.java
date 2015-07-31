@@ -26,13 +26,12 @@ public class StructureVisitor extends BaseVisitor<Boolean, Throwable> {
 		this.context = comp;
 		ComponentType type = comp.getComponentType();
 		//TODO: visiting / traversing
-		//      discuss those cases with Robert
 		for(Structure struct : type.getStructures()){
 			for(ChildInstance child: struct.getChildInstances()){
 				QName attrName = new QName(child.getComponent());
 				//TODO: that should be a copy.
 				Component componentById = this.lems.getComponentById(comp.getOtherAttributes().get(attrName));
-				componentById.setBoundTo(attrName.toString());
+				context.bindSubCompToName(componentById, attrName.toString());
 				comp.withComponent(componentById);
 			}
 		}
