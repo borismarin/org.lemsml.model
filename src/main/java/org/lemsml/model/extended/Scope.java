@@ -19,6 +19,7 @@ import com.google.common.base.Optional;
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
 import expr_parser.utils.UndefinedSymbolException;
+import expr_parser.visitors.AntlrExpressionParser;
 
 public class Scope implements IScope{
 
@@ -40,6 +41,7 @@ public class Scope implements IScope{
 	public Symbol define(Symbol sym) throws LEMSCompilerException {
 		buildDependencies(sym);
 		getExpressions().put(sym.getName(), sym.getValueDefinition());
+		sym.setParser(new AntlrExpressionParser(sym.getValueDefinition()));
 		sym.setInScope(this);
 		return this.symbolTable.put(sym.getName(), sym);
 	}
@@ -124,8 +126,10 @@ public class Scope implements IScope{
 			}
 		}
 		localContext.put(symbol.getName(),
-				ExpressionParser.evaluateQuantityInContext(symbol.getValueDefinition(),
+				ExpressionParser.evaluateQuantityInContext(symbol.getParser(),
 						localContext, getUnitContext()));
+//				ExpressionParser.evaluateQuantityInContext(symbol.getValueDefinition(),
+//						localContext, getUnitContext()));
 
 		return localContext;
 

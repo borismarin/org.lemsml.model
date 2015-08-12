@@ -6,6 +6,7 @@ import java.util.Set;
 import org.lemsml.model.extended.interfaces.INamedValueDefinition;
 
 import expr_parser.utils.ExpressionParser;
+import expr_parser.visitors.AntlrExpressionParser;
 
 public class Symbol {
 
@@ -13,6 +14,7 @@ public class Symbol {
 	private LemsNode type;
 	private String valueDefinition;
 	private Scope scope;
+	private AntlrExpressionParser parser; //TODO: insane coupling
 
 	public Symbol(NamedDimensionalType type, String valueDef) {
 		setName(type.getName());
@@ -45,7 +47,8 @@ public class Symbol {
 
 	public Set<String> getIndependentVariables() {
 		Set<String> syms = ExpressionParser
-				.listSymbolsInExpression(getValueDefinition());
+				//.listSymbolsInExpression(getValueDefinition());
+				.listSymbolsInExpression(getParser());
 		return syms;
 	}
 
@@ -71,6 +74,14 @@ public class Symbol {
 								this.getType().getClass().getSimpleName(),
 								this.getName(),
 								this.getValueDefinition());
+	}
+
+	public AntlrExpressionParser getParser() {
+		return parser;
+	}
+
+	public void setParser(AntlrExpressionParser parser) {
+		this.parser = parser;
 	}
 
 }
