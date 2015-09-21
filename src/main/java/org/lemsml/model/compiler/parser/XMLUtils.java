@@ -14,17 +14,17 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
-import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
  *
  */
 public class XMLUtils {
-	private static final Logger logger = (Logger) LoggerFactory
+	private static final Logger logger =  LoggerFactory
 			.getLogger(XMLUtils.class);
 
 	/**

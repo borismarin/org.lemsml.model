@@ -6,9 +6,9 @@ import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.model.extended.Unit;
 import org.lemsml.visitors.BaseVisitor;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -17,8 +17,7 @@ import ch.qos.logback.classic.Logger;
 public class UnitsDimensionsVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
-	private static final Logger logger = (Logger) LoggerFactory
-			.getLogger(UnitsDimensionsVisitor.class);
+	private static final Logger logger = LoggerFactory.getLogger(UnitsDimensionsVisitor.class);
 
 	private void logRegistration(String identifier, LemsNode n) {
 		StringBuilder sb = new StringBuilder();

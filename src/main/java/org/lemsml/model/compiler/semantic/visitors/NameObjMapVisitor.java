@@ -5,9 +5,9 @@ import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.LemsNode;
 import org.lemsml.visitors.BaseVisitor;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 
 /**
  * @author borismarin
@@ -15,8 +15,7 @@ import ch.qos.logback.classic.Logger;
  */ public class NameObjMapVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
-	private static final Logger logger = (Logger) LoggerFactory
-			.getLogger(NameObjMapVisitor.class);
+	private static final Logger logger = LoggerFactory.getLogger(NameObjMapVisitor.class);
 
 	public NameObjMapVisitor(Lems lems) {
 		this.lems = lems;
