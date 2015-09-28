@@ -153,11 +153,11 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return MessageFormat.format("({0}) {1}", this.getType(), this.getId());
 	}
 
-	public Component getParent() {
+	public Component getParentComponent() {
 		return this.parent;
 	}
 
-	public void setParent(Component comp) {
+	public void setParentComponent(Component comp) {
 		this.parent = comp;
 	}
 

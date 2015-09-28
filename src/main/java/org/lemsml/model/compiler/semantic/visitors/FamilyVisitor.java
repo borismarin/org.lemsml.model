@@ -52,7 +52,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 		}
 		for(Component subComp : subComps){
 			subComp.getScope().setParent(comp.getScope());
-			subComp.setParent(comp);
+			subComp.setParentComponent(comp);
 		}
 		comp.setChildren(subComps);
 	}
@@ -96,7 +96,7 @@ public class FamilyVisitor extends BaseVisitor<Boolean, Throwable> {
 		}
 		for (Component subComp : subComps) {
 			subComp.getScope().setParent(comp.getScope());
-			subComp.setParent(comp);
+			subComp.setParentComponent(comp);
 		}
 		comp.setChildren(subComps);
 	}

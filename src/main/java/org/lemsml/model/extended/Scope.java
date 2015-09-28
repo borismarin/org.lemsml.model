@@ -110,7 +110,6 @@ public class Scope implements IScope{
 										Map<String, Quantity<?>> localContext,
 										Map<String, Quantity<?>> indepVars)
                         throws LEMSCompilerException, UndefinedSymbolException {
-
 		localContext.putAll(indepVars);
 		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
 			// don't calculate deps which are already calculated, nor circular deps (e.g. state vars)
@@ -134,6 +133,24 @@ public class Scope implements IScope{
 		return localContext;
 
 	}
+
+	public Map<String, String> buildContext(Symbol symbol, Map<String, String> localContext) throws LEMSCompilerException,
+			UndefinedSymbolException {
+		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
+			if (!localContext.containsKey(dep) && !(dep.equals(symbol.getName()))) {
+				Symbol resolved = resolve(dep);
+				if (!resolved.getScope().equals(this)) {
+					localContext.putAll(resolved.getScope().buildContext(resolved, new HashMap<String, String>()));
+				} else {
+					localContext.putAll(buildContext(resolved, localContext));
+				}
+			}
+		}
+		localContext.put(symbol.getName(), symbol.getValueDefinition());
+		return localContext;
+
+	}
+
 
 	public Quantity<?> evaluate(String symbolName) throws LEMSCompilerException {
 		return evaluate(symbolName, new HashMap<String, Quantity<?>>());
