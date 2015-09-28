@@ -3,6 +3,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 import java.util.List;
 
 import org.lemsml.model.Constant;
+import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.Dynamics;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.Requirement;
@@ -34,6 +35,14 @@ class CopyComponentTypeDef extends BaseVisitor<Boolean, Throwable> {
 		List<Parameter> parameters = targetType.getParameters();
 		if (!parameters.contains(par))
 			parameters.add(par);
+		return true;
+	}
+
+	@Override
+	public Boolean visit(DerivedParameter dpar) {
+		List<DerivedParameter> dparameters = targetType.getDerivedParameters();
+		if (!dparameters.contains(dpar))
+			dparameters.add(dpar);
 		return true;
 	}
 
