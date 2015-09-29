@@ -74,6 +74,20 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return this;
 	}
 
+	public Component withTextValue(String tName, String val)
+			throws LEMSCompilerException {
+		this.getOtherAttributes().put(new QName(tName), val);
+		// TODO: error checking compiler pass
+		// if (1 != getTextsWithName(tName).size()) {
+		// String message = MessageFormat.format(
+		// "Component ({1}) does not define Text field {2}",
+		// getComponentType().getName(), tName);
+		// throw new LEMSCompilerException(message,
+		// LEMSCompilerError.UndefinedTextField);
+		// }
+		return this;
+	}
+
 	public List<Component> getSubComponentsOfType(String type) {
 		ArrayList<Component> comps = new ArrayList<Component>();
 		for (Component subComp : getComponent()) {
@@ -93,9 +107,13 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	}
 
 	public List<Component> getSubComponentsWithName(String name) {
-		return Lists.newArrayList(Iterables.filter(getComponent(),
-				isNamed(name)));
+		return Lists.newArrayList(Iterables.filter(getComponent(), isNamed(name)));
 	}
+
+	public List<Component> getSubComponentsWithTextValue(String field, String value) {
+		return Lists.newArrayList(Iterables.filter(getComponent(), hasTextNamedValued(field, value)));
+	}
+
 
 	public static Predicate<Component> hasType(final String type) {
 		return new Predicate<Component>() {
@@ -106,11 +124,20 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		};
 	}
 
-	public static Predicate<Component> isNamed(final String name) {
+	public static Predicate<INamed> isNamed(final String name) {
+		return new Predicate<INamed>() {
+			@Override
+			public boolean apply(INamed input) {
+				return input.getName() != null && input.getName().equals(name);
+			}
+		};
+	}
+
+	public static Predicate<Component> hasTextNamedValued(final String name, final String value) {
 		return new Predicate<Component>() {
 			@Override
 			public boolean apply(Component input) {
-				return input.getName() != null && input.getName().equals(name);
+				return input.getOtherAttributes().get(new QName(name)).equals(value);
 			}
 		};
 	}
