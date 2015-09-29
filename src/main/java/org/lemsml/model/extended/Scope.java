@@ -1,5 +1,6 @@
 package org.lemsml.model.extended;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.lemsml.model.Requirement;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.IScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 
@@ -22,6 +25,8 @@ import expr_parser.utils.UndefinedSymbolException;
 import expr_parser.visitors.AntlrExpressionParser;
 
 public class Scope implements IScope{
+
+	private static final Logger logger = LoggerFactory.getLogger(IScope.class);
 
 	private Map<String, Symbol> symbolTable = new HashMap<String, Symbol>();
 	private String name;
@@ -65,8 +70,15 @@ public class Scope implements IScope{
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
 			}
-			sym.setValueDefinition(PathQDParser.reduceToExpr(deps,
-					Optional.fromNullable(dv.getReduce())));
+			String expandedValue = PathQDParser.reduceToExpr(deps, Optional.fromNullable(dv.getReduce()));
+			if(expandedValue.isEmpty()){
+				String w = MessageFormat.format("Evaluation of path ({0}) for [{1}] resulted in empty list", path, getBelongsTo());
+				logger.warn(w);
+				sym.setValueDefinition("0"+dv.getUOMDimension().getSymbol());
+			}
+			else{
+				sym.setValueDefinition(expandedValue);
+			}
 		}
 	}
 

@@ -67,6 +67,10 @@ public class PathTest extends BaseTest {
 											.withSelect("foos[colour='red']/baz/q0")
 											.withReduce("add"),
 										new DerivedVariable()
+											.withName("greenFoos_Baz_q0_sum") // no green foos...
+											.withSelect("foos[colour='green']/baz/q0")
+											.withReduce("add"),
+										new DerivedVariable()
 											.withName("foos_p0_sum")
 											.withSelect("foos[*]/p0")
 											.withReduce("add")))
@@ -132,6 +136,9 @@ public class PathTest extends BaseTest {
 
 		assertEquals(0.1,
 				lems.getComponentById("bar0").getScope().evaluate("blueFoos_Baz_q0_sum").getValue().doubleValue(), 1e-9);
+
+		assertEquals(0.,
+				lems.getComponentById("bar0").getScope().evaluate("greenFoos_Baz_q0_sum").getValue().doubleValue(), 1e-9);
 
 	}
 

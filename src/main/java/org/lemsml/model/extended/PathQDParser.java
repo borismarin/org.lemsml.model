@@ -79,8 +79,7 @@ public class PathQDParser {
 	public static Symbol resolvePath(String path, Component comp)
 			throws LEMSCompilerException {
 		// TODO: this is stupid. Symbols should be children along with subcomps
-		// so
-		// that path walking will be uniform
+		// 		 so that path walking will be uniform
 		String[] steps = path.split("\\.");
 		return followPath(steps, comp).getScope().resolve(
 				steps[steps.length - 1]);
