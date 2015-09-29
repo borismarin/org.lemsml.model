@@ -80,7 +80,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		// TODO: error checking compiler pass
 		// if (1 != getTextsWithName(tName).size()) {
 		// String message = MessageFormat.format(
-		// "Component ({1}) does not define Text field {2}",
+		// "Component [{0}] does not define Text field ({1})",
 		// getComponentType().getName(), tName);
 		// throw new LEMSCompilerException(message,
 		// LEMSCompilerError.UndefinedTextField);
@@ -137,7 +137,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return new Predicate<Component>() {
 			@Override
 			public boolean apply(Component input) {
-				return input.getOtherAttributes().get(new QName(name)).equals(value);
+				return input.getOtherAttributes().get(new QName(name)) != null && input.getOtherAttributes().get(new QName(name)).equals(value);
 			}
 		};
 	}
