@@ -55,10 +55,13 @@ public class PathQDParser {
 			else{
 				Matcher eqMatcher = equalityPattern.matcher(predMatcher.group(2));
 				if(eqMatcher.find()){ // x='y' predicate
-					List<Component> allWithText = comp.getSubComponentsWithTextValue(eqMatcher.group(1), eqMatcher.group(2));
+					List<Component> allWithText = comp.getSubComponentsWithTextValue(
+							eqMatcher.group(1), eqMatcher.group(2));
 					for (Component c : allWithText) {
 						String depName = MessageFormat.format("{0}[{1}]{2}",
-								predMatcher.group(1), comp.getComponent().indexOf(c), predMatcher.group(3));
+								predMatcher.group(1),
+								comp.getComponent().indexOf(c),
+								predMatcher.group(3));
 						deps.add(depName);
 					}
 				}
@@ -81,8 +84,7 @@ public class PathQDParser {
 		// TODO: this is stupid. Symbols should be children along with subcomps
 		// 		 so that path walking will be uniform
 		String[] steps = path.split("\\.");
-		return followPath(steps, comp).getScope().resolve(
-				steps[steps.length - 1]);
+		return followPath(steps, comp).getScope().resolve(steps[steps.length - 1]);
 	}
 
 	private static Component followPath(String[] steps, Component comp) {

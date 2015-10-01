@@ -14,6 +14,7 @@ import org.lemsml.model.Requirement;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.IScope;
+import org.lemsml.model.extended.interfaces.IScoped;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,7 @@ public class Scope implements IScope{
 	private Map<String, Symbol> symbolTable = new HashMap<String, Symbol>();
 	private String name;
 	private IScope parent;
-	private Component belongsTo;
+	private IScoped belongsTo;
 
 	private Map<String, String> expressions = new HashMap<String, String>();
 	private Map<String, Unit<?>> unitContext = new HashMap<String, Unit<?>>();
@@ -65,7 +66,7 @@ public class Scope implements IScope{
 		} else { // select/reduce
 			DerivedVariable dv = ((DerivedVariable) sym.getType());
 			String path = dv.getSelect().replace('/', '.');
-			List<String> deps = PathQDParser.expand(path, this.getBelongsTo());
+			List<String> deps = PathQDParser.expand(path, (Component) this.getBelongsTo());
 			for (String dep : deps) {
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
@@ -74,12 +75,22 @@ public class Scope implements IScope{
 			if(expandedValue.isEmpty()){
 				String w = MessageFormat.format("Evaluation of path ({0}) for [{1}] resulted in empty list", path, getBelongsTo());
 				logger.warn(w);
-				sym.setValueDefinition("0"+dv.getUOMDimension().getSymbol());
+				Lems lemsRoot = (Lems) ((Scope) getLemsRoot(this)).getBelongsTo();
+				String firstUnitOfDim = lemsRoot.getAllUnitsForDimension(dv.getDimension()).get(0).getSymbol();
+				sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
 			}
 			else{
 				sym.setValueDefinition(expandedValue);
 			}
 		}
+	}
+
+	IScope getLemsRoot(IScope scope){
+		IScope s = scope;
+		while(!s.getScopeName().equals("global")){
+			s = s.getEnclosingScope();
+		}
+		return s;
 	}
 
 	@Override
@@ -103,7 +114,7 @@ public class Scope implements IScope{
 			return symb;
 		}
 		if(name.indexOf('.') > 0){ // path notation breaks neat scoping...
-			return PathQDParser.resolvePath(name, this.getBelongsTo());
+			return PathQDParser.resolvePath(name, (Component) this.getBelongsTo());
 		}
 		if (null != getParent()) {
 			return getParent().resolve(name);
@@ -168,13 +179,13 @@ public class Scope implements IScope{
 		return evaluate(symbolName, new HashMap<String, Quantity<?>>());
 	}
 
-	public Quantity<?> evaluate(String symbolName,
+	public Quantity<?> evaluate(String toEval,
 			Map<String, Quantity<?>> indepVars) throws LEMSCompilerException {
 		try {
 			HashMap<String, Quantity<?>> context = new HashMap<String, Quantity<?>>();
 			Map<String, Quantity<?>> evaluated = evalDependencies(
-					resolve(symbolName), context, indepVars);
-			return evaluated.get(symbolName);
+					resolve(toEval), context, indepVars);
+			return evaluated.get(toEval);
 		} catch (UndefinedSymbolException e) {
 			throw new LEMSCompilerException(e.getMessage(),
 					LEMSCompilerError.MissingSymbolValue);
@@ -220,12 +231,12 @@ public class Scope implements IScope{
 	}
 
 	//TODO: consider moving Scope logic back into Component/Lems
-	public Component getBelongsTo() {
+	public IScoped getBelongsTo() {
 		return belongsTo;
 	}
 
-	public void setBelongsTo(Component belongsTo) {
-		this.belongsTo = belongsTo;
+	public void setBelongsTo(IScoped scoped) {
+		this.belongsTo = scoped;
 	}
 
 	public Symbol get(String name) throws LEMSCompilerException{

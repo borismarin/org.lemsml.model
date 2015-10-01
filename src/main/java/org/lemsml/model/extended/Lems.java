@@ -3,7 +3,9 @@ package org.lemsml.model.extended;
 import static tec.units.ri.AbstractUnit.ONE;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.measure.quantity.Dimensionless;
@@ -14,7 +16,6 @@ import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.interfaces.HasComponents;
 import org.lemsml.model.extended.interfaces.INamed;
-import org.lemsml.model.extended.interfaces.IScope;
 import org.lemsml.model.extended.interfaces.IScoped;
 import org.lemsml.visitors.Visitor;
 
@@ -39,8 +40,7 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed, HasC
 	 */
 
 	@XmlTransient
-	private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>(
-			"*");
+	private final BaseUnit<Dimensionless> anyDimension = new BaseUnit<Dimensionless>("*");
 	@XmlTransient
 	private Map<String, javax.measure.Unit<?>> nameToDimension = new HashMap<String, javax.measure.Unit<?>>();
 	{
@@ -94,6 +94,20 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed, HasC
 		return getSymbolToUnit().get(name);
 	}
 
+	public List<Unit> getAllUnitsForDimension(String dim){
+		List<Unit> units = new ArrayList<>();
+		if(dim.equals("none")){
+			//TODO: better handling of default "empty" unit
+			units.add((Unit) new Unit().withDimension("none").withSymbol(""));
+		}
+		for(Unit u : getUnits()){
+			if(u.getDimension().equals(dim)){
+				units.add(u);
+			}
+		}
+		return units;
+	}
+
 	public Map<String, ComponentType> getNameToCompTypeMap() {
 		return nameToCompType;
 	}
@@ -128,7 +142,7 @@ public class Lems extends org.lemsml.model.Lems implements IScoped, INamed, HasC
 	}
 
 	@Override
-	public IScope getScope() {
+	public Scope getScope() {
 		return scope;
 	}
 

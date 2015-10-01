@@ -32,6 +32,14 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	@Override
+	public Boolean visit(org.lemsml.model.Lems lems) throws Throwable {
+		Lems elems = (Lems) lems;
+		this.scope = elems.getScope();
+		this.scope.setBelongsTo(elems);
+		return null;
+	}
+
+	@Override
 	public Boolean visit(Component comp) throws Throwable {
 		this.context = comp;
 		this.scope = comp.getScope();
