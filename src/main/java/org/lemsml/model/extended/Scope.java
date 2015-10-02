@@ -9,6 +9,8 @@ import java.util.Set;
 import javax.measure.Quantity;
 import javax.measure.Unit;
 
+import org.lemsml.model.Case;
+import org.lemsml.model.ConditionalDerivedVariable;
 import org.lemsml.model.DerivedVariable;
 import org.lemsml.model.Requirement;
 import org.lemsml.model.exceptions.LEMSCompilerError;
@@ -63,35 +65,53 @@ public class Scope implements IScope{
 					getDependencies().addEdge(sym.getName(), dep);
 				}
 			}
-		} else { // select/reduce
-			DerivedVariable dv = ((DerivedVariable) sym.getType());
-			String path = dv.getSelect().replace('/', '.');
-			List<String> deps = PathQDParser.expand(path, (Component) this.getBelongsTo());
-			for (String dep : deps) {
-				getDependencies().addNode(dep);
-				getDependencies().addEdge(sym.getName(), dep);
-			}
-			String expandedValue = PathQDParser.reduceToExpr(deps, Optional.fromNullable(dv.getReduce()));
-			if(expandedValue.isEmpty()){
-				String w = MessageFormat.format("Evaluation of path ({0}) for [{1}] resulted in empty list", path, getBelongsTo());
-				logger.warn(w);
-				Lems lemsRoot = (Lems) ((Scope) getLemsRoot(this)).getBelongsTo();
-				String firstUnitOfDim = lemsRoot.getAllUnitsForDimension(dv.getDimension()).get(0).getSymbol();
-				sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
-			}
-			else{
-				sym.setValueDefinition(expandedValue);
+		} else {
+			if(sym.getType() instanceof ConditionalDerivedVariable){
+				buildCondDerVarDeps(sym);
+			}else{
+				//DerivedVariable with select/reduce
+				buildSelectReduceDeps(sym);
 			}
 		}
 	}
 
-	IScope getLemsRoot(IScope scope){
-		IScope s = scope;
-		while(!s.getScopeName().equals("global")){
-			s = s.getEnclosingScope();
+	private void buildCondDerVarDeps(Symbol sym) {
+		ConditionalDerivedVariable cdv = ((ConditionalDerivedVariable) sym.getType());
+		for (Case c : cdv.getCase()) {
+			for (String dep : ExpressionParser.listSymbolsInExpression(c.getValueDefinition())) {
+				getDependencies().addNode(dep);
+				getDependencies().addEdge(sym.getName(), dep);
+			}
+			for (String dep : ExpressionParser.listSymbolsInExpression(c.getCondition())) {
+				getDependencies().addNode(dep);
+				getDependencies().addEdge(sym.getName(), dep);
+			}
 		}
-		return s;
+		sym.setValueDefinition(sym.getName());
 	}
+
+	public void buildSelectReduceDeps(Symbol sym) throws LEMSCompilerException {
+		DerivedVariable dv = ((DerivedVariable) sym.getType());
+		String path = dv.getSelect().replace('/', '.');
+		List<String> deps = PathQDParser.expand(path, (Component) this.getBelongsTo());
+		for (String dep : deps) {
+			getDependencies().addNode(dep);
+			getDependencies().addEdge(sym.getName(), dep);
+		}
+		String expandedValue = PathQDParser.reduceToExpr(deps, Optional.fromNullable(dv.getReduce()));
+		if(expandedValue.isEmpty()){
+			String w = MessageFormat.format("Evaluation of path ({0}) for [{1}] resulted in empty list",
+					path, getBelongsTo());
+			logger.warn(w);
+			Lems lemsRoot = (Lems) ((Scope) getLemsRoot(this)).getBelongsTo();
+			String firstUnitOfDim = lemsRoot.getAllUnitsForDimension(dv.getDimension()).get(0).getSymbol();
+			sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
+		}
+		else{
+			sym.setValueDefinition(expandedValue);
+		}
+	}
+
 
 	@Override
 	public Symbol resolve(String name) throws LEMSCompilerException {
@@ -147,6 +167,18 @@ public class Scope implements IScope{
 				}
 			}
 		}
+		if (symbol.getType() instanceof ConditionalDerivedVariable) {
+			ConditionalDerivedVariable cdv = (ConditionalDerivedVariable) symbol.getType();
+			for (Case c : cdv.getCase()) {
+				// Dependencies for Cases are already accounted for.
+				if (ExpressionParser.evaluateConditionInContext(
+						c.getCondition(), localContext, unitContext)) {
+					localContext.put(symbol.getName(), ExpressionParser
+							.evaluateQuantityInContext(c.getValueDefinition(),
+									localContext, getUnitContext()));
+				}
+			}
+		}
 		localContext.put(symbol.getName(),
 				ExpressionParser.evaluateQuantityInContext(symbol.getParser(),
 						localContext, getUnitContext()));
@@ -190,6 +222,14 @@ public class Scope implements IScope{
 			throw new LEMSCompilerException(e.getMessage(),
 					LEMSCompilerError.MissingSymbolValue);
 		}
+	}
+
+	IScope getLemsRoot(IScope scope){
+		IScope s = scope;
+		while(!s.getScopeName().equals("global")){
+			s = s.getEnclosingScope();
+		}
+		return s;
 	}
 
 	@Override

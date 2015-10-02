@@ -2,6 +2,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import java.text.MessageFormat;
 
+import org.lemsml.model.ConditionalDerivedVariable;
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.DerivedVariable;
@@ -80,6 +81,13 @@ public class ScopeVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	@Override
 	public Boolean visit(DerivedVariable derVar) throws Throwable {
+		Symbol sym = new Symbol(derVar);
+		scope.define(sym);
+		return true;
+	}
+
+	@Override
+	public Boolean visit(ConditionalDerivedVariable derVar) throws Throwable {
 		Symbol sym = new Symbol(derVar);
 		scope.define(sym);
 		return true;
