@@ -28,6 +28,8 @@ import tec.units.ri.quantity.Quantities;
 import com.google.common.collect.ImmutableMap;
 
 public class SyncTest extends BaseTest {
+	LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
@@ -47,7 +49,7 @@ public class SyncTest extends BaseTest {
 										.withValueDefinition("2 * p")))
 				.withComponents(foo);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 		assertEquals(adim(1.0), foo.getScope().evaluate("p"));
 		assertEquals(adim(2.0), foo.getScope().evaluate("twoP"));
 
@@ -139,7 +141,7 @@ public class SyncTest extends BaseTest {
 
 		Lems lems = (Lems) new Lems().withComponentTypes(Foo, Bar).withComponents(foo);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 		assertEquals(adim(1.0), foo.getScope().evaluate("p"));
 		assertEquals(adim(2.0), foo.getScope().evaluate("twoP"));
 		assertEquals(adim(6.0), bar.getScope().evaluate("twoP1"));

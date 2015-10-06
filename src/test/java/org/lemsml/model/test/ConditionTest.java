@@ -57,7 +57,8 @@ public class ConditionTest extends BaseTest {
 						.withParameterValue("p0", "1.0")
 			);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+		compiler.semanticAnalysis(lems);
 
 		Component foo0 = lems.getComponentById("foo0");
 

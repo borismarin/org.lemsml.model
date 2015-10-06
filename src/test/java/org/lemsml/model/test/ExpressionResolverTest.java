@@ -100,7 +100,8 @@ public class ExpressionResolverTest extends BaseTest {
 				.withComponents((Component)
 								new Component().withType("Foo"));
 
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+		compiler.semanticAnalysis(fakeLems);
 	}
 
 	@SuppressWarnings("deprecation")

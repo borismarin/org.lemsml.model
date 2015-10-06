@@ -48,7 +48,7 @@ public class PathQDParser {
 				List<Component> allWithName = comp.getSubComponentsBoundToName(predMatcher.group(1));
 				for (Component c : allWithName) {
 					String depName = MessageFormat.format("{0}[{1}]{2}",
-							predMatcher.group(1), comp.getComponent().indexOf(c), predMatcher.group(3));
+							predMatcher.group(1), allWithName.indexOf(c), predMatcher.group(3));
 					deps.add(depName);
 				}
 			}

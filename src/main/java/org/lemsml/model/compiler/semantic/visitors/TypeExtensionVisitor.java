@@ -22,7 +22,7 @@ import expr_parser.utils.TopologicalSort;
 public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 
 	private Lems lems;
-	private DirectedGraph<ComponentType> dependencies = new DirectedGraph<ComponentType>();
+	private DirectedGraph<ComponentType> typeGraph = new DirectedGraph<ComponentType>();
 
 	public TypeExtensionVisitor(Lems lems) throws Throwable {
 		this.lems = lems;
@@ -42,9 +42,9 @@ public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 				throw new LEMSCompilerException(err,
 						LEMSCompilerError.UndefinedComponentType);
 			} else {
-				dependencies.addNode(compType);
-				dependencies.addNode(base);
-				dependencies.addEdge(compType, base);
+				getTypeGraph().addNode(compType);
+				getTypeGraph().addNode(base);
+				getTypeGraph().addEdge(compType, base);
 			}
 		}
 
@@ -52,7 +52,7 @@ public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 	}
 
 	public void visitToposortedTypes() throws Throwable {
-		List<ComponentType> sorted = TopologicalSort.sort(dependencies);
+		List<ComponentType> sorted = TopologicalSort.sort(getTypeGraph());
 		Collections.reverse(sorted);
 		for (ComponentType ct : sorted) {
 			ComponentType base = lems.getComponentTypeByName(ct.getExtends());
@@ -65,6 +65,14 @@ public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 				ct.setParent(base);
 			}
 		}
+	}
+
+	public DirectedGraph<ComponentType> getTypeGraph() {
+		return typeGraph;
+	}
+
+	public void setTypeGraph(DirectedGraph<ComponentType> typeGraph) {
+		this.typeGraph = typeGraph;
 	}
 
 }

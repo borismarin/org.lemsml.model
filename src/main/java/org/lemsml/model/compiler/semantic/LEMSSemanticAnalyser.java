@@ -24,10 +24,10 @@ public class LEMSSemanticAnalyser {
 		this.lems = lems;
 
 		mapBuilder = new BuildNameToObjMaps(lems);
-		dimensionResolver = new ResolveUnitsDimensions(lems);
-		dimensionDecorator = new DecorateWithDimensions(lems);
-		typeDecorator = new DecorateComponentsWithType(lems);
-		typeExtender = new ExtendTypes(lems);
+		dimensionResolver  = new ResolveUnitsDimensions(lems);
+		dimensionDecorator  = new DecorateWithDimensions(lems);
+		typeDecorator  = new DecorateComponentsWithType(lems);
+		setTypeExtender(new ExtendTypes(lems));
 		familyAdder = new AddFamilyToComponents(lems);
 		structureBuilder = new BuildStructure(lems);
 		scopeBuilder = new BuildScope(lems);
@@ -40,7 +40,7 @@ public class LEMSSemanticAnalyser {
 		dimensionResolver.apply();
 		dimensionDecorator.apply();
 		typeDecorator.apply();
-		typeExtender.apply();
+		getTypeExtender().apply();
 		familyAdder.apply();
 		structureBuilder.apply();
 		scopeBuilder.apply();
@@ -49,5 +49,14 @@ public class LEMSSemanticAnalyser {
 		return lems;
 
 	}
+
+	public ExtendTypes getTypeExtender() {
+		return typeExtender;
+	}
+
+	public void setTypeExtender(ExtendTypes typeExtender) {
+		this.typeExtender = typeExtender;
+	}
+
 
 }

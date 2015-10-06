@@ -15,6 +15,7 @@ public class LEMSCompilerFrontend {
 
 	private File lemsFile;
 	File schema;
+	private LEMSSemanticAnalyser semanticAnalyser;
 
 	/**
 	 * @param lemsFile
@@ -60,10 +61,17 @@ public class LEMSCompilerFrontend {
 		return parser.parse();
 	}
 
-	static public Lems semanticAnalysis(Lems lemsDocument) throws Throwable {
-		LEMSSemanticAnalyser semanticAnalyser = new LEMSSemanticAnalyser(
-				lemsDocument);
-		return semanticAnalyser.analyse();
+	public Lems semanticAnalysis(Lems lemsDocument) throws Throwable {
+		setSemanticAnalyser(new LEMSSemanticAnalyser(lemsDocument));
+		return getSemanticAnalyser().analyse();
+	}
+
+	public LEMSSemanticAnalyser getSemanticAnalyser() {
+		return semanticAnalyser;
+	}
+
+	public void setSemanticAnalyser(LEMSSemanticAnalyser semanticAnalyser) {
+		this.semanticAnalyser = semanticAnalyser;
 	}
 
 }

@@ -21,6 +21,8 @@ import tec.units.ri.quantity.Quantities;
 
 public class PathTest extends BaseTest {
 
+	LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
@@ -123,7 +125,7 @@ public class PathTest extends BaseTest {
 										.withParameterValue("p0", "2.0"))
 			);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 		assertEquals(Quantities.getQuantity(3.0, ONE),
 				lems.getComponentById("bar0").getScope().evaluate("foos_p0_sum"));

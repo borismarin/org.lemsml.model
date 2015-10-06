@@ -25,6 +25,7 @@ import org.lemsml.model.extended.Unit;
 import tec.units.ri.quantity.Quantities;
 
 public class uomTest extends BaseTest {
+	LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
 
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
@@ -87,7 +88,7 @@ public class uomTest extends BaseTest {
 		);
 
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 		assertEquals(cm(101.), lems
 					.getComponentById("aCar")

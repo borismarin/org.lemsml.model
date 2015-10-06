@@ -55,7 +55,8 @@ public class DimensionalAnalysisTest extends BaseTest {
 		fakeHO.withParameterValue("m", "1m");
 		fakeHO.withParameterValue("k", "1N_per_m");
 		fakeLems.withComponents(fakeHO);
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+		compiler.semanticAnalysis(fakeLems);
 	}
 
 	@Test
@@ -100,7 +101,8 @@ public class DimensionalAnalysisTest extends BaseTest {
 		fakeLems.getComponents().add(comp);
 		fakeLems.getComponentTypes().add(type);
 
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+		compiler.semanticAnalysis(fakeLems);
 	}
 
 

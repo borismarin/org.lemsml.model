@@ -38,6 +38,8 @@ public class SimplePendulumTest extends BaseTest {
 	private File pendLemsFile;
 	private Lems compiledLems;
 
+	LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+
 	@Before
 	public void setUp() throws Throwable {
 		schema = getLocalFile("/Schemas/LEMS_v0.9.0.xsd");
@@ -99,7 +101,7 @@ public class SimplePendulumTest extends BaseTest {
 		fakePend.getOtherAttributes().put(new QName("fakePar"), "123");
 		fakeLems.getComponents().add(fakePend);
 
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		compiler.semanticAnalysis(fakeLems);
 
 	}
 
@@ -112,7 +114,7 @@ public class SimplePendulumTest extends BaseTest {
 		fakeComp.setDefinedIn(pendLemsFile);
 		fakeLems.getComponents().add(fakeComp);
 
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		compiler.semanticAnalysis(fakeLems);
 
 	}
 
@@ -125,7 +127,7 @@ public class SimplePendulumTest extends BaseTest {
 		fakeComp.setType("ThisTypeIsUndefined");
 		fakeLems.getComponents().add(fakeComp);
 
-		LEMSCompilerFrontend.semanticAnalysis(fakeLems);
+		compiler.semanticAnalysis(fakeLems);
 
 	}
 

@@ -6,6 +6,8 @@ import org.lemsml.model.extended.Lems;
 
 public class ExtendTypes extends ASemanticPass {
 
+	private TypeExtensionVisitor visitor;
+
 	ExtendTypes(Lems lems) throws Throwable{
 		super.setLems(lems);
 		super.setTraverser(new DepthFirstTraverserExt<Throwable>());
@@ -15,8 +17,16 @@ public class ExtendTypes extends ASemanticPass {
 	@Override
 	protected void apply() throws Throwable{
 		super.apply();
-		//TODO: is there a better way?
-		((TypeExtensionVisitor) super.getVisitor()).visitToposortedTypes();
+		setVisitor((TypeExtensionVisitor) super.getVisitor());
+		getVisitor().visitToposortedTypes();
+	}
+
+	public TypeExtensionVisitor getVisitor() {
+		return visitor;
+	}
+
+	public void setVisitor(TypeExtensionVisitor visitor) {
+		this.visitor = visitor;
 	}
 
 }

@@ -24,6 +24,8 @@ public class InheritanceTest extends BaseTest {
 	@Rule
 	public ExpectedException exception = ExpectedException.none();
 
+	private LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+
 	@Test
 	public void testInheritedPar() throws Throwable {
 
@@ -48,7 +50,7 @@ public class InheritanceTest extends BaseTest {
 
 		lems.getComponents().add(comp0);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 		assertEquals(adim(1.0), lems
 					.getComponentById("comp0")
@@ -79,7 +81,7 @@ public class InheritanceTest extends BaseTest {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.RequiredParameterUndefined.toString());
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 	}
 
@@ -95,8 +97,7 @@ public class InheritanceTest extends BaseTest {
 		exception.expect(LEMSCompilerException.class);
 		exception.expectMessage(LEMSCompilerError.UndefinedComponentType.toString());
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
-
+		compiler.semanticAnalysis(lems);
 	}
 
 	public Quantity<Dimensionless> adim(Double x) {

@@ -34,6 +34,8 @@ public class FamilyTest extends BaseTest {
 							.withType("Bar")
 							.withName("bar0"));
 
+	private LEMSCompilerFrontend compiler = new LEMSCompilerFrontend(null);
+
 //	TODO: see https://github.com/LEMS/jLEMS/issues/71
 	@Test
 	public void testTooManyChilds() throws Throwable {
@@ -57,7 +59,7 @@ public class FamilyTest extends BaseTest {
 				.withComponentTypes(Bar, Foo)
 				.withComponents(foo);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 	}
 
@@ -89,7 +91,7 @@ public class FamilyTest extends BaseTest {
 				.withComponentTypes(Bar, Goo)
 				.withComponents(goo);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 	}
 
@@ -101,7 +103,7 @@ public class FamilyTest extends BaseTest {
 				.withComponentTypes(Bar, Foo)
 				.withComponents((Component) new Component().withType("Foo"));
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 	}
 
 	@Test
@@ -129,7 +131,7 @@ public class FamilyTest extends BaseTest {
 				.withComponentTypes(Bar, Foo, Baz)
 				.withComponents(baz0);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 
 		Assert.assertEquals(foo0, bar0.getParentComponent());
@@ -171,7 +173,7 @@ public class FamilyTest extends BaseTest {
 				.withComponentTypes(Bar, Foo, Baz)
 				.withComponents(foo0, baz0);
 
-		LEMSCompilerFrontend.semanticAnalysis(lems);
+		compiler.semanticAnalysis(lems);
 
 		File tmpFile = File.createTempFile("family", ".xml");
 		LEMSXMLWriter.marshall(lems, tmpFile);
