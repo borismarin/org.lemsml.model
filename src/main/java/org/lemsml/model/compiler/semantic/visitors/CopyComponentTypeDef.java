@@ -2,6 +2,7 @@ package org.lemsml.model.compiler.semantic.visitors;
 
 import java.util.List;
 
+import org.lemsml.model.ComponentReference;
 import org.lemsml.model.Constant;
 import org.lemsml.model.DerivedParameter;
 import org.lemsml.model.Dynamics;
@@ -59,6 +60,14 @@ class CopyComponentTypeDef extends BaseVisitor<Boolean, Throwable> {
 		List<Requirement> requirements = targetType.getRequirements();
 		if (!requirements.contains(req))
 			requirements.add(req);
+		return true;
+	}
+
+	@Override
+	public Boolean visit(ComponentReference ref) {
+		List<ComponentReference> refs = targetType.getComponentReferences();
+		if (!refs.contains(ref))
+			refs.add(ref);
 		return true;
 	}
 
