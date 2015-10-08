@@ -32,9 +32,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>expr_parser</groupId>
-			<artifactId>expr_parser</artifactId>
-			<version>0.0.1</version>
+			<groupId>com.github.borismarin</groupId>
+			<artifactId>expr-parser</artifactId>
+			<version>-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.measure</groupId>
