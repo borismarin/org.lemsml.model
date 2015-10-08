@@ -104,17 +104,12 @@ public class Scope implements IScope{
 					path, getBelongsTo());
 			logger.warn(w);
 			Lems lemsRoot = (Lems) ((Scope) getLemsRoot(this)).getBelongsTo();
-			String firstUnitOfDim = lemsRoot.getAllUnitsForDimension(dv.getDimension()).get(0).getSymbol();
-			if(dv.getReduce().equals("add")){
-				sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
-			}else
-				sym.setValueDefinition("1" + firstUnitOfDim);
+			sym.setValueDefinition(PathQDParser.getEmptySelection(dv, lemsRoot));
 		}
 		else{
 			sym.setValueDefinition(expandedValue);
 		}
 	}
-
 
 	@Override
 	public Symbol resolve(String name) throws LEMSCompilerException {
