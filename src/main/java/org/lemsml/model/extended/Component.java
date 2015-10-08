@@ -44,9 +44,6 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	private Component parent;
 
 	@XmlTransient
-	private String boundTo;
-
-	@XmlTransient
 	public Multimap<String, Component> nameBindings = ArrayListMultimap
 			.create();
 
