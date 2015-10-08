@@ -13,9 +13,11 @@ import org.lemsml.model.Dynamics;
 import org.lemsml.model.Parameter;
 import org.lemsml.model.Text;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Scope;
 
 import tec.units.ri.quantity.Quantities;
 
@@ -73,6 +75,10 @@ public class PathTest extends BaseTest {
 											.withSelect("foos[colour='green']/baz/q0")
 											.withReduce("add"),
 										new DerivedVariable()
+											.withName("greenFoos_Baz_q0_prod") // no green foos...
+											.withSelect("foos[colour='green']/baz/q0")
+											.withReduce("multiply"),
+										new DerivedVariable()
 											.withName("foos_p0_sum")
 											.withSelect("foos[*]/p0")
 											.withReduce("add")))
@@ -127,21 +133,21 @@ public class PathTest extends BaseTest {
 
 		compiler.semanticAnalysis(lems);
 
+		Scope scope = lems.getComponentById("bar0").getScope();
 		assertEquals(Quantities.getQuantity(3.0, ONE),
-				lems.getComponentById("bar0").getScope().evaluate("foos_p0_sum"));
+				scope.evaluate("foos_p0_sum"));
 
-		assertEquals(0.006,
-				lems.getComponentById("bar0").getScope().evaluate("foos_baz_q0_mult").getValue().doubleValue(), 1e-9);
+		assertEquals(0.006, evalDouble(scope, "foos_baz_q0_mult"), 1e-9);
+		assertEquals(0.5, evalDouble(scope, "redFoos_Baz_q0_sum"), 1e-9);
+		assertEquals(0.1, evalDouble(scope, "blueFoos_Baz_q0_sum"), 1e-9);
+		assertEquals(0., evalDouble(scope, "greenFoos_Baz_q0_sum"), 1e-9);
+		assertEquals(0., evalDouble(scope, "greenFoos_Baz_q0_sum"), 1e-9);
+		assertEquals(1., evalDouble(scope, "greenFoos_Baz_q0_prod"), 1e-9);
 
-		assertEquals(0.5,
-				lems.getComponentById("bar0").getScope().evaluate("redFoos_Baz_q0_sum").getValue().doubleValue(), 1e-9);
+	}
 
-		assertEquals(0.1,
-				lems.getComponentById("bar0").getScope().evaluate("blueFoos_Baz_q0_sum").getValue().doubleValue(), 1e-9);
-
-		assertEquals(0.,
-				lems.getComponentById("bar0").getScope().evaluate("greenFoos_Baz_q0_sum").getValue().doubleValue(), 1e-9);
-
+	public double evalDouble(Scope scope, String name) throws LEMSCompilerException {
+		return scope.evaluate(name).getValue().doubleValue();
 	}
 
 

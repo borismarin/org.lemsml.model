@@ -105,7 +105,10 @@ public class Scope implements IScope{
 			logger.warn(w);
 			Lems lemsRoot = (Lems) ((Scope) getLemsRoot(this)).getBelongsTo();
 			String firstUnitOfDim = lemsRoot.getAllUnitsForDimension(dv.getDimension()).get(0).getSymbol();
-			sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
+			if(dv.getReduce().equals("add")){
+				sym.setValueDefinition("0" + firstUnitOfDim); //TODO: UGLYUGLY
+			}else
+				sym.setValueDefinition("1" + firstUnitOfDim);
 		}
 		else{
 			sym.setValueDefinition(expandedValue);
