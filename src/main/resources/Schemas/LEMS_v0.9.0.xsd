@@ -21,11 +21,11 @@
 	attributeFormDefault="unqualified">
 
 
-	<xs:element name="Lems">
+	<xs:element name="Lems" type="Lems"/>
+	<xs:complexType name="Lems">
 		<xs:annotation>
 			<xs:documentation>The root Lems element.</xs:documentation>
 		</xs:annotation>
-		<xs:complexType>
 			<xs:choice maxOccurs="unbounded">
 				<xs:element name="Target" type="Target" />
 				<xs:element name="Include" type="Include" />
@@ -36,8 +36,7 @@
 				<xs:element name="Component" type="Component" />
 			</xs:choice>
 			<xs:attribute name="description" type="xs:string" use="optional" />
-		</xs:complexType>
-	</xs:element>
+	</xs:complexType>
 
 	<xs:complexType name="Target">
 		<xs:attribute name="component" type="xs:string" use="required" />

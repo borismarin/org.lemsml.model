@@ -1,5 +1,7 @@
 package org.lemsml.model.compiler.semantic.visitors;
 
+import java.lang.reflect.Field;
+
 import javax.xml.namespace.QName;
 
 import org.lemsml.model.ChildInstance;
@@ -30,7 +32,22 @@ public class StructureVisitor extends BaseVisitor<Boolean, Throwable> {
 			for(ChildInstance child: struct.getChildInstances()){
 				QName attrName = new QName(child.getComponent());
 				//TODO: that should be a copy.
-				Component componentById = this.lems.getComponentById(comp.getOtherAttributes().get(attrName));
+//				Component componentById = this.lems.getComponentById(attrName.toString());
+				Field field = null;
+				try {
+					Class<? extends Component> clazz = comp.getClass();
+					field = clazz.getField(attrName.toString());
+				} catch (NoSuchFieldException | SecurityException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} //ugly
+				Component componentById = null;
+				try {
+					componentById = this.lems.getComponentById((String) field.get(comp));
+				} catch (IllegalArgumentException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				context.bindSubCompToName(componentById, attrName.toString());
 				comp.withComponent(componentById);
 			}
