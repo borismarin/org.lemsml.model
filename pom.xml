@@ -66,6 +66,10 @@
 
 	<repositories>
 		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+		<repository>
 			<id>jcenter</id>
 			<name>JCenter</name>
 			<layout>default</layout>
@@ -173,11 +177,11 @@
 								<include>LEMS_v${build.version2}.xsd</include>
 							</schemaIncludes>
 							<plugins>
-								<plugin>
-									<groupId>com.massfords</groupId>
+								<dependency>
+									<groupId>com.github.massfords</groupId>
 									<artifactId>jaxb-visitor</artifactId>
-									<version>2.3-SNAPSHOT</version>
-								</plugin>
+									<version>jaxb-visitor-2.3</version>
+								</dependency>
 								<plugin>
 									<groupId>org.jvnet.jaxb2_commons</groupId>
 									<artifactId>jaxb2-basics</artifactId>
