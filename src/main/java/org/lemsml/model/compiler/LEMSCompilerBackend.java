@@ -11,7 +11,7 @@ import org.lemsml.model.extended.Lems;
  * @author borismarin
  *
  */
-public class LEMSCompilerFrontend {
+public class LEMSCompilerBackend {
 
 	private File lemsFile;
 	File schema;
@@ -23,13 +23,13 @@ public class LEMSCompilerFrontend {
 	 * @param cwd
 	 * @param schema
 	 */
-	public LEMSCompilerFrontend(File lemsFile, File lemsSchemaFile) {
+	public LEMSCompilerBackend(File lemsFile, File lemsSchemaFile) {
 		super();
 		this.lemsFile = lemsFile;
 		this.schema = lemsSchemaFile;
 	}
 
-	public LEMSCompilerFrontend(File lemsFile) {
+	public LEMSCompilerBackend(File lemsFile) {
 		super();
 		this.lemsFile = lemsFile;
 		this.schema = getCurrentSchema();
@@ -41,6 +41,10 @@ public class LEMSCompilerFrontend {
 				.getFile());
 	}
 
+	/**
+	 * @throws Throwable
+	 *
+	 */
 	public Lems generateLEMSDocument() throws Throwable {
 		// First step: parse the LEMS file
 		Lems parsedLems = parseLemsFile(lemsFile, schema);
