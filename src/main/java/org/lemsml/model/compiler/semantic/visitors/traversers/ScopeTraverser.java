@@ -99,8 +99,13 @@ public class ScopeTraverser<E extends Throwable> implements Traverser<E> {
 	@Override
 	public void traverse(org.lemsml.model.extended.Component aBean,
 			Visitor<?, E> aVisitor) throws E {
-		ComponentType compType = aBean.getComponentType();
-		compType.accept(aVisitor);
+		org.lemsml.model.extended.ComponentType compType = aBean.getComponentType();
+		compType.accept(aVisitor); //TODO: cast to non-extended comptype?
+		org.lemsml.model.extended.ComponentType st = compType.getSuperType();
+		while(null != st){
+			st.accept(aVisitor); //TODO: cast to non-extended comptype?
+			st = st.getSuperType();
+		}
 		for (Component subComp : aBean.getComponent()) {
 			subComp.accept(aVisitor);
 		}

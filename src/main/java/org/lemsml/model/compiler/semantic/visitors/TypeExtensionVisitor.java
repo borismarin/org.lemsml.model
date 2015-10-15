@@ -57,11 +57,11 @@ public class TypeExtensionVisitor extends BaseVisitor<Boolean, Throwable> {
 		for (ComponentType ct : sorted) {
 			ComponentType base = lems.getComponentTypeByName(ct.getExtends());
 			if (base != null) {
-				CopyComponentTypeDef typeCopier = new CopyComponentTypeDef(ct);
-				TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
-						new DepthFirstTraverserExt<Throwable>(), typeCopier);
-				trav.setTraverseFirst(true);
-				base.accept(trav);
+//				CopyComponentTypeDef typeCopier = new CopyComponentTypeDef(ct);
+//				TraversingVisitor<Boolean, Throwable> trav = new TraversingVisitor<Boolean, Throwable>(
+//						new DepthFirstTraverserExt<Throwable>(), typeCopier);
+//				trav.setTraverseFirst(true);
+//				base.accept(trav);
 				ct.setParent(base);
 			}
 		}
