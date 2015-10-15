@@ -66,13 +66,13 @@ public class ExpressionResolverTest extends BaseTest {
 		assertEquals(adim(dp1d), dp1);
 		assertEquals(adim(dp2d), dp2);
 
-		Component comp1 = compiledLems.getComponentById("comp1");
+		Component comp1 = (Component) comp0.getSubComponentsWithName("comp1").get(0);
 		Quantity<?> p1 = comp1.getScope().evaluate("p1");
 		Quantity<?> dp1_1 = comp1.getScope().evaluate("dp1");
 		assertEquals(adim(p1d), p1);
 		assertEquals(adim(dp1_1d) , dp1_1);
 
-		Component nested = compiledLems.getComponentById("veryNested");
+		Component nested = comp1.getSubComponentsWithName("veryNested").get(0);
 		Quantity<?> dp0_nested= nested.getScope().evaluate("dp0");
 		assertEquals(adim(p2d * Math.pow(c0d, 2)), dp0_nested);
 
@@ -122,7 +122,7 @@ public class ExpressionResolverTest extends BaseTest {
 								.build());
 		assertEquals(adim(-1.), x);
 
-		Component comp1 = compiledLems.getComponentById("comp1");
+		Component comp1 = comp0.getSubComponentsWithName("comp1").get(0);
 		Symbol dy1 = comp1.getScope().resolve("dy1_dt");
 		Set<String> independentVariables1 = dy1.getIndependentVariables();
 		assertTrue(independentVariables1.contains("y1"));

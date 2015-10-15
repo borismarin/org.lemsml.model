@@ -29,6 +29,7 @@ public class StructureVisitor extends BaseVisitor<Boolean, Throwable> {
 		for(Structure struct : type.getStructures()){
 			for(ChildInstance child: struct.getChildInstances()){
 				QName attrName = new QName(child.getComponent());
+				//TODO: what is the scope for comp refs? considering toplevel only
 				Component componentById = this.lems.getComponentById(comp.getOtherAttributes().get(attrName));
 				//TODO: should be a copy?
 				context.bindSubCompToName(componentById, attrName.toString());

@@ -77,7 +77,7 @@ public class SyncTest extends BaseTest {
 						adim(10.)).build());
 		assertEquals(adim(-10.), x);
 
-		Component comp1 = compiledLems.getComponentById("comp1");
+		Component comp1 = comp0.getSubComponentsWithName("comp1").get(0);
 		Symbol dy1 = comp1.getScope().resolve("dy1_dt");
 		Set<String> independentVariables1 = dy1.getIndependentVariables();
 		assertTrue(independentVariables1.contains("y1"));
