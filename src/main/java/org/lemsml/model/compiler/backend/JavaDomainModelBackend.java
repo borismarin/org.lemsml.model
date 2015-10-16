@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
+import org.lemsml.model.compiler.semantic.visitors.TypeExtensionVisitor;
 import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.slf4j.Logger;
@@ -41,7 +42,7 @@ public class JavaDomainModelBackend {
 	private File outputDir;
 	private File componentTypeDefs;
 
-	public JavaDomainModelBackend(String ml,  File compTypeDefs, File outDir) {
+	public JavaDomainModelBackend(String ml, File compTypeDefs, File outDir) {
 		this.mlName = ml;
 		this.componentTypeDefs = compTypeDefs;
 		this.outputDir = outDir;
@@ -78,7 +79,8 @@ public class JavaDomainModelBackend {
 	private void generateObjectFactory() throws IOException {
 		String fName = "ObjectFactory.java";
 
-		URL stURL = getClass().getResource("/templates/java-domain-classes/obj_factory.stg");
+		URL stURL = getClass().getResource(
+				"/templates/java-domain-classes/obj_factory.stg");
 		STGroup group = new STGroupFile(stURL, "UTF-8", '<', '>');
 		group.registerRenderer(String.class, new StringRenderer());
 
@@ -106,9 +108,10 @@ public class JavaDomainModelBackend {
 	public ST mergeCompTypeTemplate(ComponentType ct) {
 		ST template = typeSTG.getInstanceOf("class_file");
 
+		TypeExtensionVisitor visitor = (TypeExtensionVisitor) frontend
+				.getSemanticAnalyser().getTypeExtender().getVisitor();
 		DirectedGraph<ComponentType> typeGraph = TopologicalSort
-				.reverseGraph(frontend.getSemanticAnalyser().getTypeExtender()
-						.getVisitor().getTypeGraph());
+				.reverseGraph(visitor.getTypeGraph());
 
 		Map<String, Set<ComponentType>> typeDepsMap = new HashMap<String, Set<ComponentType>>();
 		for (ComponentType node : typeGraph.getGraph().keySet()) {
@@ -128,7 +131,8 @@ public class JavaDomainModelBackend {
 	}
 
 	public ST mergeRootElement() {
-		URL stURL = getClass().getResource("/templates/java-domain-classes/root_element.stg");
+		URL stURL = getClass().getResource(
+				"/templates/java-domain-classes/root_element.stg");
 		STGroup group = new STGroupFile(stURL, "UTF-8", '<', '>');
 		group.registerRenderer(String.class, new StringRenderer());
 
