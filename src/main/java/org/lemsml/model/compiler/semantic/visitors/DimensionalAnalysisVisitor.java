@@ -52,7 +52,8 @@ public class DimensionalAnalysisVisitor extends BaseVisitor<Boolean, Throwable> 
 		try {
 			unitFromValue = scope.evaluate(resolved.getName()).getUnit();
 		} catch (LEMSCompilerException e) {
-			if (e.getErrorCode().equals(LEMSCompilerError.MissingSymbolValue))
+			if (e.getErrorCode().equals(LEMSCompilerError.MissingSymbolValue) ||
+				e.getErrorCode().equals(LEMSCompilerError.NoMatchingCase))
 				return;// OK, those are symbolic expressions
 			else {
 				throw e;

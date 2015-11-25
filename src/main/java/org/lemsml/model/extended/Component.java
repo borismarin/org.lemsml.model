@@ -2,7 +2,9 @@ package org.lemsml.model.extended;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.namespace.QName;
@@ -112,7 +114,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 	}
 
 
-	public static Predicate<Component> hasType(final String type) {
+	private static Predicate<Component> hasType(final String type) {
 		return new Predicate<Component>() {
 			@Override
 			public boolean apply(Component input) {
@@ -121,7 +123,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		};
 	}
 
-	public static Predicate<INamed> isNamed(final String name) {
+	private static Predicate<INamed> isNamed(final String name) {
 		return new Predicate<INamed>() {
 			@Override
 			public boolean apply(INamed input) {
@@ -130,7 +132,7 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		};
 	}
 
-	public static Predicate<Component> hasTextNamedValued(final String name, final String value) {
+	private static Predicate<Component> hasTextNamedValued(final String name, final String value) {
 		return new Predicate<Component>() {
 			@Override
 			public boolean apply(Component input) {
@@ -194,5 +196,23 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		nameBindings.put(name, sc);
 
 	}
+
+	public <T extends Component> Set<T> getAllOfType(Class<T> type) {
+		return getAllOfType(type, this);
+	}
+
+	@SuppressWarnings("unchecked")
+	public <T extends Component> Set<T> getAllOfType(Class<T> type,
+			HasComponents node) {
+		Set<T> accum = new HashSet<T>();
+		for (Component c : node.getComponents()) {
+			accum.addAll(getAllOfType(type, c));
+		}
+		if (type.isInstance(node)) {
+			accum.add((T) node);
+		}
+		return accum;
+	}
+
 
 }

@@ -82,9 +82,13 @@ public class Scope implements IScope{
 				getDependencies().addNode(dep);
 				getDependencies().addEdge(sym.getName(), dep);
 			}
-			for (String dep : ExpressionParser.listSymbolsInExpression(c.getCondition())) {
-				getDependencies().addNode(dep);
-				getDependencies().addEdge(sym.getName(), dep);
+			//TODO: Cases w/o conditions are dubious:
+			//       see https://github.com/LEMS/jLEMS/issues/78
+			if (null != c.getCondition()) {
+				for (String dep : ExpressionParser.listSymbolsInExpression(c.getCondition())) {
+					getDependencies().addNode(dep);
+					getDependencies().addEdge(sym.getName(), dep);
+				}
 			}
 		}
 		sym.setValueDefinition(sym.getName());
@@ -166,14 +170,38 @@ public class Scope implements IScope{
 			}
 		}
 		if (symbol.getType() instanceof ConditionalDerivedVariable) {
+			Boolean caseFound = false;
+			Case defaultCase = null;
 			ConditionalDerivedVariable cdv = (ConditionalDerivedVariable) symbol.getType();
 			for (Case c : cdv.getCase()) {
 				// Dependencies for Cases are already accounted for.
-				if (ExpressionParser.evaluateConditionInContext(
-						c.getCondition(), localContext, unitContext)) {
+				if (null != c.getCondition()) {
+					if (ExpressionParser.evaluateConditionInContext(
+							c.getCondition(), localContext, unitContext)) {
+						localContext.put(symbol.getName(), ExpressionParser
+								.evaluateQuantityInContext(
+										c.getValueDefinition(), localContext,
+										getUnitContext()));
+						caseFound = true;
+					}
+				} else {
+				//TODO: Cases w/o conditions are dubious:
+				//       see https://github.com/LEMS/jLEMS/issues/78
+					defaultCase = c;
+				}
+			}
+			if (!caseFound) {
+				if (null != defaultCase) {
 					localContext.put(symbol.getName(), ExpressionParser
-							.evaluateQuantityInContext(c.getValueDefinition(),
+							.evaluateQuantityInContext(
+									defaultCase.getValueDefinition(),
 									localContext, getUnitContext()));
+				} else {
+					String err = MessageFormat
+							.format("No <Case> could be met for [ConditionalDerivedVariable] {0}:({1}) in context {2}",
+									cdv.getName(), cdv.getCase(), localContext);
+					throw new LEMSCompilerException(err,
+							LEMSCompilerError.NoMatchingCase);
 				}
 			}
 		}
