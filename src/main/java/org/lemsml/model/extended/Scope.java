@@ -2,7 +2,9 @@ package org.lemsml.model.extended;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,6 +26,7 @@ import com.google.common.base.Optional;
 
 import expr_parser.utils.DirectedGraph;
 import expr_parser.utils.ExpressionParser;
+import expr_parser.utils.TopologicalSort;
 import expr_parser.utils.UndefinedSymbolException;
 import expr_parser.visitors.AntlrExpressionParser;
 
@@ -150,12 +153,28 @@ public class Scope implements IScope{
 		return this.symbolTable.keySet();
 	}
 
-	//TODO: this method could use some refactoring...
+    //TODO: refactoring needed, ugly methods
 	private Map<String, Quantity<?>> evalDependencies(Symbol symbol,
 										Map<String, Quantity<?>> localContext,
 										Map<String, Quantity<?>> indepVars)
                         throws LEMSCompilerException, UndefinedSymbolException {
 		localContext.putAll(indepVars);
+		evalLocalDeps(symbol, localContext, indepVars);
+		evalConditionals(symbol, localContext);
+		localContext.put(symbol.getName(),
+				ExpressionParser.evaluateQuantityInContext(symbol.getParser(),
+						localContext, getUnitContext()));
+//				ExpressionParser.evaluateQuantityInContext(symbol.getValueDefinition(),
+//						localContext, getUnitContext()));
+
+		return localContext;
+
+	}
+    //TODO: refactoring needed, ugly methods
+	public void evalLocalDeps(Symbol symbol,
+			Map<String, Quantity<?>> localContext,
+			Map<String, Quantity<?>> indepVars) throws LEMSCompilerException,
+			UndefinedSymbolException {
 		for (String dep : getDependencies().edgesFrom(symbol.getName())) {
 			// don't calculate deps which are already calculated, nor circular deps (e.g. state vars)
 			if (!localContext.containsKey(dep) && !(dep.equals(symbol.getName()))){
@@ -169,6 +188,11 @@ public class Scope implements IScope{
 				}
 			}
 		}
+	}
+
+	public void evalConditionals(Symbol symbol, Map<String, Quantity<?>> localContext)
+			throws UndefinedSymbolException, LEMSCompilerException {
+
 		if (symbol.getType() instanceof ConditionalDerivedVariable) {
 			Boolean caseFound = false;
 			Case defaultCase = null;
@@ -179,9 +203,7 @@ public class Scope implements IScope{
 					if (ExpressionParser.evaluateConditionInContext(
 							c.getCondition(), localContext, unitContext)) {
 						localContext.put(symbol.getName(), ExpressionParser
-								.evaluateQuantityInContext(
-										c.getValueDefinition(), localContext,
-										getUnitContext()));
+								.evaluateQuantityInContext(c.getValueDefinition(), localContext, getUnitContext()));
 						caseFound = true;
 					}
 				} else {
@@ -205,14 +227,6 @@ public class Scope implements IScope{
 				}
 			}
 		}
-		localContext.put(symbol.getName(),
-				ExpressionParser.evaluateQuantityInContext(symbol.getParser(),
-						localContext, getUnitContext()));
-//				ExpressionParser.evaluateQuantityInContext(symbol.getValueDefinition(),
-//						localContext, getUnitContext()));
-
-		return localContext;
-
 	}
 
 	public Map<String, String> buildContext(Symbol symbol, Map<String, String> localContext) throws LEMSCompilerException,
@@ -229,7 +243,18 @@ public class Scope implements IScope{
 		}
 		localContext.put(symbol.getName(), symbol.getValueDefinition());
 		return localContext;
+	}
 
+	public Map<String, String> buildSortedContext(Symbol symbol) throws LEMSCompilerException,
+			UndefinedSymbolException {
+		Map<String, String> ctxt = new LinkedHashMap<String, String>();
+		List<String> sorted = TopologicalSort.sort(getDependencies());
+		ListIterator<String> li = sorted.listIterator(sorted.size());
+		while(li.hasPrevious()) {
+			String d = li.previous();
+			ctxt.put(d, getExpressions().get(d));
+		}
+		return ctxt;
 	}
 
 
