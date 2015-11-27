@@ -16,6 +16,9 @@ public class <ml_name; format="cap"> extends <lems_root()> {
 	@XmlElement(name = "Components")
 	protected List\<Component> components;
 
+	@XmlElement(name = "ComponentTypes")
+	protected List\<ComponentType> componentTypes;
+
 	<lems:get_component()>
 
 	<all_of_type()>
@@ -91,5 +94,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.lemsml.model.extended.Component;
+import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.interfaces.HasComponents;
 >>
