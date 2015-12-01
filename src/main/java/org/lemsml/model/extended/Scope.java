@@ -245,7 +245,7 @@ public class Scope implements IScope{
 		return localContext;
 	}
 
-	public Map<String, String> buildSortedContext(Symbol symbol) throws LEMSCompilerException,
+	public Map<String, String> buildTopoSortedContext(Symbol symbol) throws LEMSCompilerException,
 			UndefinedSymbolException {
 		Map<String, String> ctxt = new LinkedHashMap<String, String>();
 		List<String> sorted = TopologicalSort.sort(getDependencies());
