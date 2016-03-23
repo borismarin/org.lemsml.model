@@ -6,15 +6,15 @@ children_declaration(children, type_deps) ::= <<
 <else>
     <children.type:xml_element()>
 <endif>
-	private List\<<children.type; format="cap">\> <children.name>;
+	private List\<<children.type; format="cap,safe">\> <children.name; format="safe">;
 
 >>
 
 children_accessors(prop) ::= "<\n><prop:children_getter()>"
 
 children_getter(children) ::= <<
-	public List\<<children.type; format="cap">\> get<children.name; format="cap">() {
-		return this.<children.name>;
+	public List\<<children.type; format="cap,safe">\> get<children.name; format="cap,safe">() {
+		return this.<children.name; format="safe">;
 	}
 >>
 
@@ -23,7 +23,7 @@ xml_elements(ext_types) ::= <<
 >>
 
 name(x) ::= "<if(x.name)><x.name><else><x><endif>"
-cap_name(x) ::= "<if(x.name)><x.name; format=\"cap\"><else><x; format=\"cap\"><endif>"
+cap_name(x) ::= "<if(x.name)><x.name; format=\"cap,safe\"><else><x; format=\"cap,safe\"><endif>"
 
 xml_element(type) ::= <<
 @XmlElement(name="<type:name()>",

@@ -21,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
-import org.stringtemplate.v4.StringRenderer;
 
 import com.google.common.base.CaseFormat;
 
@@ -82,7 +81,7 @@ public class JavaDomainModelBackend {
 		URL stURL = getClass().getResource(
 				"/templates/java-domain-classes/obj_factory.stg");
 		STGroup group = new STGroupFile(stURL, "UTF-8", '<', '>');
-		group.registerRenderer(String.class, new StringRenderer());
+		group.registerRenderer(String.class, new SafeJavaStringRenderer());
 
 		ST template = group.getInstanceOf("obj_factory");
 		template.add("lems", domainDefs);
@@ -134,7 +133,7 @@ public class JavaDomainModelBackend {
 		URL stURL = getClass().getResource(
 				"/templates/java-domain-classes/root_element.stg");
 		STGroup group = new STGroupFile(stURL, "UTF-8", '<', '>');
-		group.registerRenderer(String.class, new StringRenderer());
+		group.registerRenderer(String.class, new SafeJavaStringRenderer());
 
 		ST template = group.getInstanceOf("root_element");
 		template.add("lems", domainDefs);
@@ -148,7 +147,7 @@ public class JavaDomainModelBackend {
 		URL stURL = getClass().getResource(
 				"/templates/java-domain-classes/domain_type.stg");
 		STGroup group = new STGroupFile(stURL, "UTF-8", '<', '>');
-		group.registerRenderer(String.class, new StringRenderer());
+		group.registerRenderer(String.class, new SafeJavaStringRenderer());
 		return group;
 	}
 

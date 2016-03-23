@@ -52,7 +52,7 @@ for (<type.name; format="cap"> c : <type.name:getter_name()>()) {
 
 type_list(type) ::= <<
 @XmlElement(name = "<type.name>")
-private List\<<type.name; format="cap">\> <type.name; format="lower">s = new ArrayList\<<type.name; format="cap">\>();
+private List\<<type.name; format="cap,safe">\> <type.name; format="lower,safe">s = new ArrayList\<<type.name; format="cap,safe">\>();
 >>
 
 all_of_type() ::= <<

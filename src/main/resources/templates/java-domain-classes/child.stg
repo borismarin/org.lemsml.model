@@ -1,13 +1,13 @@
 child_declaration(child) ::= <<
 	@XmlElement(name = "<child.name>")
-	private <child.type; format="cap"> <child.name>;
+	private <child.type; format="cap,safe"> <child.name; format="safe">;
 
 >>
 
 child_accessors(prop) ::= "<\n><prop:child_getter()>"
 
 child_getter(child) ::= <<
-	public <child.type; format="cap"> get<child.name; format="cap">() {
-		return this.<child.name>;
+	public <child.type; format="cap,safe"> get<child.name; format="cap,safe">() {
+		return this.<child.name; format="safe">;
 	}
 >>
