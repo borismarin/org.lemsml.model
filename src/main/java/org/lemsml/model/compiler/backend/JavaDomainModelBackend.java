@@ -94,7 +94,7 @@ public class JavaDomainModelBackend {
 	private void generateDomainClasses() throws IOException {
 		for (ComponentType ct : domainDefs.getComponentTypes()) {
 			String classFname = CaseFormat.LOWER_CAMEL.to(
-					CaseFormat.UPPER_CAMEL, ct.getName()).replace(".", "_")
+					CaseFormat.UPPER_CAMEL, ct.getName()).replace(".", "_").replace(":", "_")
 					+ ".java";
 
 			logger.info("\t" + classFname);
