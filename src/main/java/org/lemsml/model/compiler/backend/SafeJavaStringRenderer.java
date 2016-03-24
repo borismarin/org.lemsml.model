@@ -1,5 +1,6 @@
 package org.lemsml.model.compiler.backend;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,21 +14,35 @@ import com.google.common.base.Joiner;
 public class SafeJavaStringRenderer extends StringRenderer implements
 		AttributeRenderer {
 
+	static final List<String> reserved = new ArrayList<String>(Arrays.asList("include", "component"));
+
 	@Override
 	public String toString(Object o, String formatString, Locale locale) {
 		String s = (String) o;
-		String newFormat = formatString;
+		String nextFormat = formatString;
 		if(formatString != null){
 			List<String> args = new LinkedList<String>(Arrays.asList(formatString.split(",")));
 			int safe = args.indexOf("safe");
 			if(safe >= 0){
-				s = s.replaceAll(":", "_");
+				s = removePunctuation(s);
+				s = renameReserved(s);
 				args.remove(safe);
-				newFormat = args.size() > 0 ? Joiner.on("").join(args) : null;
+				nextFormat = args.size() > 0 ? Joiner.on("").join(args) : null;
 			}
 		}
-		s = (String) super.toString(s, newFormat, locale);
+		s = (String) super.toString(s, nextFormat, locale);
 		return s;
+	}
+
+	public String renameReserved(String s) {
+		if(reserved.contains(s.toLowerCase())){
+			return s + "_";
+		}
+		return s;
+	}
+
+	public String removePunctuation(String s) {
+		return s.replaceAll(":", "_");
 	}
 
 }
