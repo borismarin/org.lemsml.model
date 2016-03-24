@@ -17,15 +17,15 @@ import org.lemsml.visitors.Visitor;
 <class(type, type_deps)>
 >>
 
-quali_name(type) ::= "<package>.<type.extends>"
-extension(type) ::= "extends <if(type.extends)><type.extends; format=\"cap\"><else>Component<endif>"
+quali_name(type) ::= "<package>.<type.extends; format=\"safe\">"
+extension(type) ::= "extends <if(type.extends)><type.extends; format=\"cap,safe\"><else>Component<endif>"
 
 
 getter_name(prop) ::= "get<prop; format=\"cap\">s"
 
 class(type, type_deps) ::= <<
 @XmlType
-public class <type.name; format="cap"> <type:extension()> {
+public class <type.name; format="cap,safe"> <type:extension()> {
 
 <type.children:child_declaration(); separator = "\n"><! see child.stg !>
 <type.childrens:children_declaration(type_deps); separator = "\n"><! see children.stg !>
