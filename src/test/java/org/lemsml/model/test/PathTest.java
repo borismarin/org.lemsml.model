@@ -42,16 +42,17 @@ public class PathTest extends BaseTest {
 					.withChildren(
 							new Child()
 								.withName("baz")
-								.withType("Baz")),
+								.withType("Baz"))
+					.withTexts(
+							new Text()
+								.withName("colour")),
 				(ComponentType)
 				new ComponentType()
 					.withName("Baz")
 					.withParameters(
 							new Parameter()
 								.withName("q0"))
-					.withTexts(
-							new Text()
-								.withName("colour")),
+					,
 				(ComponentType)
 				new ComponentType()
 					.withName("Bar")
@@ -71,21 +72,36 @@ public class PathTest extends BaseTest {
 											.withSelect("foos[colour='red']/baz/q0")
 											.withReduce("add"),
 										new DerivedVariable()
-											.withName("greenFoos_Baz_q0_sum") // no green foos...
+											.withName("greenFoos_Baz_q0_sum")
 											.withSelect("foos[colour='green']/baz/q0")
 											.withReduce("add"),
 										new DerivedVariable()
-											.withName("greenFoos_Baz_q0_prod") // no green foos...
+											.withName("greenFoos_Baz_q0_prod")
 											.withSelect("foos[colour='green']/baz/q0")
 											.withReduce("multiply"),
 										new DerivedVariable()
 											.withName("foos_p0_sum")
 											.withSelect("foos[*]/p0")
-											.withReduce("add")))
+											.withReduce("add"),
+										new DerivedVariable()
+											.withName("bazs_q0_sum")
+											.withSelect("bazs[*]/q0")
+											.withReduce("add"),
+										new DerivedVariable()
+											.withName("bazs_q0_prod")
+											.withSelect("bazs[*]/q0")
+											.withReduce("multiply"),
+										new DerivedVariable()
+											.withName("greenBazs_q0_prod")
+											.withSelect("bazs[colour='green']/q0")
+											.withReduce("multiply")))
 					.withChildrens(
 							new Children()
 								.withName("foos")
-								.withType("Foo"))
+								.withType("Foo"),
+							new Children()
+								.withName("bazs")
+								.withType("Baz"))
 				)
 			.withComponents(
 					(Component)
@@ -134,15 +150,20 @@ public class PathTest extends BaseTest {
 		compiler.semanticAnalysis(lems);
 
 		Scope scope = lems.getComponentById("bar0").getScope();
-		assertEquals(Quantities.getQuantity(3.0, ONE),
-				scope.evaluate("foos_p0_sum"));
+		assertEquals(Quantities.getQuantity(3.0, ONE), scope.evaluate("foos_p0_sum"));
 
 		assertEquals(0.006, evalDouble(scope, "foos_baz_q0_mult"), 1e-9);
 		assertEquals(0.5, evalDouble(scope, "redFoos_Baz_q0_sum"), 1e-9);
 		assertEquals(0.1, evalDouble(scope, "blueFoos_Baz_q0_sum"), 1e-9);
-		assertEquals(0., evalDouble(scope, "greenFoos_Baz_q0_sum"), 1e-9);
+
+		//those should results in empty selections: no green foos in bar0
 		assertEquals(0., evalDouble(scope, "greenFoos_Baz_q0_sum"), 1e-9);
 		assertEquals(1., evalDouble(scope, "greenFoos_Baz_q0_prod"), 1e-9);
+
+		//those should results in empty selections: no bazs in bar0
+		assertEquals(0., evalDouble(scope, "bazs_q0_sum"), 1e-9);
+		assertEquals(1., evalDouble(scope, "bazs_q0_prod"), 1e-9);
+		assertEquals(1., evalDouble(scope, "greenBazs_q0_prod"), 1e-9);
 
 	}
 
