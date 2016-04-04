@@ -14,6 +14,8 @@ import org.lemsml.model.exceptions.LEMSCompilerException;
 import com.google.common.base.Joiner;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 public class PathQDParser {
 
@@ -57,16 +59,12 @@ public class PathQDParser {
 					deps.add(depName);
 				}
 			} else {
-				Matcher eqMatcher = equalityPattern.matcher(predMatcher
-						.group(2));
+				Matcher eqMatcher = equalityPattern.matcher(predMatcher.group(2));
 				if (eqMatcher.find()) { // x='y' predicate
-					List<Component> allWithText = comp
-							.getSubComponentsWithTextValue(eqMatcher.group(1),
-									eqMatcher.group(2));
-					for (Component c : allWithText) {
-						String depName = MessageFormat.format("{0}[{1}]{2}",
-								predMatcher.group(1), comp.getComponent()
-										.indexOf(c), predMatcher.group(3));
+				    for (Component c : comp.getNamedChildrenWithTextValue(predMatcher.group(1), eqMatcher.group(1), eqMatcher.group(2))) {
+					    String depName = MessageFormat.format("{0}[{1}]{2}",
+						    	predMatcher.group(1), comp.getComponent()
+							    		.indexOf(c), predMatcher.group(3));
 						deps.add(depName);
 					}
 				} else {

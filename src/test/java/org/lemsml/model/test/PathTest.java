@@ -167,6 +167,96 @@ public class PathTest extends BaseTest {
 
 	}
 
+	@Test
+	public void testChildrenPath() throws Throwable {
+
+		Lems lems = (Lems) new Lems()
+			.withComponentTypes(
+				(ComponentType)
+				new ComponentType()
+					.withName("Foo")
+					.withParameters(
+						new Parameter()
+							.withName("p0"))
+					.withChildren(
+							new Child()
+								.withName("baz")
+								.withType("Baz"))
+					.withTexts(
+							new Text()
+								.withName("colour")),
+				(ComponentType)
+				new ComponentType()
+					.withName("Baz")
+					.withParameters(
+							new Parameter()
+								.withName("q0"))
+					,
+				(ComponentType)
+				new ComponentType()
+					.withName("Bar")
+					.withDynamics(
+							new Dynamics()
+								.withDerivedVariables(
+										new DerivedVariable()
+											.withName("greenBazs_q0_prod")
+											.withSelect("bazs[colour='green']/q0")
+											.withReduce("multiply"),
+										new DerivedVariable()
+											.withName("greenBazs_q0_sum")
+											.withSelect("bazs[colour='red']/q0")
+											.withReduce("add")))
+					.withChildrens(
+							new Children()
+								.withName("foos")
+								.withType("Foo"),
+							new Children()
+								.withName("bazs")
+								.withType("Baz"))
+				)
+			.withComponents(
+					(Component)
+					new Component()
+						.withType("Bar")
+						.withId("bar0")
+						.withComponent(
+								((Component) //  bar0/foos[0]
+								new Component()
+									.withType("Foo")
+									.withComponent(
+										((Component)
+										new Component()
+											.withType("Baz")
+											.withId("baz"))
+											.withParameterValue("q0", "0.1"))
+									.withId("foo0"))
+									.withTextValue("colour", "green")
+									.withParameterValue("p0", "0.0"),
+								((Component)
+									new Component() //  bar0/foos[1]
+										.withType("Foo")
+										.withComponent(
+											((Component)
+												new Component()
+													.withType("Baz")
+													.withId("baz"))
+													.withParameterValue("q0", "0.2"))
+										.withId("foo1"))
+										.withTextValue("colour", "red")
+										.withParameterValue("p0", "1.0"))
+			);
+
+		compiler.semanticAnalysis(lems);
+
+		Scope scope = lems.getComponentById("bar0").getScope();
+
+		//those should results in empty selections: no bazs in bar0
+		assertEquals(1., evalDouble(scope, "greenBazs_q0_prod"), 1e-9);
+		assertEquals(0., evalDouble(scope, "greenBazs_q0_sum"), 1e-9);
+
+	}
+
+
 	public double evalDouble(Scope scope, String name) throws LEMSCompilerException {
 		return scope.evaluate(name).getValue().doubleValue();
 	}
