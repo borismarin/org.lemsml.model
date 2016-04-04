@@ -113,6 +113,10 @@ public class Component extends org.lemsml.model.Component implements INamed,
 		return Lists.newArrayList(Iterables.filter(getComponent(), hasTextNamedValued(field, value)));
 	}
 
+	public List<Component> getNamedChildrenWithTextValue(String name, String field, String value) {
+		return Lists.newArrayList(Iterables.filter(getSubComponentsBoundToName(name), hasTextNamedValued(field, value)));
+	}
+
 
 	private static Predicate<Component> hasType(final String type) {
 		return new Predicate<Component>() {
