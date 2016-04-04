@@ -49,22 +49,22 @@ public class PathQDParser {
 		// in particular, predicates after the first node (e.g. a/b[*]) are not
 		// supported.
 		if (predMatcher.find()) { // this is a predicate-like expression
+			String pathRoot = predMatcher.group(1);
 			if (predMatcher.group(2).equals("*")) { // select '*'
 				List<Component> allWithName = comp
-						.getSubComponentsBoundToName(predMatcher.group(1));
+						.getSubComponentsBoundToName(pathRoot);
 				for (Component c : allWithName) {
 					String depName = MessageFormat.format("{0}[{1}]{2}",
-							predMatcher.group(1), allWithName.indexOf(c),
+							pathRoot, allWithName.indexOf(c),
 							predMatcher.group(3));
 					deps.add(depName);
 				}
 			} else {
 				Matcher eqMatcher = equalityPattern.matcher(predMatcher.group(2));
 				if (eqMatcher.find()) { // x='y' predicate
-				    for (Component c : comp.getNamedChildrenWithTextValue(predMatcher.group(1), eqMatcher.group(1), eqMatcher.group(2))) {
+				    for (Component c : comp.getNamedChildrenWithTextValue(pathRoot, eqMatcher.group(1), eqMatcher.group(2))) {
 					    String depName = MessageFormat.format("{0}[{1}]{2}",
-						    	predMatcher.group(1), comp.getComponent()
-							    		.indexOf(c), predMatcher.group(3));
+						    	pathRoot, comp.getSubComponentsBoundToName(pathRoot).indexOf(c), predMatcher.group(3));
 						deps.add(depName);
 					}
 				} else {
