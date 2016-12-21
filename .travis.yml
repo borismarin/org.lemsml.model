@@ -6,7 +6,7 @@ before_install:
 - rm ~/.m2/settings.xml
 
 jdk:
-  - openjdk6
+  # - openjdk6
   - openjdk7
   - oraclejdk7
   - oraclejdk8
