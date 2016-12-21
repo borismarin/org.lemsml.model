@@ -12,7 +12,7 @@ jdk:
   - oraclejdk8
 
 install:
-  - git clone https://github.com/pgleeson/expr-parser.git
+  - git clone https://github.com/borismarin/expr-parser.git
   - cd expr-parser
   - mvn install
   - cd $TRAVIS_BUILD_DIR 
