@@ -1,9 +1,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.github.borismarin</groupId>
+	<groupId>org.lemsml.model</groupId>
 	<artifactId>org.lemsml.model</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>bundle</packaging>
 	<properties>
 		<build.version2>0.9.0</build.version2>
@@ -32,9 +32,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.borismarin</groupId>
-		    <artifactId>expr-parser</artifactId>
-		    <version>-SNAPSHOT</version>
+		    <groupId>org.lemsml.expr-parser</groupId>
+		    <artifactId>org.lemsml.expr-parser</artifactId>
+		    <version>0.0.2</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.measure</groupId>
