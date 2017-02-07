@@ -8,7 +8,7 @@ import org.lemsml.model.extended.ComponentType;
 import org.lemsml.model.extended.Lems;
 import org.lemsml.visitors.BaseVisitor;
 
-import expr_parser.utils.DirectedGraph;
+import org.lemsml.expr_parser.utils.DirectedGraph;
 
 /**
  * @author borismarin
