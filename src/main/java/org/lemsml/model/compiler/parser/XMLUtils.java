@@ -2,6 +2,8 @@ package org.lemsml.model.compiler.parser;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
@@ -80,6 +82,34 @@ public class XMLUtils {
 		}
 
 		return outputFile;
+	}
+
+	/**
+	 * @param document
+	 * @param transformation
+	 * @return
+	 */
+	public static String transform(String document, File transformation) {
+		logger.info("Applying XSLT " + transformation.getName() + " to string of xml... ");
+        
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Source xslt = new StreamSource(transformation);
+		Transformer transformer;
+        StringWriter writer = new StringWriter();
+		try {
+			transformer = factory.newTransformer(xslt);
+			Source text = new StreamSource(new StringReader(document));
+            
+			transformer.transform(text, new StreamResult(writer));
+		} catch (TransformerConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return writer.toString();
 	}
 
 	/**
