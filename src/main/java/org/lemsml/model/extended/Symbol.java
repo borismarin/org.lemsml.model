@@ -5,8 +5,8 @@ import java.util.Set;
 
 import org.lemsml.model.extended.interfaces.INamedValueDefinition;
 
-import expr_parser.utils.ExpressionParser;
-import expr_parser.visitors.AntlrExpressionParser;
+import org.lemsml.expr_parser.utils.ExpressionParser;
+import org.lemsml.expr_parser.visitors.AntlrExpressionParser;
 
 public class Symbol {
 

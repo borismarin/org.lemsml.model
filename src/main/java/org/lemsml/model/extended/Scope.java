@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Optional;
 
-import expr_parser.utils.DirectedGraph;
-import expr_parser.utils.ExpressionParser;
-import expr_parser.utils.TopologicalSort;
-import expr_parser.utils.UndefinedSymbolException;
-import expr_parser.visitors.AntlrExpressionParser;
+import org.lemsml.expr_parser.utils.DirectedGraph;
+import org.lemsml.expr_parser.utils.ExpressionParser;
+import org.lemsml.expr_parser.utils.TopologicalSort;
+import org.lemsml.expr_parser.utils.UndefinedSymbolException;
+import org.lemsml.expr_parser.visitors.AntlrExpressionParser;
 
 public class Scope implements IScope{
 
